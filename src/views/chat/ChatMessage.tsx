@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Typography, Paper } from "@mui/material";
 
-const ChatMessage = ({ message, sender, timestamp }) => {
+const ChatMessage = ({ message, sender, timestamp }: Props) => {
   const isPerson1 = sender === "person1";
 
   return (
@@ -30,4 +30,9 @@ const ChatMessage = ({ message, sender, timestamp }) => {
   );
 };
 
+export interface Props {
+  message: string;
+  sender: string;
+  timestamp: string;
+}
 export default ChatMessage;

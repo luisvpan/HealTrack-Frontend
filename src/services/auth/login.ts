@@ -8,6 +8,7 @@ const URL = `${API_BASE_URL}/auth/login`;
 
 export default async function login(body: LoginBody): Promise<LoginResponse> {
   try {
+    console.log(body);
     console.log("akak " + URL);
     const response = await axios.post<LoginResponse>(URL, body);
     return response.data;
