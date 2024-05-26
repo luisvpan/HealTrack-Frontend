@@ -146,7 +146,7 @@ const Form: FunctionComponent<Props> = ({
               <FormControl className="field-form" fullWidth>
                 <TextField
                   id="homePhone"
-                  label="Telefono de paciente"
+                  label="Telefono de la casa del paciente"
                   variant="outlined"
                   onBlur={handleBlur}
                   onChange={handleChange}

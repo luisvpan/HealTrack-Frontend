@@ -12,6 +12,10 @@ import EditPatient from "views/patients/edit";
 
 import Chat from "views/chat";
 
+import Reports from "views/reports";
+import CreateReport from "views/reports/create";
+import EditReport from "views/reports/edit";
+
 const GeneralRoutes: RouteObject[] = [
   // Empleados
   {
@@ -43,6 +47,19 @@ const GeneralRoutes: RouteObject[] = [
   {
     path: "chat",
     element: <Chat />,
+  },
+  //Reports
+  {
+    path: "reports",
+    element: <Reports />,
+  },
+  {
+    path: "reports/create",
+    element: <CreateReport />,
+  },
+  {
+    path: "reports/edit/:id",
+    element: <EditReport />,
   },
 ];
 

@@ -4,9 +4,9 @@ import { MenuItem, MenuItemType } from "./types";
 import store from "store";
 // constant
 const userRole = store.getState().auth.user?.role;
-const isSpecialist = userRole === 'specialist' || userRole === 'assistant';
-const isPatient = userRole === 'patient';
-const isAdmin = userRole === 'admin';
+const isSpecialist = userRole === "specialist" || userRole === "assistant";
+const isPatient = userRole === "patient";
+const isAdmin = userRole === "admin";
 const other: MenuItem = {
   id: "agencies-crud-category-general",
   type: MenuItemType.Group,
@@ -70,6 +70,29 @@ const other: MenuItem = {
           title: "Chat",
           type: MenuItemType.Item,
           url: "/chat",
+          breadcrumbs: false,
+        },
+      ],
+    },
+    {
+      id: "reports",
+      title: "Reportes",
+      type: MenuItemType.Collapse,
+      icon: IconUser,
+      breadcrumbs: false,
+      children: [
+        {
+          id: "list-reports",
+          title: "Lista de reportes",
+          type: MenuItemType.Item,
+          url: "/reports",
+          breadcrumbs: false,
+        },
+        {
+          id: "create-reports",
+          title: "Crear empleado",
+          type: MenuItemType.Item,
+          url: "/reports/create",
           breadcrumbs: false,
         },
       ],
