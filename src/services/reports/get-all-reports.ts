@@ -3,7 +3,6 @@ import axios from "axios";
 import { API_BASE_URL } from "config/constants";
 import { Report } from "core/reports/types";
 import BackendError from "exceptions/backend-error";
-import { PaginatedResponse } from "services/types";
 import store from "store";
 
 const URL = `${API_BASE_URL}/reports`;

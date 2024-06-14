@@ -8,7 +8,7 @@ import store from "store";
 const URL = `${API_BASE_URL}/reports`;
 
 export default async function createReport(
-  body: CreateReportBody
+  body: any
 ): Promise<Report> {
   try {
     console.log("entro a reports");

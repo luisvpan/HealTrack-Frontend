@@ -34,7 +34,7 @@ const EditReport: FunctionComponent<Props> = ({ className }) => {
         setStatus({});
         setSubmitting(true);
         delete values.id;
-        delete values.fileUrl;
+        delete values.file;
         delete values.submit;
         for (const key in values) {
           if (values[key] === "true") {
@@ -75,11 +75,11 @@ const EditReport: FunctionComponent<Props> = ({ className }) => {
         <Form
           initialValues={{
             id: 0,
-            isRespondingForEmployee: report.isRespondingForEmployee,
             hasHighTemperature: report.hasHighTemperature,
             hasRedness: report.hasRedness,
             hasSwelling: report.hasSwelling,
             hasSecretions: report.hasSecretions,
+            additionalInformation: report.additionalInformation,
             fileUrl: report.fileUrl,
             submit: null,
           }}

@@ -4,11 +4,11 @@ import { API_BASE_URL } from "config/constants";
 import BackendError from "exceptions/backend-error";
 import store from "store";
 
-const URL = `${API_BASE_URL}/patients`;
+const URL = `${API_BASE_URL}/reports`;
 
-export default async function deletePatient(idPatient: number): Promise<void> {
+export default async function deleteReport(idReport: number): Promise<void> {
   try {
-    await axios.delete(`${URL}/${idPatient}`, {
+    await axios.delete(`${URL}/${idReport}`, {
       headers: {
         Authorization: `Bearer ${store.getState().auth.token}`,
       },

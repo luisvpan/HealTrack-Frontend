@@ -14,6 +14,7 @@ import {
 import { useAppDispatch } from "../../store/index";
 import Form, { FormValues } from "./form";
 import { FormikHelpers } from "formik";
+import jsonToFormData from "helpers/json-to-formData";
 
 const CreateReport: FunctionComponent<Props> = ({ className }) => {
   const navigate = useNavigate();
@@ -29,17 +30,21 @@ const CreateReport: FunctionComponent<Props> = ({ className }) => {
         setErrors({});
         setStatus({});
         setSubmitting(true);
-
+        console.log({ values });
         for (const key in values) {
           if (values[key] === "true") {
             values[key] = true;
           }
         }
+        if (!values.file) {
+          delete values.file;
+        }
         delete values.id;
-        delete values.fileUrl;
         delete values.submit;
+        console.log({ values });
+        const valuesToSend = jsonToFormData(values);
 
-        await createReport(values);
+        await createReport(valuesToSend);
         navigate("/reports");
         dispatch(setSuccessMessage(`Reporte creado correctamente`));
       } catch (error) {
@@ -70,11 +75,11 @@ const CreateReport: FunctionComponent<Props> = ({ className }) => {
       <Form
         initialValues={{
           id: 0,
-          isRespondingForEmployee: false,
           hasHighTemperature: false,
           hasRedness: false,
           hasSwelling: false,
           hasSecretions: false,
+          additionalInformation: null,
           fileUrl: null,
           submit: null,
         }}

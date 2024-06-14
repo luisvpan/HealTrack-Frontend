@@ -1,5 +1,5 @@
 import { Button, Typography } from "@mui/material";
-import { IconTrash, IconEdit } from "@tabler/icons";
+import { IconTrash, IconEdit, IconEye } from "@tabler/icons";
 import DynamicTable from "components/DynamicTable";
 // Own
 import { Report } from "core/reports/types";
@@ -15,11 +15,14 @@ import {
 } from "store/customizationSlice";
 import BackendError from "exceptions/backend-error";
 import DialogDelete from "components/dialogDelete";
+import DialogImage from "components/dialogImage";
 
 const Table: FunctionComponent<Props> = ({ items, className, fetchItems }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [open, setOpen] = useState<boolean>(false);
+  const [openImage, setOpenImage] = useState<boolean>(false);
+  const [dialogImage, setDialogImage] = useState<string | null>("");
   const [reportId, setReportId] = useState<number>(0);
 
   const handleOpen = useCallback((reportId: number) => {
@@ -32,15 +35,35 @@ const Table: FunctionComponent<Props> = ({ items, className, fetchItems }) => {
     setReportId(0);
   }, []);
 
+  const handleOpenImage = useCallback((imageUrl: string | null) => {
+    console.log({ imageUrl });
+    setOpenImage(true);
+    setDialogImage(imageUrl);
+  }, []);
+
+  const handleCloseImage = useCallback(() => {
+    setOpenImage(false);
+    setDialogImage("");
+  }, []);
+
   const onDelete = useCallback(
     async (reportId: number) => {
       try {
         dispatch(setIsLoading(true));
         await deleteReport(reportId!);
-        dispatch(setSuccessMessage(`Paciente eliminado correctamente`));
+        dispatch(setSuccessMessage(`Reporte eliminado correctamente`));
       } catch (error) {
         if (error instanceof BackendError) {
-          dispatch(setErrorMessage(error.getMessage()));
+          console.log(error.statusCode);
+          if (error.statusCode === 403) {
+            dispatch(
+              setErrorMessage(
+                "Solo un administrador puede eliminar un reporte."
+              )
+            );
+          } else {
+            dispatch(setErrorMessage(error.getMessage()));
+          }
         }
       } finally {
         dispatch(setIsLoading(false));
@@ -87,6 +110,17 @@ const Table: FunctionComponent<Props> = ({ items, className, fetchItems }) => {
         ]}
         rows={items}
         components={[
+          (row: Report) =>
+            row.fileUrl ? (
+              <Button
+                color="info"
+                onClick={() => handleOpenImage(row.fileUrl)}
+                startIcon={<IconEye />}
+              >
+                Ver Imagen
+              </Button>
+            ) : null,
+          /*
           (row: Report) => (
             <Button
               color="primary"
@@ -98,9 +132,10 @@ const Table: FunctionComponent<Props> = ({ items, className, fetchItems }) => {
               Editar
             </Button>
           ),
+          */
           (row: Report) => (
             <Button
-              color="secondary"
+              color="error"
               onClick={() => handleOpen(row.id)}
               startIcon={<IconTrash />}
             >
@@ -115,6 +150,11 @@ const Table: FunctionComponent<Props> = ({ items, className, fetchItems }) => {
           onDelete(reportId);
         }}
         open={open}
+      />
+      <DialogImage
+        handleClose={handleCloseImage}
+        open={openImage}
+        imageUrl={dialogImage}
       />
     </div>
   );

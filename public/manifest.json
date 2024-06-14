@@ -1,6 +1,6 @@
 {
-  "short_name": "HealTrack App",
-  "name": "HealTrack Admin Panel",
+  "short_name": "HealTrack Panel",
+  "name": "HealTrack Panel",
   "icons": [
     {
       "src": "favicon.ico",

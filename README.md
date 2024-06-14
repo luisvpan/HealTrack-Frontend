@@ -1,7 +1,7 @@
 <p align="center">
   <img width="255" height="255" src="https://github.com/Hector1567XD/leafeon-app-frontend/assets/22270579/ba34a6f1-390f-4027-b105-6cc1498c49df">
 </p>
-<h1 align="center">HealTrack App</h1>
+<h1 align="center">HealTrack Panel</h1>
 <p align="center">The ecological application for furrys car dealerships</p>
 
 ## Getting Started with Create React App

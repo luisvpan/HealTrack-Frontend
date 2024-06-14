@@ -90,7 +90,7 @@ const other: MenuItem = {
         },
         {
           id: "create-reports",
-          title: "Crear empleado",
+          title: "Crear reporte",
           type: MenuItemType.Item,
           url: "/reports/create",
           breadcrumbs: false,

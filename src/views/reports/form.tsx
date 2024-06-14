@@ -1,10 +1,6 @@
-import dayjs from "dayjs";
-import * as Yup from "yup";
 import { FunctionComponent } from "react";
 import { Formik, FormikHelpers } from "formik";
-import SelectField from "components/SelectField";
 import MainCard from "components/cards/MainCard";
-import useEmployeesOptions from "core/employees/use-employees-options";
 // material-ui
 import {
   Box,
@@ -12,18 +8,13 @@ import {
   FormControl,
   FormControlLabel,
   FormHelperText,
-  InputLabel,
   Radio,
   RadioGroup,
   TextField,
   Typography,
 } from "@mui/material";
-import { DatePicker } from "@mui/x-date-pickers";
 import styled from "styled-components";
-import { User } from "core/users/types";
-import { display } from "@mui/system";
-
-const USE_AUTOCOMPLETES = false;
+import { DropzoneArea } from "react-mui-dropzone";
 
 const Form: FunctionComponent<Props> = ({
   className,
@@ -46,6 +37,7 @@ const Form: FunctionComponent<Props> = ({
           handleBlur,
           handleChange,
           handleSubmit,
+          setFieldValue,
           isSubmitting,
           touched,
           values,
@@ -165,6 +157,29 @@ const Form: FunctionComponent<Props> = ({
                     />
                   </RadioGroup>
                 </FormControl>
+                <FormControl className="field-form" fullWidth>
+                  <TextField
+                    id="additionalInformation"
+                    label="Informacion Adicional"
+                    variant="outlined"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.additionalInformation}
+                    name="additionalInformation"
+                  />
+                </FormControl>
+                <FormControl className="field-form" fullWidth>
+                  <DropzoneArea
+                    dropzoneText="Arrastra una imagen del paciente u herida o haz click aqui"
+                    acceptedFiles={["image/jpeg", "image/png"]}
+                    filesLimit={1}
+                    onChange={(files) => {
+                      console.log(files);
+                      console.log(files[0]);
+                      setFieldValue("file", files[0]);
+                    }}
+                  />
+                </FormControl>
               </Box>
             </MainCard>
             <MainCard className={"form-data flex-column"}>
@@ -192,11 +207,11 @@ interface Props {
 
 export type FormValues = {
   id: number;
-  isRespondingForEmployee: boolean;
   hasHighTemperature: boolean;
   hasRedness: boolean;
   hasSwelling: boolean;
   hasSecretions: boolean;
+  additionalInformation: string | null;
   fileUrl: string | null;
   submit: string | null;
 };

@@ -7,6 +7,7 @@ export interface Report {
   hasRedness: boolean;
   hasSwelling: boolean;
   hasSecretions: boolean;
+  additionalInformation: string | null;
   fileUrl: string | null;
   createdAt: string;
   updatedAt: string;
