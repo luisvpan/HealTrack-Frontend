@@ -58,6 +58,7 @@ const other: MenuItem = {
         },
       ],
     },
+    /*
     {
       id: "chat",
       title: "Chat",
@@ -74,6 +75,7 @@ const other: MenuItem = {
         },
       ],
     },
+    */
     {
       id: "reports",
       title: "Reportes",
