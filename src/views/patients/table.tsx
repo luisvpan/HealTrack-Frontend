@@ -1,5 +1,5 @@
 import { Button } from "@mui/material";
-import { IconTrash, IconEdit } from "@tabler/icons";
+import { IconTrash, IconEdit, IconRefreshAlert } from "@tabler/icons";
 import DynamicTable from "components/DynamicTable";
 // Own
 import { Patient, TranslatedPatientStatus } from "core/patients/types";
@@ -15,11 +15,13 @@ import {
 } from "store/customizationSlice";
 import BackendError from "exceptions/backend-error";
 import DialogDelete from "components/dialogDelete";
+import DialogChangeState from "./dialogChangeState";
 
 const Table: FunctionComponent<Props> = ({ items, className, fetchItems }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [open, setOpen] = useState<boolean>(false);
+  const [openChangeState, setOpenChangeState] = useState<boolean>(false);
   const [patientId, setPatientId] = useState<number>(0);
 
   const handleOpen = useCallback((patientId: number) => {
@@ -29,6 +31,16 @@ const Table: FunctionComponent<Props> = ({ items, className, fetchItems }) => {
 
   const handleClose = useCallback(() => {
     setOpen(false);
+    setPatientId(0);
+  }, []);
+
+  const handleOpenChangeState = useCallback((patientId: number) => {
+    setOpenChangeState(true);
+    setPatientId(patientId);
+  }, []);
+
+  const handleCloseChangeState = useCallback(() => {
+    setOpenChangeState(false);
     setPatientId(0);
   }, []);
 
@@ -50,7 +62,7 @@ const Table: FunctionComponent<Props> = ({ items, className, fetchItems }) => {
     },
     [dispatch, fetchItems, handleClose]
   );
-  console.log(items);
+
   return (
     <div className={className}>
       <DynamicTable
@@ -82,6 +94,15 @@ const Table: FunctionComponent<Props> = ({ items, className, fetchItems }) => {
         components={[
           (row: Patient) => (
             <Button
+              color="info"
+              onClick={() => handleOpenChangeState(row.id)}
+              startIcon={<IconRefreshAlert />}
+            >
+              Cambiar estado
+            </Button>
+          ),
+          (row: Patient) => (
+            <Button
               color="primary"
               onClick={() => {
                 navigate("/patients/edit/" + row.id);
@@ -108,6 +129,12 @@ const Table: FunctionComponent<Props> = ({ items, className, fetchItems }) => {
           onDelete(patientId);
         }}
         open={open}
+      />
+      <DialogChangeState
+        handleClose={handleCloseChangeState}
+        open={openChangeState}
+        patientId={patientId}
+        fetchItems={fetchItems}
       />
     </div>
   );
