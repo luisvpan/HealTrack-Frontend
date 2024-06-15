@@ -110,7 +110,7 @@ const DialogChangeState: FunctionComponent<Prop> = ({
                   options={[
                     { label: "En seguimiento", value: "active" },
                     { label: "Dado de Alta", value: "inactive" },
-                    { label: "Hozpitalizado", value: "emergency" },
+                    { label: "Hospitalizado", value: "emergency" },
                     { label: "Caso Cerrado", value: "closed" },
                   ]}
                   helperText={touched.status ? errors.status : ""}
