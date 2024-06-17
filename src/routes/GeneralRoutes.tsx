@@ -15,6 +15,7 @@ import Chat from "views/chat";
 import Reports from "views/reports";
 import CreateReport from "views/reports/create";
 import EditReport from "views/reports/edit";
+import ChatList from "views/chat/chat-list";
 
 const GeneralRoutes: RouteObject[] = [
   // Empleados
@@ -45,7 +46,11 @@ const GeneralRoutes: RouteObject[] = [
   },
   //Chat
   {
-    path: "chat",
+    path: "chat-list",
+    element: <ChatList />,
+  },
+  {
+    path: "chat/:chatId",
     element: <Chat />,
   },
   //Reports

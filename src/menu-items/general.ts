@@ -58,7 +58,7 @@ const other: MenuItem = {
         },
       ],
     },
-    /*
+
     {
       id: "chat",
       title: "Chat",
@@ -68,14 +68,13 @@ const other: MenuItem = {
       children: [
         {
           id: "chat",
-          title: "Chat",
+          title: "Lista de chats",
           type: MenuItemType.Item,
-          url: "/chat",
+          url: "/chat-list",
           breadcrumbs: false,
         },
       ],
     },
-    */
     {
       id: "reports",
       title: "Reportes",

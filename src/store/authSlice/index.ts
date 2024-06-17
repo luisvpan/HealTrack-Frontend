@@ -27,6 +27,7 @@ const authSlice = createSlice({
   reducers: {
     authUser(state, action: PayloadAction<LoginPayload>) {
       state.user = {
+        id: action.payload.id,
         email: action.payload.email,
         name: action.payload.name,
         role: action.payload.role,
@@ -36,6 +37,7 @@ const authSlice = createSlice({
       if (action.payload.remember)
         setStorageData({
           user: {
+            id: action.payload.id,
             email: action.payload.email,
             name: action.payload.name,
             role: action.payload.role,

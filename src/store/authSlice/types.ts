@@ -2,6 +2,7 @@ import { AllRole } from "core/users/types";
 
 export interface AuthState {
   user: null | {
+    id: number;
     email: string;
     name: string;
     role: AllRole;
@@ -12,6 +13,7 @@ export interface AuthState {
 
 export interface AuthStored {
   user: {
+    id: number;
     email: string;
     name: string;
     role: AllRole;
