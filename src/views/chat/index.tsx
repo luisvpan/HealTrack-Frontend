@@ -137,7 +137,16 @@ const Chat = () => {
           background: "",
         }}
       >
-        <Box sx={{ flexGrow: 1, p: 2, overflow: "auto", maxHeight: "450px" }}>
+        <Box
+          sx={{
+            flexGrow: 1,
+            p: 2,
+            overflow: "auto",
+            maxHeight: "450px",
+            background: "#EEF2F6",
+            borderRadius: "14px",
+          }}
+        >
           {messages.map((item: Message) => (
             <Box key={item.id}>
               {item.user.id !== userId ? (
