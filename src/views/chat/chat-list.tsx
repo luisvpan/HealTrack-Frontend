@@ -9,13 +9,13 @@ import { Chat } from "core/chats/types";
 import store from "store";
 
 const ChatList: FunctionComponent<Prop> = ({ className }) => {
-  const { items, fetchChats } = useData();
+  const { items } = useData();
   const user = store.getState().auth.user;
   const navigate = useNavigate();
 
   const goToCreate = useCallback(() => {
-    navigate("/chats/create");
-  }, [navigate]);
+    navigate("/chat/create");
+  }, []);
 
   const goToChat = useCallback((chatId: number) => {
     navigate(`/chat/${chatId}`);

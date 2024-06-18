@@ -15,7 +15,6 @@ const Chat = () => {
   const [messageToSend, setMessageToSend] = useState<string>("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [chatInfo, setChatInfo] = useState<ChatInfo | null>(null);
-  const [open, setOpen] = useState<boolean>(false);
 
   const { chatId } = useParams<{ chatId: string }>();
 
