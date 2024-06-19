@@ -1,11 +1,8 @@
 import { Box, IconButton, Typography } from "@mui/material";
 import MainCard from "components/cards/MainCard";
-import { Chat } from "core/chats/types";
 import { AllRole, TranslatedRole } from "core/users/types";
 import { useCallback, useEffect, useState } from "react";
 import postChat from "services/chats/create-chat.service";
-import getAllChats from "services/chats/get-all-chats.service";
-import getAllEmployees from "services/employees/get-all-employees";
 import AddIcon from "@mui/icons-material/Add";
 import ArrowBack from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router";
@@ -13,18 +10,20 @@ import useData from "./useData";
 import { useAppDispatch } from "store";
 import { setErrorMessage, setSuccessMessage } from "store/customizationSlice";
 import BackendError from "exceptions/backend-error";
+import getAllUsers from "services/users/get-all-users";
 
 const CreateChat = () => {
-  const [employees, setEmployees] = useState<any>([]);
+  const [users, setUsers] = useState<any>([]);
   const { fetchChats } = useData();
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
 
-  const fetchAllEmployees = useCallback(async () => {
+  const fetchAllUsers = useCallback(async () => {
     try {
-      const response = await getAllEmployees();
-      setEmployees(response);
+      const response = await getAllUsers();
+      setUsers(response);
+      console.log(response);
     } catch (error) {
       if (error instanceof BackendError)
         dispatch(setErrorMessage(error.getMessage()));
@@ -32,8 +31,8 @@ const CreateChat = () => {
   }, []);
 
   useEffect(() => {
-    fetchAllEmployees();
-  }, [fetchAllEmployees]);
+    fetchAllUsers();
+  }, [fetchAllUsers]);
 
   const createChat = useCallback(async (userId: number) => {
     try {
@@ -85,9 +84,9 @@ const CreateChat = () => {
           overflow: "auto",
         }}
       >
-        {employees.map((employee: any) => (
+        {users.map((user: any) => (
           <Box
-            key={employee.user.id}
+            key={user.id}
             sx={{
               display: "flex",
               flexDirection: "column",
@@ -108,17 +107,16 @@ const CreateChat = () => {
             >
               <Box sx={{ display: "flex", flexDirection: "column" }}>
                 <Typography sx={{ fontSize: "20px", fontWeight: "800" }}>
-                  {employee.user.name && employee.user.name}{" "}
-                  {employee.user.lastname && employee.user.lastname}
+                  {user.name && user.name} {user.lastname && user.lastname}
                 </Typography>
 
                 <Typography sx={{ fontSize: "16px" }}>
-                  Rol: {TranslatedRole[employee.user.role as AllRole]}
+                  Rol: {TranslatedRole[user.role as AllRole]}
                 </Typography>
               </Box>
               <IconButton
                 onClick={() => {
-                  createChat(employee.user.id);
+                  createChat(user.id);
                 }}
                 sx={{ width: "50px", height: "50px" }}
               >

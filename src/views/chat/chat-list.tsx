@@ -66,7 +66,6 @@ const ChatList: FunctionComponent<Prop> = ({ className }) => {
                 width: "60px",
                 maxHeight: "60px",
                 maxWidth: "60px",
-                background: "red",
                 borderRadius: "100px",
               }}
               component="img"
