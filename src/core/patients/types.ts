@@ -17,7 +17,7 @@ export enum StatusPatient {
 export enum TranslatedPatientStatus {
   active = "En seguimiento",
   inactive = "Dado de Alta",
-  emergency = "Hozpitalizado",
+  emergency = "Hospitalizado",
   closed = "Caso Cerrado",
 }
 

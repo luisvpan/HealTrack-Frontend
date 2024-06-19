@@ -105,6 +105,11 @@ const Table: FunctionComponent<Props> = ({ items, className, fetchItems }) => {
             ),
             cellAlignment: "center",
           },
+          {
+            columnLabel: "Descripción",
+            fieldName: "additionalInformation",
+            cellAlignment: "center",
+          },
         ]}
         rows={items}
         components={[
