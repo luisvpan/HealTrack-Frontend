@@ -16,7 +16,6 @@ export default async function getAllEmployees(): Promise<Employee[]> {
         }
       }
     );
-    console.log(response.data)
     return response.data;
   } catch (error: unknown) {
     console.log(error);

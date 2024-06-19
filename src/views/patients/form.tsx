@@ -220,7 +220,6 @@ const Form: FunctionComponent<Props> = ({
                   value={dayjs(values.surgeryDate)}
                   onChange={(newValue: any) => {
                     const newValueFormatted = newValue.format("YYYY-MM-DD"); //'DD-MM-AAAA'
-                    console.log(newValueFormatted);
                     handleChange({
                       target: {
                         name: "surgeryDate",

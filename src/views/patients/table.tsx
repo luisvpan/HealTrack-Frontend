@@ -1,5 +1,5 @@
 import { Button } from "@mui/material";
-import { IconTrash, IconEdit, IconRefreshAlert } from "@tabler/icons";
+import { IconTrash, IconEdit, IconRefreshAlert, IconEye } from "@tabler/icons";
 import DynamicTable from "components/DynamicTable";
 // Own
 import { Patient, TranslatedPatientStatus } from "core/patients/types";
@@ -92,6 +92,17 @@ const Table: FunctionComponent<Props> = ({ items, className, fetchItems }) => {
         ]}
         rows={items}
         components={[
+          (row: Patient) => (
+            <Button
+              color="primary"
+              onClick={() => {
+                navigate("/patients/detail/" + row.id);
+              }}
+              startIcon={<IconEye />}
+            >
+              Ver
+            </Button>
+          ),
           (row: Patient) => (
             <Button
               color="info"

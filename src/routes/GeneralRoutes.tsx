@@ -9,6 +9,7 @@ import EditEmployee from "views/employees/edit";
 import Patients from "views/patients";
 import CreatePatient from "views/patients/create";
 import EditPatient from "views/patients/edit";
+import DetailPatient from "views/patients/detail";
 
 import Chat from "views/chat";
 
@@ -42,6 +43,10 @@ const GeneralRoutes: RouteObject[] = [
   {
     path: "patients/edit/:id",
     element: <EditPatient />,
+  },
+  {
+    path: "patients/detail/:id",
+    element: <DetailPatient />,
   },
   //Chat
   {

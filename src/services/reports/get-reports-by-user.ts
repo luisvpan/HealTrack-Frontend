@@ -7,11 +7,9 @@ import store from "store";
 
 const URL = `${API_BASE_URL}/reports`;
 
-export default async function createReport(
-  body: any
-): Promise<Report> {
+export default async function getReportsByUser(userId: number): Promise<Report[]> {
   try {
-    const response = await axios.post<Report>(URL, body, {
+    const response = await axios.get<Report[]>(`${URL}/user/${userId}`, {
       headers: {
         Authorization: `Bearer ${store.getState().auth.token}`,
       },
@@ -21,13 +19,4 @@ export default async function createReport(
     console.log(error);
     throw new BackendError(error);
   }
-}
-
-interface CreateReportBody {
-  isRespondingForEmployee: boolean;
-  hasHighTemperature: boolean;
-  hasRedness: boolean;
-  hasSwelling: boolean;
-  hasSecretions: boolean;
-  fileUrl: string | null;
 }

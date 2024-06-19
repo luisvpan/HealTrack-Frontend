@@ -54,7 +54,6 @@ const EditPatient: FunctionComponent<Props> = ({ className }) => {
         delete formatedValues.identification;
         delete formatedValues.password;
         delete formatedValues.submit;
-        console.log(formatedValues);
         await editPatient(patientId!, formatedValues);
         navigate("/patients");
         dispatch(

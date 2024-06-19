@@ -30,7 +30,6 @@ const CreateReport: FunctionComponent<Props> = ({ className }) => {
         setErrors({});
         setStatus({});
         setSubmitting(true);
-        console.log({ values });
         for (const key in values) {
           if (values[key] === "true") {
             values[key] = true;
@@ -41,7 +40,6 @@ const CreateReport: FunctionComponent<Props> = ({ className }) => {
         }
         delete values.id;
         delete values.submit;
-        console.log({ values });
         const valuesToSend = jsonToFormData(values);
 
         await createReport(valuesToSend);

@@ -1,5 +1,6 @@
 import { Employee, Hospital } from "core/employees/types";
 import { User } from "core/users/types";
+import { Report } from "core/reports/types";
 
 export enum SurgeryType {
   SURGERYTYPE1 = "A",
@@ -35,4 +36,5 @@ export interface Patient {
   status: StatusPatient;
   deletedAt: Date;
   medic: Employee;
+  patientReports?: Report[];
 }

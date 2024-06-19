@@ -36,7 +36,6 @@ const Table: FunctionComponent<Props> = ({ items, className, fetchItems }) => {
   }, []);
 
   const handleOpenImage = useCallback((imageUrl: string | null) => {
-    console.log({ imageUrl });
     setOpenImage(true);
     setDialogImage(imageUrl);
   }, []);
@@ -54,7 +53,6 @@ const Table: FunctionComponent<Props> = ({ items, className, fetchItems }) => {
         dispatch(setSuccessMessage(`Reporte eliminado correctamente`));
       } catch (error) {
         if (error instanceof BackendError) {
-          console.log(error.statusCode);
           if (error.statusCode === 403) {
             dispatch(
               setErrorMessage(

@@ -174,8 +174,6 @@ const Form: FunctionComponent<Props> = ({
                     acceptedFiles={["image/jpeg", "image/png"]}
                     filesLimit={1}
                     onChange={(files) => {
-                      console.log(files);
-                      console.log(files[0]);
                       setFieldValue("file", files[0]);
                     }}
                   />
