@@ -1,30 +1,33 @@
-import { useAppDispatch } from "store";
+import store, { useAppDispatch } from "store";
 import { Patient } from "core/patients/types";
 import BackendError from "exceptions/backend-error";
-import getAllPatients from "services/patients/get-all-patients";
+import getPatientsByEmployee from "services/patients/get-patients-by-employee";
 
 import { useEffect, useState, useCallback } from "react";
 import { setErrorMessage, setIsLoading } from "store/customizationSlice";
 
 export default function useData() {
+  const userEmployeeId = store.getState().auth.user?.employee;
   const dispatch = useAppDispatch();
   const [items, setItems] = useState<Patient[]>([]);
 
   const fetchPatients = useCallback(async () => {
     try {
       dispatch(setIsLoading(true));
-      const response = await getAllPatients();
-      const formatedEmployees = response.map((item) => {
-        return { ...item, ...item.user, id: item.id };
-      });
-      setItems(formatedEmployees);
+      if (!!userEmployeeId) {
+        const response = await getPatientsByEmployee(userEmployeeId);
+        const formatedPatients = response.map((item) => {
+          return { ...item, ...item.user, id: item.id };
+        });
+        setItems(formatedPatients);
+      }
     } catch (error) {
       if (error instanceof BackendError)
         dispatch(setErrorMessage(error.getMessage()));
     } finally {
       dispatch(setIsLoading(false));
     }
-  }, [dispatch]);
+  }, [dispatch, userEmployeeId]);
 
   useEffect(() => {
     fetchPatients();

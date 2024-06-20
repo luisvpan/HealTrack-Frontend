@@ -28,7 +28,7 @@ const CreateChat = () => {
       if (error instanceof BackendError)
         dispatch(setErrorMessage(error.getMessage()));
     }
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     fetchAllUsers();
@@ -44,11 +44,11 @@ const CreateChat = () => {
       if (error instanceof BackendError)
         dispatch(setErrorMessage(error.getMessage()));
     }
-  }, []);
+  }, [dispatch, fetchChats, navigate]);
 
   const goToChatList = useCallback(() => {
     navigate("/chat-list");
-  }, []);
+  }, [navigate]);
   return (
     <MainCard
       title={

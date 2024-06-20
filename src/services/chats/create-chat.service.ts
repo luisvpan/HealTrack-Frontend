@@ -1,12 +1,13 @@
 import axios from "axios";
-import { API_BASE_URL } from "../../config/constants";
 import store from "../../store";
+import { Chat } from "core/chats/types";
+import { API_BASE_URL } from "../../config/constants";
 import BackendError from "../../exceptions/backend-error";
 // Own
 
 const URL = `${API_BASE_URL}/chats`;
 
-export default async function postChat(userId: number): Promise<any> {
+export default async function postChat(userId: number): Promise<Chat> {
   try {
     const response = await axios.post(
       `${URL}`,

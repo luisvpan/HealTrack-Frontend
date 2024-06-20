@@ -1,4 +1,5 @@
 // project imports
+import store from "store";
 import { RouteObject } from "react-router";
 
 // Empleados
@@ -18,38 +19,52 @@ import CreateReport from "views/reports/create";
 import EditReport from "views/reports/edit";
 import ChatList from "views/chat/chat-list";
 import CreateChat from "views/chat/create";
+import { AllRole } from "core/users/types";
+
+const userRole = store.getState().auth.user?.role;
+const isPatient = userRole === AllRole.PATIENT;
 
 const GeneralRoutes: RouteObject[] = [
   // Empleados
-  {
-    path: "employees",
-    element: <Employees />,
-  },
-  {
-    path: "employees/create",
-    element: <CreateEmployee />,
-  },
-  {
-    path: "employees/edit/:id",
-    element: <EditEmployee />,
-  },
+  ...(!isPatient
+    ? [
+        {
+          path: "employees",
+          element: <Employees />,
+        },
+        {
+          path: "employees/create",
+          element: <CreateEmployee />,
+        },
+        {
+          path: "employees/edit/:id",
+          element: <EditEmployee />,
+        },
+      ]
+    : []),
+
   // Pacientes
-  {
-    path: "patients",
-    element: <Patients />,
-  },
-  {
-    path: "patients/create",
-    element: <CreatePatient />,
-  },
-  {
-    path: "patients/edit/:id",
-    element: <EditPatient />,
-  },
-  {
-    path: "patients/detail/:id",
-    element: <DetailPatient />,
-  },
+  ...(!isPatient
+    ? [
+        {
+          path: "patients",
+          element: <Patients />,
+        },
+        {
+          path: "patients/create",
+          element: <CreatePatient />,
+        },
+        {
+          path: "patients/edit/:id",
+          element: <EditPatient />,
+        },
+        {
+          path: "patients/detail/:id",
+          element: <DetailPatient />,
+        },
+      ]
+    : []),
+
   //Chat
   {
     path: "chat-list",

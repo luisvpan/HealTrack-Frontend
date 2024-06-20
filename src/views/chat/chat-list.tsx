@@ -15,11 +15,14 @@ const ChatList: FunctionComponent<Prop> = ({ className }) => {
 
   const goToCreate = useCallback(() => {
     navigate("/chat/create");
-  }, []);
+  }, [navigate]);
 
-  const goToChat = useCallback((chatId: number) => {
-    navigate(`/chat/${chatId}`);
-  }, []);
+  const goToChat = useCallback(
+    (chatId: number) => {
+      navigate(`/chat/${chatId}`);
+    },
+    [navigate]
+  );
 
   return (
     <MainCard

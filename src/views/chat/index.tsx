@@ -6,12 +6,14 @@ import store from "store";
 
 import getMessagesById from "services/messages/get-messages-by-id.service";
 import sendMessage from "services/messages/create-message.service";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Socket, io } from "socket.io-client";
 import MainCard from "components/cards/MainCard";
 import { AllRole, TranslatedRole } from "core/users/types";
+import BackendError from "exceptions/backend-error";
 
 const Chat = () => {
+  const navigate = useNavigate();
   const [messageToSend, setMessageToSend] = useState<string>("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [chatInfo, setChatInfo] = useState<ChatInfo | null>(null);
@@ -49,8 +51,11 @@ const Chat = () => {
       } */
     } catch (error) {
       console.log(error);
+      if (error instanceof BackendError && error.statusCode === 404) {
+        navigate("/chat-list");
+      }
     }
-  }, []);
+  }, [chatId, navigate]);
 
   useEffect(() => {
     getAllMessages();
@@ -72,7 +77,7 @@ const Chat = () => {
         console.log(error);
       }
     },
-    [messageToSend]
+    [chatId, messageToSend, user]
   );
 
   useEffect(() => {
