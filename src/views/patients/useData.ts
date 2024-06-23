@@ -5,9 +5,11 @@ import getPatientsByEmployee from "services/patients/get-patients-by-employee";
 
 import { useEffect, useState, useCallback } from "react";
 import { setErrorMessage, setIsLoading } from "store/customizationSlice";
+import getAllPatients from "services/patients/get-all-patients";
 
 export default function useData() {
   const userEmployeeId = store.getState().auth.user?.employee;
+  const role = store.getState().auth.user?.role;
   const dispatch = useAppDispatch();
   const [items, setItems] = useState<Patient[]>([]);
 
@@ -20,6 +22,14 @@ export default function useData() {
           return { ...item, ...item.user, id: item.id };
         });
         setItems(formatedPatients);
+
+        if (role === "admin") {
+          const response = await getAllPatients();
+          const formatedPatients = response.map((item) => {
+            return { ...item, ...item.user, id: item.id };
+          });
+          setItems(formatedPatients);
+        }
       }
     } catch (error) {
       if (error instanceof BackendError)

@@ -31,7 +31,7 @@ const ChatList: FunctionComponent<Prop> = ({ className }) => {
       title={
         <div className={"chats-header"}>
           <Typography variant="h3" className={"title-header"}>
-            Pacientes
+            Chats
           </Typography>
           <Button
             color="primary"
