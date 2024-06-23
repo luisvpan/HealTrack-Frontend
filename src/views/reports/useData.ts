@@ -19,17 +19,20 @@ export default function useData() {
   const fetchReports = useCallback(async () => {
     try {
       dispatch(setIsLoading(true));
-      if (userRole !== AllRole.ADMIN) {
+      if (userRole === AllRole.ADMIN) {
         const response = await getAllReports();
         setItems(response);
+        return;
       }
       if (userRole === AllRole.PATIENT && userId) {
         const response = await getReportsByUser(userId);
         setItems(response);
+        return;
       }
       if (userRole !== AllRole.PATIENT && userEmployeeId) {
         const response = await getReportsByEmployee(userEmployeeId);
         setItems(response);
+        return;
       }
     } catch (error) {
       if (error instanceof BackendError)
