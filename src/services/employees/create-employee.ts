@@ -5,7 +5,7 @@ import { Employee } from "core/employees/types";
 import BackendError from "exceptions/backend-error";
 import store from "store";
 
-const URL = `${API_BASE_URL}/employees`;
+const URL = `${API_BASE_URL}/auth/register/employee`;
 
 export default async function createEmployee(
   body: EmployeePayload

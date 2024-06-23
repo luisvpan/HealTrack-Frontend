@@ -5,7 +5,7 @@ import { Patient } from "core/patients/types";
 import BackendError from "exceptions/backend-error";
 import store from "store";
 
-const URL = `${API_BASE_URL}/patients`;
+const URL = `${API_BASE_URL}/auth/register/patient`;
 
 export default async function createPatient(
   body: PatientPayload
