@@ -72,7 +72,7 @@ const Detail: FunctionComponent<Props> = ({ className, patient }) => {
           title={
             <div className="patients-detail-header">
               <Typography variant="h2" className="title-header">
-                {`Detalles del paciente ${patient.user.name} ${patient.user.lastname}`}
+                {`Detalle del paciente ${patient.user.name} ${patient.user.lastname}`}
               </Typography>
               <Button
                 color="primary"
