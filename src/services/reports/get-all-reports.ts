@@ -8,11 +8,15 @@ import store from "store";
 const URL = `${API_BASE_URL}/reports`;
 
 export default async function getAllReports(
-  userId?: number
+  userId?: number,
+  startDate?: string,
+  endDate?: string
 ): Promise<Report[]> {
   try {
     const response = await axios.get(
-      `${URL}${!!userId ? "?userId=" + userId : ""}`,
+      `${URL}?${!!userId ? "userId=" + userId : ""}${
+        !!startDate ? "&startDate=" + startDate : ""
+      }${!!endDate ? "&endDate=" + endDate : ""}`,
       {
         headers: {
           Authorization: `Bearer ${store.getState().auth.token}`,

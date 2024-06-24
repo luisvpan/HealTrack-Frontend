@@ -7,14 +7,25 @@ import { AllRole } from "core/users/types";
 import { IconCirclePlus } from "@tabler/icons";
 import MainCard from "components/cards/MainCard";
 import SelectField from "components/SelectField";
+import { DatePicker } from "@mui/x-date-pickers";
 import { FunctionComponent, useCallback } from "react";
 import { Button, FormControl, Typography } from "@mui/material";
 import usePatientsOptions from "core/patients/use-patients-options";
+import dayjs from "dayjs";
 
 const Reports: FunctionComponent<Prop> = ({ className }) => {
   const userRole = store.getState().auth.user?.role;
   const patientOptions = usePatientsOptions();
-  const { items, fetchReports, setPatientId, patientId } = useData();
+  const {
+    items,
+    fetchReports,
+    setPatientId,
+    patientId,
+    setStartDate,
+    startDate,
+    setEndDate,
+    endDate,
+  } = useData();
   const navigate = useNavigate();
 
   const goToCreate = useCallback(() => {
@@ -31,6 +42,36 @@ const Reports: FunctionComponent<Prop> = ({ className }) => {
             Reportes
           </Typography>
           <div>
+            <FormControl className={"field-form-header-container"}>
+              <DatePicker
+                label="Desde"
+                value={dayjs(startDate)}
+                format="YYYY-MM-DD"
+                slotProps={{
+                  field: { clearable: true, onClear: () => setStartDate("") },
+                }}
+                onChange={(newValue: any) => {
+                  if (!!newValue) {
+                    setStartDate(newValue?.format("YYYY-MM-DD"));
+                  }
+                }}
+              />
+            </FormControl>
+            <FormControl className={"field-form-header-container"}>
+              <DatePicker
+                label="Hasta"
+                value={dayjs(endDate)}
+                format="YYYY-MM-DD"
+                slotProps={{
+                  field: { clearable: true, onClear: () => setEndDate("") },
+                }}
+                onChange={(newValue: any) => {
+                  if (!!newValue) {
+                    setEndDate(newValue?.format("YYYY-MM-DD"));
+                  }
+                }}
+              />
+            </FormControl>
             {userRole !== AllRole.PATIENT && (
               <FormControl className={"field-form-header-container"}>
                 <SelectField
@@ -75,7 +116,8 @@ export default styled(Reports)`
   flex-direction: column;
 
   .field-form-header-container {
-    width: 300px;
+    width: 200px;
+    margin: 5px 10px;
   }
 
   .reports-header {

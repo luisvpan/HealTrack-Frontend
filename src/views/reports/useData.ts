@@ -15,23 +15,30 @@ export default function useData() {
   const userEmployeeId = store.getState().auth.user?.employee;
   const dispatch = useAppDispatch();
   const [items, setItems] = useState<Report[]>([]);
+  const [startDate, setStartDate] = useState<string>("");
+  const [endDate, setEndDate] = useState<string>("");
   const [patientId, setPatientId] = useState<number>(0);
 
   const fetchReports = useCallback(async () => {
     try {
       dispatch(setIsLoading(true));
       if (userRole === AllRole.ADMIN) {
-        const response = await getAllReports(patientId);
+        const response = await getAllReports(patientId, startDate, endDate);
         setItems(response);
         return;
       }
       if (userRole === AllRole.PATIENT && userId) {
-        const response = await getReportsByUser(userId);
+        const response = await getReportsByUser(userId, startDate, endDate);
         setItems(response);
         return;
       }
       if (userRole !== AllRole.PATIENT && userEmployeeId) {
-        const response = await getReportsByEmployee(userEmployeeId, patientId);
+        const response = await getReportsByEmployee(
+          userEmployeeId,
+          patientId,
+          startDate,
+          endDate
+        );
         setItems(response);
         return;
       }
@@ -41,11 +48,28 @@ export default function useData() {
     } finally {
       dispatch(setIsLoading(false));
     }
-  }, [dispatch, patientId, userEmployeeId, userId, userRole]);
+  }, [
+    dispatch,
+    endDate,
+    patientId,
+    startDate,
+    userEmployeeId,
+    userId,
+    userRole,
+  ]);
 
   useEffect(() => {
     fetchReports();
   }, [fetchReports]);
 
-  return { items, fetchReports, setPatientId, patientId } as const;
+  return {
+    items,
+    fetchReports,
+    setPatientId,
+    patientId,
+    startDate,
+    setStartDate,
+    endDate,
+    setEndDate,
+  } as const;
 }

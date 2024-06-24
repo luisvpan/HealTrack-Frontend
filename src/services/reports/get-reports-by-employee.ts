@@ -9,11 +9,15 @@ const URL = `${API_BASE_URL}/reports`;
 
 export default async function getReportsByEmployee(
   employeeId: number,
-  userId?: number
+  userId?: number,
+  startDate?: string,
+  endDate?: string
 ): Promise<Report[]> {
   try {
     const response = await axios.get<Report[]>(
-      `${URL}/employee/${employeeId}${!!userId ? "?userId=" + userId : ""}`,
+      `${URL}/employee/${employeeId}?${!!userId ? "userId=" + userId : ""}${
+        !!startDate ? "&startDate=" + startDate : ""
+      }${!!endDate ? "&endDate=" + endDate : ""}`,
       {
         headers: {
           Authorization: `Bearer ${store.getState().auth.token}`,
