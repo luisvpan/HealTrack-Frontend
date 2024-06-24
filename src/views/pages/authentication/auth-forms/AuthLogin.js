@@ -50,7 +50,7 @@ const FirebaseLogin = ({ ...others }) => {
   };
 
   if (isAuthenticated) {
-    window.location.href = window.location.origin + '/employees';
+    window.location.href = window.location.origin + '/';
     return null;
   }
 
