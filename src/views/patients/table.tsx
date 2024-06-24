@@ -1,5 +1,5 @@
 import { Button } from "@mui/material";
-import { IconTrash, IconEdit, IconRefreshAlert, IconEye } from "@tabler/icons";
+import { /*IconTrash,*/ IconEdit, IconRefreshAlert, IconEye } from "@tabler/icons";
 import DynamicTable from "components/DynamicTable";
 // Own
 import { Patient, TranslatedPatientStatus } from "core/patients/types";
@@ -24,10 +24,11 @@ const Table: FunctionComponent<Props> = ({ items, className, fetchItems }) => {
   const [openChangeState, setOpenChangeState] = useState<boolean>(false);
   const [patientId, setPatientId] = useState<number>(0);
 
-  const handleOpen = useCallback((patientId: number) => {
+
+  /*const handleOpen = useCallback((patientId: number) => {
     setOpen(true);
     setPatientId(patientId);
-  }, []);
+  }, []);*/
 
   const handleClose = useCallback(() => {
     setOpen(false);
@@ -123,6 +124,7 @@ const Table: FunctionComponent<Props> = ({ items, className, fetchItems }) => {
               Editar
             </Button>
           ),
+          /*
           (row: Patient) => (
             <Button
               color="secondary"
@@ -132,6 +134,7 @@ const Table: FunctionComponent<Props> = ({ items, className, fetchItems }) => {
               Eliminar
             </Button>
           ),
+          */
         ]}
       />
       <DialogDelete

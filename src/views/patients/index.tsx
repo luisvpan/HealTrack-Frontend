@@ -4,11 +4,13 @@ import { styled } from "styled-components";
 import { useNavigate } from "react-router";
 import { IconCirclePlus } from "@tabler/icons";
 import MainCard from "components/cards/MainCard";
-import { Button, Typography } from "@mui/material";
+import { Button, FormControl, Typography } from "@mui/material";
 import { FunctionComponent, useCallback } from "react";
+import SelectField from "components/SelectField";
+import { StatusPatientOptions } from "core/patients/types";
 
 const Patients: FunctionComponent<Prop> = ({ className }) => {
-  const { items, fetchPatients } = useData();
+  const { items, fetchPatients, status, setStatus } = useData();
   const navigate = useNavigate();
 
   const goToCreate = useCallback(() => {
@@ -24,6 +26,21 @@ const Patients: FunctionComponent<Prop> = ({ className }) => {
           <Typography variant="h3" className={"title-header"}>
             Pacientes
           </Typography>
+          <FormControl className={"field-form-header-container"}>
+            <SelectField
+              className="field-form-header"
+              fullWidth={true}
+              name="status"
+              onChange={(e) => {
+                setStatus(String(e.target.value));
+              }}
+              label="Estado"
+              options={StatusPatientOptions}
+              error={false}
+              isAutocomplete={false}
+              value={status}
+            />
+          </FormControl>
           <Button
             color="primary"
             variant={"outlined"}
@@ -48,6 +65,10 @@ export default styled(Patients)`
   width: 100%;
   display: flex;
   flex-direction: column;
+
+  .field-form-header-container {
+    width: 300px;
+  }
 
   .patients-header {
     flex: 1;

@@ -1,14 +1,20 @@
+import store from "store";
 import Table from "./table";
 import useData from "./useData";
 import { styled } from "styled-components";
 import { useNavigate } from "react-router";
+import { AllRole } from "core/users/types";
 import { IconCirclePlus } from "@tabler/icons";
 import MainCard from "components/cards/MainCard";
-import { Button, Typography } from "@mui/material";
+import SelectField from "components/SelectField";
 import { FunctionComponent, useCallback } from "react";
+import { Button, FormControl, Typography } from "@mui/material";
+import usePatientsOptions from "core/patients/use-patients-options";
 
 const Reports: FunctionComponent<Prop> = ({ className }) => {
-  const { items, fetchReports } = useData();
+  const userRole = store.getState().auth.user?.role;
+  const patientOptions = usePatientsOptions();
+  const { items, fetchReports, setPatientId, patientId } = useData();
   const navigate = useNavigate();
 
   const goToCreate = useCallback(() => {
@@ -24,6 +30,25 @@ const Reports: FunctionComponent<Prop> = ({ className }) => {
           <Typography variant="h3" className={"title-header"}>
             Reportes
           </Typography>
+          <div>
+            {userRole !== AllRole.PATIENT && (
+              <FormControl className={"field-form-header-container"}>
+                <SelectField
+                  className="field-form-header"
+                  fullWidth={true}
+                  name="userId"
+                  onChange={(e) => {
+                    setPatientId(Number(e.target.value));
+                  }}
+                  label="Paciente"
+                  options={patientOptions}
+                  error={false}
+                  isAutocomplete={false}
+                  value={patientId}
+                />
+              </FormControl>
+            )}
+          </div>
           <Button
             color="primary"
             variant={"outlined"}
@@ -48,6 +73,10 @@ export default styled(Reports)`
   width: 100%;
   display: flex;
   flex-direction: column;
+
+  .field-form-header-container {
+    width: 300px;
+  }
 
   .reports-header {
     flex: 1;

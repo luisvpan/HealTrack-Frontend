@@ -7,13 +7,18 @@ import store from "store";
 
 const URL = `${API_BASE_URL}/reports`;
 
-export default async function getAllReports(): Promise<Report[]> {
+export default async function getAllReports(
+  userId?: number
+): Promise<Report[]> {
   try {
-    const response = await axios.get(URL, {
-      headers: {
-        Authorization: `Bearer ${store.getState().auth.token}`,
-      },
-    });
+    const response = await axios.get(
+      `${URL}${!!userId ? "?userId=" + userId : ""}`,
+      {
+        headers: {
+          Authorization: `Bearer ${store.getState().auth.token}`,
+        },
+      }
+    );
     return response.data;
   } catch (error: unknown) {
     console.log(error);

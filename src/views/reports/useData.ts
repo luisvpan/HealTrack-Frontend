@@ -15,12 +15,13 @@ export default function useData() {
   const userEmployeeId = store.getState().auth.user?.employee;
   const dispatch = useAppDispatch();
   const [items, setItems] = useState<Report[]>([]);
+  const [patientId, setPatientId] = useState<number>(0);
 
   const fetchReports = useCallback(async () => {
     try {
       dispatch(setIsLoading(true));
       if (userRole === AllRole.ADMIN) {
-        const response = await getAllReports();
+        const response = await getAllReports(patientId);
         setItems(response);
         return;
       }
@@ -30,7 +31,7 @@ export default function useData() {
         return;
       }
       if (userRole !== AllRole.PATIENT && userEmployeeId) {
-        const response = await getReportsByEmployee(userEmployeeId);
+        const response = await getReportsByEmployee(userEmployeeId, patientId);
         setItems(response);
         return;
       }
@@ -40,11 +41,11 @@ export default function useData() {
     } finally {
       dispatch(setIsLoading(false));
     }
-  }, [dispatch, userEmployeeId, userId, userRole]);
+  }, [dispatch, patientId, userEmployeeId, userId, userRole]);
 
   useEffect(() => {
     fetchReports();
   }, [fetchReports]);
 
-  return { items, fetchReports } as const;
+  return { items, fetchReports, setPatientId, patientId } as const;
 }

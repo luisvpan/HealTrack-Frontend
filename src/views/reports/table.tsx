@@ -1,13 +1,13 @@
 import { Button, Typography } from "@mui/material";
-import { IconTrash, IconEdit, IconEye } from "@tabler/icons";
-import DynamicTable from "components/DynamicTable";
+import dayjs from "dayjs";
+import { IconTrash, IconEye } from "@tabler/icons";
+import DynamicTable, { Settings } from "components/DynamicTable";
 // Own
 import { Report } from "core/reports/types";
 import deleteReport from "services/reports/delete-report";
 import { FunctionComponent, useCallback, useState } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router";
-import { useAppDispatch } from "store/index";
+import store, { useAppDispatch } from "store/index";
 import {
   setIsLoading,
   setSuccessMessage,
@@ -16,9 +16,10 @@ import {
 import BackendError from "exceptions/backend-error";
 import DialogDelete from "components/dialogDelete";
 import DialogImage from "components/dialogImage";
+import { AllRole } from "core/users/types";
 
 const Table: FunctionComponent<Props> = ({ items, className, fetchItems }) => {
-  const navigate = useNavigate();
+  const role = store.getState().auth.user?.role;
   const dispatch = useAppDispatch();
   const [open, setOpen] = useState<boolean>(false);
   const [openImage, setOpenImage] = useState<boolean>(false);
@@ -76,7 +77,28 @@ const Table: FunctionComponent<Props> = ({ items, className, fetchItems }) => {
     <div className={className}>
       <DynamicTable
         headers={[
-          { columnLabel: "Id", fieldName: "id", cellAlignment: "center" },
+          ...(role !== AllRole.PATIENT
+            ? [
+                {
+                  columnLabel: "Paciente",
+                  cellAlignment: "center" as Settings["cellAlignment"],
+                  onRender: (row: Report) => (
+                    <Typography>
+                      {`${row.user.name} ${row.user.lastname}`}
+                    </Typography>
+                  ),
+                },
+              ]
+            : []),
+          {
+            columnLabel: "Fecha",
+            onRender: (row: Report) => (
+              <Typography>
+                {dayjs(row.createdAt).format("DD/MM/YYYY")}
+              </Typography>
+            ),
+            cellAlignment: "center",
+          },
           {
             columnLabel: "¿Tiene temperatura alta?",
             onRender: (row: Report) => (
@@ -123,19 +145,6 @@ const Table: FunctionComponent<Props> = ({ items, className, fetchItems }) => {
                 Ver Imagen
               </Button>
             ) : null,
-          /*
-          (row: Report) => (
-            <Button
-              color="primary"
-              onClick={() => {
-                navigate("/reports/edit/" + row.id);
-              }}
-              startIcon={<IconEdit />}
-            >
-              Editar
-            </Button>
-          ),
-          */
           (row: Report) => (
             <Button
               color="error"

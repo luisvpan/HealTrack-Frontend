@@ -12,6 +12,7 @@ export enum StatusPatient {
   ACTIVE = "active",
   INACTIVE = "inactive",
   EMERGENCY = "emergency",
+  CLOSED = "closed",
 }
 
 export enum TranslatedPatientStatus {
@@ -20,6 +21,13 @@ export enum TranslatedPatientStatus {
   emergency = "Hospitalizado",
   closed = "Caso Cerrado",
 }
+
+export const StatusPatientOptions = [
+  { label: TranslatedPatientStatus.active, value: StatusPatient.ACTIVE },
+  { label: TranslatedPatientStatus.inactive, value: StatusPatient.INACTIVE },
+  { label: TranslatedPatientStatus.emergency, value: StatusPatient.EMERGENCY },
+  { label: TranslatedPatientStatus.closed, value: StatusPatient.CLOSED },
+];
 
 export interface Patient {
   id: number;

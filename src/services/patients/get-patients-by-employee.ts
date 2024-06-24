@@ -8,11 +8,12 @@ import store from "store";
 const URL = `${API_BASE_URL}/patients`;
 
 export default async function getPatientsByEmployee(
-  employeeId: number
+  employeeId: number,
+  status?: string
 ): Promise<Patient[]> {
   try {
     const response = await axios.get<Patient[]>(
-      `${URL}/employee/${employeeId}`,
+      `${URL}/employee/${employeeId}${!!status ? "?status=" + status : ""}`,
       {
         headers: {
           Authorization: `Bearer ${store.getState().auth.token}`,

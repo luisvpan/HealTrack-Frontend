@@ -11,25 +11,27 @@ export default function useData() {
   const userEmployeeId = store.getState().auth.user?.employee;
   const role = store.getState().auth.user?.role;
   const dispatch = useAppDispatch();
+  const [status, setStatus] = useState<string>("");
   const [items, setItems] = useState<Patient[]>([]);
 
   const fetchPatients = useCallback(async () => {
     try {
       dispatch(setIsLoading(true));
-      if (!!userEmployeeId) {
-        const response = await getPatientsByEmployee(userEmployeeId);
+      if (role === "admin") {
+        const response = await getAllPatients(status);
         const formatedPatients = response.map((item) => {
           return { ...item, ...item.user, id: item.id };
         });
         setItems(formatedPatients);
+        return;
+      }
 
-        if (role === "admin") {
-          const response = await getAllPatients();
-          const formatedPatients = response.map((item) => {
-            return { ...item, ...item.user, id: item.id };
-          });
-          setItems(formatedPatients);
-        }
+      if (!!userEmployeeId) {
+        const response = await getPatientsByEmployee(userEmployeeId, status);
+        const formatedPatients = response.map((item) => {
+          return { ...item, ...item.user, id: item.id };
+        });
+        setItems(formatedPatients);
       }
     } catch (error) {
       if (error instanceof BackendError)
@@ -37,11 +39,11 @@ export default function useData() {
     } finally {
       dispatch(setIsLoading(false));
     }
-  }, [dispatch, userEmployeeId]);
+  }, [dispatch, role, status, userEmployeeId]);
 
   useEffect(() => {
     fetchPatients();
   }, [fetchPatients]);
 
-  return { items, fetchPatients } as const;
+  return { items, fetchPatients, setStatus, status } as const;
 }
