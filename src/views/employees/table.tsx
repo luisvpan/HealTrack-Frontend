@@ -77,7 +77,7 @@ const Table: FunctionComponent<Props> = ({ items, className, fetchItems }) => {
           {
             columnLabel: "Rol",
             cellAlignment: "left",
-            onRender: (row: Employee) => TranslatedRole[row.user.role],
+            onRender: (row: Employee) => TranslatedRole[row.user?.role],
           },
         ]}
         rows={items}
