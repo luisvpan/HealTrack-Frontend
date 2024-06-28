@@ -16,7 +16,6 @@ export default function useData() {
       dispatch(setIsLoading(true));
       const response = await getAllChats();
       setItems(response);
-      console.log(response);
     } catch (error) {
       if (error instanceof BackendError)
         dispatch(setErrorMessage(error.getMessage()));

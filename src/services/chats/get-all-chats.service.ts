@@ -15,7 +15,7 @@ export default async function getAllChats(): Promise<Chat[]> {
         Authorization: `Bearer ${store.getState().auth.token}`,
       },
     });
-    console.log(response.data);
+
     return response.data;
   } catch (error: unknown) {
     throw new BackendError(error);

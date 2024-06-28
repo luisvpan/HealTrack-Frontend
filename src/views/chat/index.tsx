@@ -11,6 +11,7 @@ import { Socket, io } from "socket.io-client";
 import MainCard from "components/cards/MainCard";
 import { AllRole, TranslatedRole } from "core/users/types";
 import BackendError from "exceptions/backend-error";
+import { API_BASE_URL } from "config/constants";
 
 const Chat = () => {
   const navigate = useNavigate();
@@ -23,12 +24,14 @@ const Chat = () => {
   const token = store.getState().auth.token;
   const userId = store.getState().auth.user?.id;
   const user = store.getState().auth.user;
-
+  const URL = API_BASE_URL!.endsWith("/api/v1")
+    ? API_BASE_URL!.replace("/api/v1", "")
+    : API_BASE_URL;
   const socket = useRef<Socket | null>(null);
 
   useEffect(() => {
-    if (!socket.current) {
-      socket.current = io("http://localhost:3000", {
+    if (!socket.current && URL) {
+      socket.current = io(URL, {
         extraHeaders: {
           Authorization: "Bearer " + token,
         },
@@ -38,7 +41,6 @@ const Chat = () => {
 
   const getAllMessages = useCallback(async () => {
     try {
-      console.log(chatId);
       const response = await getMessagesById(Number(chatId));
       setMessages(response.data.items);
       setChatInfo(response.data.chat);

@@ -72,7 +72,7 @@ const Table: FunctionComponent<Props> = ({ items, className, fetchItems }) => {
     },
     [dispatch, fetchItems, handleClose]
   );
-  console.log(items);
+
   return (
     <div className={className}>
       <DynamicTable

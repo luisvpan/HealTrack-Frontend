@@ -8,7 +8,6 @@ const URL = `${API_BASE_URL}/chats`;
 
 export default async function getMessagesById(otherId: number): Promise<any> {
   try {
-    console.log(otherId);
     const response = await axios.get(`${URL}/${otherId}/messages`, {
       headers: {
         Authorization: `Bearer ${store.getState().auth.token}`,
