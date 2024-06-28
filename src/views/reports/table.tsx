@@ -84,7 +84,7 @@ const Table: FunctionComponent<Props> = ({ items, className, fetchItems }) => {
                   cellAlignment: "center" as Settings["cellAlignment"],
                   onRender: (row: Report) => (
                     <Typography>
-                      {`${row.user.name} ${row.user.lastname}`}
+                      {`${row.user?.name} ${row.user?.lastname}`}
                     </Typography>
                   ),
                 },
