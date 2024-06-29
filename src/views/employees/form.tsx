@@ -36,13 +36,13 @@ const Form: FunctionComponent<Props> = ({
         initialValues={initialValues}
         validationSchema={Yup.object().shape({
           ...aditionalFieldValidations,
-          name: Yup.string().max(20).required("El nombre es requerido"),
-          lastname: Yup.string().max(20).required("El apellido es requerido"),
+          name: Yup.string().max(50).required("El nombre es requerido"),
+          lastname: Yup.string().max(50).required("El apellido es requerido"),
           identification: Yup.string()
             .min(8)
             .max(20)
             .required("La cedula es requerida"),
-          email: Yup.string().max(30).required("El email es requerido"),
+          email: Yup.string().max(120).required("El email es requerido"),
           hospital: Yup.string().required("El hospital es requerido"),
           role: Yup.string()
             .typeError("El rol es invalido")

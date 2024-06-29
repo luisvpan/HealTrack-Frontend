@@ -40,8 +40,8 @@ const Form: FunctionComponent<Props> = ({
         initialValues={initialValues}
         validationSchema={Yup.object().shape({
           ...aditionalFieldValidations,
-          name: Yup.string().max(20).required("El nombre es requerido"),
-          lastname: Yup.string().max(20).required("El apellido es requerido"),
+          name: Yup.string().max(50).required("El nombre es requerido"),
+          lastname: Yup.string().max(50).required("El apellido es requerido"),
           age: Yup.number().required("La edad es requerida"),
           address: Yup.string().required("La direccion es requerida"),
           personalPhone: Yup.string().required("El celular es requerido"),
@@ -50,7 +50,7 @@ const Form: FunctionComponent<Props> = ({
             .min(8)
             .max(20)
             .required("La cedula es requerida"),
-          email: Yup.string().max(30).required("El email es requerido"),
+          email: Yup.string().max(120).required("El email es requerido"),
           hospital: Yup.string().required("El hospital es requerido"),
           surgeryProcedure: Yup.string().required(
             "El nombre del procedimiento es requerido"
