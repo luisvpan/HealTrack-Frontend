@@ -8,11 +8,12 @@ import { Button, FormControl, Typography } from "@mui/material";
 import { FunctionComponent, useCallback } from "react";
 import SelectField from "components/SelectField";
 import { StatusPatientOptions } from "core/patients/types";
+import store from "store";
 
 const Patients: FunctionComponent<Prop> = ({ className }) => {
   const { items, fetchPatients, status, setStatus } = useData();
   const navigate = useNavigate();
-
+  const role = store.getState().auth.user?.role;
   const goToCreate = useCallback(() => {
     navigate("/patients/create");
   }, [navigate]);
@@ -46,6 +47,7 @@ const Patients: FunctionComponent<Prop> = ({ className }) => {
             variant={"outlined"}
             onClick={goToCreate}
             startIcon={<IconCirclePlus />}
+            sx={role !== "assistant" ? { display: "none" } : null}
           >
             Crear
           </Button>
