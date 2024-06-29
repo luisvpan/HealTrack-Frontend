@@ -7,7 +7,10 @@ import BackendError from "../../exceptions/backend-error";
 
 const URL = `${API_BASE_URL}/chats`;
 
-export default async function postChat(userId: number): Promise<Chat> {
+export default async function postChat(
+  userId: number,
+  userId2: number
+): Promise<Chat> {
   try {
     const response = await axios.post(
       `${URL}`,
@@ -15,6 +18,9 @@ export default async function postChat(userId: number): Promise<Chat> {
         users: [
           {
             id: userId,
+          },
+          {
+            id: userId2,
           },
         ],
         title: "chat",

@@ -1,9 +1,9 @@
-import { Button, Typography } from "@mui/material";
+import { Button, Typography, Pagination } from "@mui/material";
 import dayjs from "dayjs";
 import { IconTrash, IconEye } from "@tabler/icons";
 import DynamicTable, { Settings } from "components/DynamicTable";
 // Own
-import { Report } from "core/reports/types";
+import { PaginationData, Report } from "core/reports/types";
 import deleteReport from "services/reports/delete-report";
 import { FunctionComponent, useCallback, useState } from "react";
 import styled from "styled-components";
@@ -18,14 +18,19 @@ import DialogDelete from "components/dialogDelete";
 import DialogImage from "components/dialogImage";
 import { AllRole } from "core/users/types";
 
-const Table: FunctionComponent<Props> = ({ items, className, fetchItems }) => {
+const Table: FunctionComponent<Props> = ({
+  items,
+  className,
+  fetchItems,
+  setPaginationData,
+  paginationData,
+}) => {
   const role = store.getState().auth.user?.role;
   const dispatch = useAppDispatch();
   const [open, setOpen] = useState<boolean>(false);
   const [openImage, setOpenImage] = useState<boolean>(false);
   const [dialogImage, setDialogImage] = useState<string | null>("");
   const [reportId, setReportId] = useState<number>(0);
-
   const handleOpen = useCallback((reportId: number) => {
     setOpen(true);
     setReportId(reportId);
@@ -168,6 +173,18 @@ const Table: FunctionComponent<Props> = ({ items, className, fetchItems }) => {
         open={openImage}
         imageUrl={dialogImage}
       />
+      <div className={"paginator-container"}>
+        <Pagination
+          count={paginationData.totalPages}
+          page={paginationData.page}
+          variant="outlined"
+          shape="rounded"
+          color="primary"
+          onChange={(event, page) => {
+            setPaginationData({ ...paginationData, page });
+          }}
+        />
+      </div>
     </div>
   );
 };
@@ -176,6 +193,8 @@ type Props = {
   items: Report[];
   className?: string;
   fetchItems: () => void;
+  setPaginationData: (paginationData: PaginationData) => void;
+  paginationData: PaginationData;
 };
 
 export default styled(Table)`

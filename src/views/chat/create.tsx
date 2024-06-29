@@ -6,20 +6,14 @@ import postChat from "services/chats/create-chat.service";
 import AddIcon from "@mui/icons-material/Add";
 import ArrowBack from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router";
-import useData from "./useData";
 import store, { useAppDispatch } from "store";
-import {
-  setErrorMessage,
-  setIsLoading,
-  setSuccessMessage,
-} from "store/customizationSlice";
+import { setErrorMessage, setIsLoading } from "store/customizationSlice";
 import BackendError from "exceptions/backend-error";
 import getAllUsers from "services/users/get-all-users";
 import checkIfChatExists from "services/chats/check-chat-exists";
 
 const CreateChat = () => {
   const [users, setUsers] = useState<any>([]);
-  const { fetchChats } = useData();
   const navigate = useNavigate();
   const employeeId = store.getState().auth.user?.id;
   const dispatch = useAppDispatch();
@@ -27,13 +21,13 @@ const CreateChat = () => {
   const fetchAllUsers = useCallback(async () => {
     try {
       const response = await getAllUsers();
-      setUsers(response);
-      console.log(response);
+      const filteredUsers = response.filter((item) => item.id !== employeeId);
+      setUsers(filteredUsers);
     } catch (error) {
       if (error instanceof BackendError)
         dispatch(setErrorMessage(error.getMessage()));
     }
-  }, [dispatch]);
+  }, [dispatch, employeeId]);
 
   useEffect(() => {
     fetchAllUsers();
@@ -50,7 +44,7 @@ const CreateChat = () => {
           return;
         }
 
-        const createdChat = await postChat(userId);
+        const createdChat = await postChat(userId, employeeId);
         navigate(`/chat/${createdChat.id}`);
       } catch (error) {
         console.log(error);
@@ -61,7 +55,7 @@ const CreateChat = () => {
         dispatch(setIsLoading(false));
       }
     },
-    [dispatch, fetchChats, navigate]
+    [dispatch, employeeId, navigate]
   );
 
   const goToChatList = useCallback(() => {

@@ -25,6 +25,8 @@ const Reports: FunctionComponent<Prop> = ({ className }) => {
     startDate,
     setEndDate,
     endDate,
+    pagination,
+    setPagination,
   } = useData();
   const navigate = useNavigate();
 
@@ -101,7 +103,12 @@ const Reports: FunctionComponent<Prop> = ({ className }) => {
         </div>
       }
     >
-      <Table items={items} fetchItems={fetchReports} />
+      <Table
+        items={items}
+        fetchItems={fetchReports}
+        paginationData={pagination}
+        setPaginationData={setPagination}
+      />
     </MainCard>
   );
 };

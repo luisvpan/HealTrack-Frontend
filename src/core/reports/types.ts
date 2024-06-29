@@ -14,3 +14,14 @@ export interface Report {
   deletedAt: string | null;
   user: User;
 }
+export interface PaginationData {
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
+export interface PaginatedReportResult {
+  data: Report[];
+  paginationData: PaginationData;
+}

@@ -1,5 +1,5 @@
-import { styled } from 'styled-components';
-import Detail from './detail.component';
+import { styled } from "styled-components";
+import Detail from "./detail.component";
 
 export default styled(Detail)`
   display: flex;

@@ -1,5 +1,5 @@
 import { AllRole } from "core/users/types";
-import { Report } from "core/reports/types";
+import { PaginationData, Report } from "core/reports/types";
 import store, { useAppDispatch } from "store";
 import BackendError from "exceptions/backend-error";
 import getAllReports from "services/reports/get-all-reports";
@@ -15,6 +15,12 @@ export default function useData() {
   const userEmployeeId = store.getState().auth.user?.employee;
   const dispatch = useAppDispatch();
   const [items, setItems] = useState<Report[]>([]);
+  const [pagination, setPagination] = useState<PaginationData>({
+    total: 0,
+    page: 1,
+    limit: 5,
+    totalPages: 0,
+  });
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
   const [patientId, setPatientId] = useState<number>(0);
@@ -23,13 +29,27 @@ export default function useData() {
     try {
       dispatch(setIsLoading(true));
       if (userRole === AllRole.ADMIN) {
-        const response = await getAllReports(patientId, startDate, endDate);
-        setItems(response);
+        const response = await getAllReports(
+          patientId,
+          startDate,
+          endDate,
+          pagination.limit,
+          pagination.page
+        );
+        setItems(response.data);
+        setPagination(response.paginationData);
         return;
       }
       if (userRole === AllRole.PATIENT && userId) {
-        const response = await getReportsByUser(userId, startDate, endDate);
-        setItems(response);
+        const response = await getReportsByUser(
+          userId,
+          startDate,
+          endDate,
+          pagination.limit,
+          pagination.page
+        );
+        setItems(response.data);
+        setPagination(response.paginationData);
         return;
       }
       if (userRole !== AllRole.PATIENT && userEmployeeId) {
@@ -37,9 +57,12 @@ export default function useData() {
           userEmployeeId,
           patientId,
           startDate,
-          endDate
+          endDate,
+          pagination.limit,
+          pagination.page
         );
-        setItems(response);
+        setItems(response.data);
+        setPagination(response.paginationData);
         return;
       }
     } catch (error) {
@@ -51,6 +74,8 @@ export default function useData() {
   }, [
     dispatch,
     endDate,
+    pagination.limit,
+    pagination.page,
     patientId,
     startDate,
     userEmployeeId,
@@ -64,6 +89,8 @@ export default function useData() {
 
   return {
     items,
+    pagination,
+    setPagination,
     fetchReports,
     setPatientId,
     patientId,

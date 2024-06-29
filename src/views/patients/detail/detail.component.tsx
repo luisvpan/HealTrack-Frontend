@@ -53,7 +53,7 @@ const Detail: FunctionComponent<Props> = ({ className, patient }) => {
         return;
       }
 
-      const createdChat = await postChat(patient.user.id);
+      const createdChat = await postChat(patient.user.id, employeeId);
       navigate(`/chat/${createdChat.id}`);
     } catch (error) {
       console.log(error);
@@ -182,7 +182,7 @@ const Detail: FunctionComponent<Props> = ({ className, patient }) => {
                   cellAlignment: "center",
                 },
               ]}
-              rows={patient.patientReports}
+              rows={patient.patientReports?.data}
               components={[
                 (row: Report) =>
                   row.fileUrl ? (
