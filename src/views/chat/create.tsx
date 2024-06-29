@@ -7,16 +7,21 @@ import AddIcon from "@mui/icons-material/Add";
 import ArrowBack from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router";
 import useData from "./useData";
-import { useAppDispatch } from "store";
-import { setErrorMessage, setSuccessMessage } from "store/customizationSlice";
+import store, { useAppDispatch } from "store";
+import {
+  setErrorMessage,
+  setIsLoading,
+  setSuccessMessage,
+} from "store/customizationSlice";
 import BackendError from "exceptions/backend-error";
 import getAllUsers from "services/users/get-all-users";
+import checkIfChatExists from "services/chats/check-chat-exists";
 
 const CreateChat = () => {
   const [users, setUsers] = useState<any>([]);
   const { fetchChats } = useData();
   const navigate = useNavigate();
-
+  const employeeId = store.getState().auth.user?.id;
   const dispatch = useAppDispatch();
 
   const fetchAllUsers = useCallback(async () => {
@@ -34,17 +39,30 @@ const CreateChat = () => {
     fetchAllUsers();
   }, [fetchAllUsers]);
 
-  const createChat = useCallback(async (userId: number) => {
-    try {
-      await postChat(userId);
-      fetchChats();
-      dispatch(setSuccessMessage("Se ha creado un chat correctamente"));
-      navigate("/chat-list");
-    } catch (error) {
-      if (error instanceof BackendError)
-        dispatch(setErrorMessage(error.getMessage()));
-    }
-  }, [dispatch, fetchChats, navigate]);
+  const createChat = useCallback(
+    async (userId: number) => {
+      if (!employeeId) return;
+      try {
+        dispatch(setIsLoading(true));
+        const existingChat = await checkIfChatExists(employeeId, userId);
+        if (!!existingChat) {
+          navigate(`/chat/${existingChat.id}`);
+          return;
+        }
+
+        const createdChat = await postChat(userId);
+        navigate(`/chat/${createdChat.id}`);
+      } catch (error) {
+        console.log(error);
+        if (error instanceof BackendError) {
+          dispatch(setErrorMessage(error.getMessage()));
+        }
+      } finally {
+        dispatch(setIsLoading(false));
+      }
+    },
+    [dispatch, fetchChats, navigate]
+  );
 
   const goToChatList = useCallback(() => {
     navigate("/chat-list");

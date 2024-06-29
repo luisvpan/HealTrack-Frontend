@@ -1,11 +1,12 @@
 import { styled } from "styled-components";
 import { useNavigate } from "react-router";
-import { IconCirclePlus } from "@tabler/icons";
+import { IconCirclePlus, IconUserCircle } from "@tabler/icons";
 import MainCard from "components/cards/MainCard";
 import { Box, Button, Typography } from "@mui/material";
 import { FunctionComponent, useCallback } from "react";
 import useData from "./useData";
 import { Chat } from "core/chats/types";
+
 import store from "store";
 
 const ChatList: FunctionComponent<Prop> = ({ className }) => {
@@ -65,15 +66,14 @@ const ChatList: FunctionComponent<Prop> = ({ className }) => {
           >
             <Box
               sx={{
-                height: "60px",
-                width: "60px",
-                maxHeight: "60px",
-                maxWidth: "60px",
-                borderRadius: "100px",
+                height: "50px",
+                width: "50px",
+                maxHeight: "50px",
+                maxWidth: "50px",
               }}
-              component="img"
-              src="https://i.pravatar.cc/300"
-            ></Box>
+            >
+              <IconUserCircle height="50px" width="50px" color="gray" />
+            </Box>
 
             <Box
               key={item.id}
