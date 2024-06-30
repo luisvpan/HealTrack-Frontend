@@ -5,14 +5,16 @@ import { AllRole } from "core/users/types";
 import { MenuItem, MenuItemType } from "./types";
 // constant
 const userRole = store.getState().auth.user?.role;
-const isPatient = userRole === AllRole.PATIENT;
+
+const isAssistant = userRole === AllRole.ASSISTANT;
+const isAdmin = userRole === AllRole.ADMIN;
 
 const other: MenuItem = {
   id: "agencies-crud-category-general",
   type: MenuItemType.Group,
   title: "General",
   children: [
-    ...(!isPatient
+    ...(isAdmin
       ? [
           {
             id: "employees",
@@ -37,6 +39,11 @@ const other: MenuItem = {
               },
             ],
           },
+        ]
+      : []),
+
+    ...(isAssistant
+      ? [
           {
             id: "patients",
             title: "Pacientes",
@@ -53,7 +60,7 @@ const other: MenuItem = {
               },
               {
                 id: "create-patients",
-                title: "Crear empleado",
+                title: "Crear paciente",
                 type: MenuItemType.Item,
                 url: "/patients/create",
                 breadcrumbs: false,
@@ -61,8 +68,24 @@ const other: MenuItem = {
             ],
           },
         ]
-      : []),
-
+      : [
+          {
+            id: "patients",
+            title: "Pacientes",
+            type: MenuItemType.Collapse,
+            icon: IconUser,
+            breadcrumbs: false,
+            children: [
+              {
+                id: "list-patients",
+                title: "Lista de pacientes",
+                type: MenuItemType.Item,
+                url: "/patients",
+                breadcrumbs: false,
+              },
+            ],
+          },
+        ]),
     {
       id: "chat",
       title: "Chat",

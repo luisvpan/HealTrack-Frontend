@@ -39,7 +39,7 @@ const Form: FunctionComponent<Props> = ({
           name: Yup.string().max(50).required("El nombre es requerido"),
           lastname: Yup.string().max(50).required("El apellido es requerido"),
           identification: Yup.string()
-            .min(8)
+            .min(2)
             .max(20)
             .required("La cedula es requerida"),
           email: Yup.string().max(120).required("El email es requerido"),
@@ -55,7 +55,6 @@ const Form: FunctionComponent<Props> = ({
           handleBlur,
           handleChange,
           handleSubmit,
-          isSubmitting,
           touched,
           values,
         }) => (
@@ -145,7 +144,7 @@ const Form: FunctionComponent<Props> = ({
                     value: "specialist",
                   },
                   {
-                    label: "Asistente",
+                    label: "Enfermero/a",
                     value: "assistant",
                   },
                 ]}

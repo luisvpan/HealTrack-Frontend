@@ -22,11 +22,12 @@ import CreateChat from "views/chat/create";
 import { AllRole } from "core/users/types";
 
 const userRole = store.getState().auth.user?.role;
-const isPatient = userRole === AllRole.PATIENT;
+const isAssistant = userRole === AllRole.ASSISTANT;
+const isAdmin = userRole === AllRole.ADMIN;
 
 const GeneralRoutes: RouteObject[] = [
   // Empleados
-  ...(!isPatient
+  ...(isAdmin
     ? [
         {
           path: "employees",
@@ -44,7 +45,7 @@ const GeneralRoutes: RouteObject[] = [
     : []),
 
   // Pacientes
-  ...(!isPatient
+  ...(isAssistant
     ? [
         {
           path: "patients",
@@ -63,7 +64,16 @@ const GeneralRoutes: RouteObject[] = [
           element: <DetailPatient />,
         },
       ]
-    : []),
+    : [
+        {
+          path: "patients",
+          element: <Patients />,
+        },
+        {
+          path: "patients/detail/:id",
+          element: <DetailPatient />,
+        },
+      ]),
 
   //Chat
   {
