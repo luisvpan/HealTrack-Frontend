@@ -12,6 +12,7 @@ import { IconEye, IconMessage } from "@tabler/icons";
 import postChat from "services/chats/create-chat.service";
 import { TranslatedPatientStatus } from "core/patients/types";
 import checkIfChatExists from "services/chats/check-chat-exists";
+import useUserReportsData from "views/reports/useUserReportsData";
 import { setErrorMessage, setIsLoading } from "store/customizationSlice";
 // material-ui
 import {
@@ -23,6 +24,7 @@ import {
   TableContainer,
   TableRow,
   Typography,
+  Pagination,
 } from "@mui/material";
 
 const Detail: FunctionComponent<Props> = ({ className, patient }) => {
@@ -32,6 +34,11 @@ const Detail: FunctionComponent<Props> = ({ className, patient }) => {
   const [openImage, setOpenImage] = useState<boolean>(false);
   const [dialogImage, setDialogImage] = useState<string | null>("");
   const surgeryDate = dayjs(patient.surgeryDate).format("DD/MM/YYYY");
+  const {
+    items: reportsData,
+    pagination,
+    setPagination,
+  } = useUserReportsData(patient.user?.id);
 
   const handleOpenImage = useCallback((imageUrl: string | null) => {
     setOpenImage(true);
@@ -182,7 +189,7 @@ const Detail: FunctionComponent<Props> = ({ className, patient }) => {
                   cellAlignment: "center",
                 },
               ]}
-              rows={patient.patientReports?.data}
+              rows={reportsData}
               components={[
                 (row: Report) =>
                   row.fileUrl ? (
@@ -202,6 +209,18 @@ const Detail: FunctionComponent<Props> = ({ className, patient }) => {
             open={openImage}
             imageUrl={dialogImage}
           />
+          <div className={"paginator-container"}>
+            <Pagination
+              count={pagination.totalPages}
+              page={pagination.page}
+              variant="outlined"
+              shape="rounded"
+              color="primary"
+              onChange={(event, page) => {
+                setPagination({ ...pagination, page });
+              }}
+            />
+          </div>
         </div>
       )}
     </div>

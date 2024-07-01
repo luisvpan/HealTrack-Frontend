@@ -5,6 +5,13 @@ export default styled(Detail)`
   display: flex;
   flex-direction: column;
 
+  .paginator-container {
+    margin-top: 12px;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+  }
+
   .patients-detail-header {
     flex: 1;
     width: 100%;
