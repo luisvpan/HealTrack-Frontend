@@ -203,6 +203,9 @@ const FirebaseLogin = ({ ...others }) => {
                   Entrar
                 </Button>
               </AnimateButton>
+
+              {/* recuperar contraseña aqui */}
+
             </Box>
           </form>
         )}

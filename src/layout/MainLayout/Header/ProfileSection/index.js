@@ -23,13 +23,13 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 // project imports
 import MainCard from "components/cards/MainCard";
 import Transitions from "components/extended/Transitions";
-import User1 from "assets/images/users/user-round.svg";
+//import User1 from "assets/images/users/user-round.svg";
 
 // assets
 import { IconLogout, IconSettings } from "@tabler/icons";
 import { useAppSelector } from "store";
 import useLogout from "hooks/use-logout";
-//import { useHistory } rom 'react-router-dom';
+import ChangePasswordModal from './ChangePasswordModal';
 
 // ==============================|| PROFILE MENU ||============================== //
 
@@ -37,15 +37,13 @@ const ProfileSection = () => {
   const theme = useTheme();
   const customization = useAppSelector((state) => state.customization);
   const user = useAppSelector((state) => state.auth.user);
-  //const history = useHistory();
   const navigate = useNavigate();
   const logout = useLogout();
 
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [open, setOpen] = useState(false);
-  /**
-   * anchorRef is used on different componets and specifying one type leads to other components throwing an error
-   * */
+  const [modalOpen, setModalOpen] = useState(false);
+
   const anchorRef = useRef(null);
 
   const handleClose = (event) => {
@@ -63,6 +61,7 @@ const ProfileSection = () => {
       navigate(route);
     }
   };
+
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
   };
@@ -145,7 +144,7 @@ const ProfileSection = () => {
                   <Box sx={{ p: 2, paddingBottom: 0 }}>
                     <Stack>
                       <Stack direction="row" spacing={0.5} alignItems="center">
-                        <Typography variant="h4">Buen dia!,</Typography>
+                        <Typography variant="h4">Buen día!,</Typography>
                         <Typography
                           component="span"
                           variant="h4"
@@ -187,6 +186,24 @@ const ProfileSection = () => {
                             borderRadius: `${customization.borderRadius}px`,
                           }}
                           selected={selectedIndex === 4}
+                          onClick={() => setModalOpen(true)}
+                        >
+                          <ListItemIcon>
+                            <IconSettings stroke={1.5} size="1.3rem" />
+                          </ListItemIcon>
+                          <ListItemText
+                            primary={
+                              <Typography variant="body2">
+                                Cambiar contraseña
+                              </Typography>
+                            }
+                          />
+                        </ListItemButton>
+                        <ListItemButton
+                          sx={{
+                            borderRadius: `${customization.borderRadius}px`,
+                          }}
+                          selected={selectedIndex === 4}
                           onClick={logout}
                         >
                           <ListItemIcon>
@@ -207,6 +224,10 @@ const ProfileSection = () => {
           </Transitions>
         )}
       </Popper>
+      <ChangePasswordModal
+        open={modalOpen}
+        handleClose={() => setModalOpen(false)}
+      />
     </>
   );
 };
