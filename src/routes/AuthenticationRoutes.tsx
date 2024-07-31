@@ -7,6 +7,7 @@ import { RouteObject } from 'react-router';
 
 // login option 3 routing
 const AuthLogin = Loadable(lazy(() => import('views/pages/authentication/authentication3/Login3')));
+const ResetPassword = Loadable(lazy(() => import('views/pages/forgotPassword/resetPassword'))); 
 
 // ==============================|| AUTHENTICATION ROUTING ||============================== //
 
@@ -17,6 +18,10 @@ const AuthenticationRoutes: RouteObject = {
     {
       path: '/pages/login',
       element: <AuthLogin />
+    },
+    {
+      path: '/reset-password/:token', 
+      element: <ResetPassword /> 
     },
   ]
 };

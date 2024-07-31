@@ -1,5 +1,4 @@
 import { useState } from "react";
-// material-ui
 import { useTheme } from "@mui/material/styles";
 import {
   Box,
@@ -13,25 +12,20 @@ import {
   InputLabel,
   OutlinedInput,
   Stack,
+  Typography,
+  Link,
+  Modal,
 } from "@mui/material";
-
-// third party
 import * as Yup from "yup";
 import { Formik } from "formik";
-
-// project imports
 import AnimateButton from "components/extended/AnimateButton";
-
-// assets
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-
 import login from "services/auth/login";
 import { authUser } from "store/authSlice";
 import { useAppDispatch, useAppSelector } from "store";
 import { useNavigate } from "react-router-dom";
-
-// ============================|| FIREBASE - LOGIN ||============================ //
+import ForgotPassword from "../../forgotPassword/ForgotPassword";
 
 const FirebaseLogin = ({ ...others }) => {
   const dispatch = useAppDispatch();
@@ -41,13 +35,15 @@ const FirebaseLogin = ({ ...others }) => {
   const isAuthenticated = useAppSelector((state) => state.auth.isAuth);
 
   const [showPassword, setShowPassword] = useState(false);
-  const handleClickShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
-
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
+
+  const [openForgotPassword, setOpenForgotPassword] = useState(false);
+
+  const handleOpenForgotPassword = () => setOpenForgotPassword(true);
+  const handleCloseForgotPassword = () => setOpenForgotPassword(false);
 
   if (isAuthenticated) {
     window.location.href = window.location.origin + "/";
@@ -203,15 +199,42 @@ const FirebaseLogin = ({ ...others }) => {
                   Entrar
                 </Button>
               </AnimateButton>
-
-              {/* recuperar contraseña aqui */}
-
+            </Box>
+            <Box sx={{ mt: 2, textAlign: 'center' }}>
+              <Typography variant="body2">
+                ¿Olvidó contraseña?{" "}
+                <Link
+                  component="button"
+                  variant="body2"
+                  onClick={handleOpenForgotPassword}
+                >
+                  Pulse aquí
+                </Link>
+              </Typography>
             </Box>
           </form>
         )}
       </Formik>
+      <Modal open={openForgotPassword} onClose={handleCloseForgotPassword}>
+        <Box sx={{ ...modalStyle }}>
+          <ForgotPassword />
+        </Box>
+      </Modal>
     </>
   );
 };
+
+const modalStyle = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  borderRadius: 4, // añadir borde redondeado
+  boxShadow: 24,
+  padding: 4,
+};
+
 
 export default FirebaseLogin;
