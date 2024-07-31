@@ -8,7 +8,7 @@ import store from "store";
 const URL = `${API_BASE_URL}/hospitals`;
 
 export default async function getHospital(
-  idHospital: number
+  idHospital: string
 ): Promise<Hospital> {
   try {
     const response = await axios.get<Hospital>(`${URL}/${idHospital}`, {

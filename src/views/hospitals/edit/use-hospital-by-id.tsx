@@ -6,12 +6,12 @@ import { useAppDispatch } from "../../../store/index";
 import { Hospital } from "core/hospitals/types";
 import getHospital from "services/hospitals/get-hospital";
 
-export default function useHospitalById(hospitalId: number | null) {
+export default function useHospitalById(hospitalId: string | null) {
   const dispatch = useAppDispatch();
   const [hospital, setHospital] = useState<Hospital | null>(null);
 
   const fetchState = useCallback(
-    async (hospitalId: number) => {
+    async (hospitalId: string) => {
       try {
         dispatch(setIsLoading(true));
         const response = await getHospital(hospitalId);

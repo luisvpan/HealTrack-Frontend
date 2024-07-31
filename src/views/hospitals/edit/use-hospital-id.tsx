@@ -5,13 +5,14 @@ export default function useHospitalId() {
   const navigate = useNavigate();
   const params = useParams();
 
-  const [hospitalId, setHospitalId] = useState<number | null>(null);
+  const [hospitalId, setHospitalId] = useState<string | null>(null);
   useEffect(() => {
-    if (!params.id || isNaN(params.id as any)) {
+
+    if (!params.id) {
       navigate("/hospitals");
     }
 
-    setHospitalId(params.id as unknown as number);
+    setHospitalId(params.id as unknown as string);
   }, [navigate, params.id]);
 
   return hospitalId;

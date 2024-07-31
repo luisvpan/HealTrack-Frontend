@@ -1,4 +1,4 @@
 export interface Hospital {
-  id: number;
+  id: string;
   name: string;
 }

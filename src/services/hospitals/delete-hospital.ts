@@ -7,7 +7,7 @@ import store from "store";
 const URL = `${API_BASE_URL}/hospitals`;
 
 export default async function deleteHospital(
-  idHospital: number
+  idHospital: string
 ): Promise<void> {
   try {
     await axios.delete(`${URL}/${idHospital}`, {

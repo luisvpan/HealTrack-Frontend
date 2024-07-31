@@ -8,7 +8,7 @@ import store from "store";
 const URL = `${API_BASE_URL}/hospitals`;
 
 export default async function editHospital(
-  idHospital: number,
+  idHospital: string,
   body: HospitalPayload
 ): Promise<Hospital> {
   try {

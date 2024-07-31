@@ -19,20 +19,20 @@ const Table: FunctionComponent<Props> = ({ items, className, fetchItems }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [open, setOpen] = useState<boolean>(false);
-  const [hospitalId, setHospitalId] = useState<number>(0);
+  const [hospitalId, setHospitalId] = useState<string>('');
 
-  const handleOpen = useCallback((hospitalId: number) => {
+  const handleOpen = useCallback((hospitalId: string) => {
     setOpen(true);
     setHospitalId(hospitalId);
   }, []);
 
   const handleClose = useCallback(() => {
     setOpen(false);
-    setHospitalId(0);
+    setHospitalId('');
   }, []);
 
   const onDelete = useCallback(
-    async (hospitalId: number) => {
+    async (hospitalId: string) => {
       try {
         dispatch(setIsLoading(true));
         await deleteHospital(hospitalId);
