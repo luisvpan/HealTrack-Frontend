@@ -65,21 +65,22 @@ const FirebaseLogin = ({ ...others }) => {
             .required("El email es requerido"),
           password: Yup.string().max(255).required("Contraseña es requerida"),
         })}
-        onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-          try {
-            const user = await login({
-              email: values.email,
-              password: values.password,
+        onSubmit={(values, { setErrors, setStatus, setSubmitting }) => {
+          login({
+            email: values.email,
+            password: values.password,
+          })
+            .then((user) => {
+              dispatch(authUser({ ...user, remember: rememberCheck }));
+              setErrors({ submit: null });
+              setSubmitting(true);
+              navigate("/dashboard/default");
+            })
+            .catch((error) => {
+              setErrors({ submit: error.getMessage() });
+              setStatus({ success: false });
+              setSubmitting(false);
             });
-            dispatch(authUser({ ...user, remember: rememberCheck }));
-            setErrors({ submit: null });
-            setSubmitting(true);
-            navigate("/dashboard/default");
-          } catch (error) {
-            setErrors({ submit: error.getMessage() });
-            setStatus({ success: false });
-            setSubmitting(false);
-          }
         }}
       >
         {({
@@ -91,7 +92,14 @@ const FirebaseLogin = ({ ...others }) => {
           touched,
           values,
         }) => (
-          <form noValidate onSubmit={handleSubmit} {...others}>
+          <form
+            noValidate
+            onSubmit={(event) => {
+              event.preventDefault();
+              handleSubmit(event);
+            }}
+            {...others}
+          >
             <FormControl
               fullWidth
               error={Boolean(touched.email && errors.email)}
@@ -235,6 +243,5 @@ const modalStyle = {
   boxShadow: 24,
   padding: 4,
 };
-
 
 export default FirebaseLogin;
