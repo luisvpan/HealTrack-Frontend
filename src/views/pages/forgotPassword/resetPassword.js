@@ -35,7 +35,6 @@ const ResetPassword = () => {
     <Box
       sx={{
         width: '60%',
-        marginLeft: 35,
         height: '90vh', // Hace que la sección abarque toda la pantalla
         display: 'flex',
         justifyContent: 'center',
@@ -43,7 +42,7 @@ const ResetPassword = () => {
         mt: 4,
         p: 2,
         border: '1px solid #000',
-        borderRadius: 40,
+        borderRadius: 10,
         textAlign: 'center'
       }}
     >

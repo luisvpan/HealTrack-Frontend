@@ -6,19 +6,29 @@ import { RouteObject } from "react-router";
 import Employees from "views/employees";
 import CreateEmployee from "views/employees/create";
 import EditEmployee from "views/employees/edit";
+
 // Pacientes
 import Patients from "views/patients";
 import CreatePatient from "views/patients/create";
 import EditPatient from "views/patients/edit";
 import DetailPatient from "views/patients/detail";
 
-import Chat from "views/chat";
+// Hospitales
+import Hospitals from "views/hospitals";
+import CreateHospital from "views/hospitals/create";
+import EditHospital from "views/hospitals/edit";
 
+// Chat
+import Chat from "views/chat";
+import ChatList from "views/chat/chat-list";
+import CreateChat from "views/chat/create";
+
+// Reports
 import Reports from "views/reports";
 import CreateReport from "views/reports/create";
 import EditReport from "views/reports/edit";
-import ChatList from "views/chat/chat-list";
-import CreateChat from "views/chat/create";
+
+// Roles
 import { AllRole } from "core/users/types";
 
 const userRole = store.getState().auth.user?.role;
@@ -75,7 +85,25 @@ const GeneralRoutes: RouteObject[] = [
         },
       ]),
 
-  //Chat
+  // Hospitales
+  ...(isAdmin
+    ? [
+        {
+          path: "hospitals",
+          element: <Hospitals />,
+        },
+        {
+          path: "hospitals/create",
+          element: <CreateHospital />,
+        },
+        {
+          path: "hospitals/edit/:id",
+          element: <EditHospital />,
+        },
+      ]
+    : []),
+
+  // Chat
   {
     path: "chat-list",
     element: <ChatList />,
@@ -88,7 +116,8 @@ const GeneralRoutes: RouteObject[] = [
     path: "chat/create",
     element: <CreateChat />,
   },
-  //Reports
+
+  // Reports
   {
     path: "reports",
     element: <Reports />,

@@ -1,6 +1,6 @@
 // assets
 import store from "store";
-import { IconUser } from "@tabler/icons";
+import { IconUser, IconBuildingHospital } from "@tabler/icons";
 import { AllRole } from "core/users/types";
 import { MenuItem, MenuItemType } from "./types";
 // constant
@@ -35,6 +35,29 @@ const other: MenuItem = {
                 title: "Crear empleado",
                 type: MenuItemType.Item,
                 url: "/employees/create",
+                breadcrumbs: false,
+              },
+            ],
+          },
+          {
+            id: "hospitals",
+            title: "Hospitales",
+            type: MenuItemType.Collapse,
+            icon: IconBuildingHospital,
+            breadcrumbs: false,
+            children: [
+              {
+                id: "list-hospitals",
+                title: "Lista de hospitales",
+                type: MenuItemType.Item,
+                url: "/hospitals",
+                breadcrumbs: false,
+              },
+              {
+                id: "create-hospitals",
+                title: "Crear hospital",
+                type: MenuItemType.Item,
+                url: "/hospitals/create",
                 breadcrumbs: false,
               },
             ],
