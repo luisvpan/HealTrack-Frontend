@@ -34,34 +34,37 @@ const ResetPassword = () => {
   return (
     <Box
       sx={{
-        width: '60%',
-        height: '90vh', // Hace que la sección abarque toda la pantalla
+        width: '100vw',
+        height: '100vh', // Hace que la sección abarque toda la pantalla
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        mt: 4,
-        p: 2,
-        border: '1px solid #000',
-        borderRadius: 10,
-        textAlign: 'center'
       }}
     >
       <Box
         sx={{
-          width: { xs: '90%', sm: '400px' },
+          width: '95%', 
+          height: '95%', 
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          flexDirection: 'column',
+          p: 2,
+          border: '1px solid #000',
+          borderRadius: 10,
+          textAlign: 'center'
         }}
       >
-        <Typography variant="h6" component="h2" sx={{ mb: 2 }}>
+        <Typography variant="h4" component="h2" sx={{ mb: 2, fontSize: '40px' }}>
           Restablecer contraseña
         </Typography>
         <TextField
           label="Nueva contraseña"
           variant="outlined"
           type={showPassword ? 'text' : 'password'}
-          fullWidth
-          margin="normal"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          sx={{ width: '55%' }} // Misma anchura que el botón
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
@@ -76,10 +79,9 @@ const ResetPassword = () => {
           label="Confirmar nueva contraseña"
           variant="outlined"
           type={showConfirmPassword ? 'text' : 'password'}
-          fullWidth
-          margin="normal"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
+          sx={{ width: '55%', mt: 2 }} // Misma anchura que el botón
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
@@ -90,7 +92,7 @@ const ResetPassword = () => {
             )
           }}
         />
-        <Button variant="contained" color="primary" onClick={handleSubmit} sx={{ mt: 2, width: '100%' }}>
+        <Button variant="contained" color="primary" onClick={handleSubmit} sx={{ mt: 2, width: '55%', fontSize: "20px" }}>
           Restablecer
         </Button>
         {message && <Typography variant="body2" sx={{ mt: 2 }}>{message}</Typography>}
