@@ -5,6 +5,7 @@ import { Formik, FormikHelpers } from "formik";
 import SelectField from "components/SelectField";
 import MainCard from "components/cards/MainCard";
 import useEmployeesOptions from "core/employees/use-employees-options";
+import useHospitalOptions from "core/hospitals/use-hospitals-options";
 // material-ui
 import { Button, FormControl, FormHelperText, TextField } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
@@ -20,6 +21,7 @@ const Form: FunctionComponent<Props> = ({
   isEdit,
 }) => {
   const employeeOptions = useEmployeesOptions();
+  const hospitalOptions = useHospitalOptions();
   const aditionalFieldValidations: any = isEdit
     ? {}
     : {
@@ -184,19 +186,18 @@ const Form: FunctionComponent<Props> = ({
                   name="email"
                 />
               </FormControl>
-              <FormControl className="field-form" fullWidth>
-                <TextField
-                  id="hospital"
-                  label="Hospital de paciente"
-                  variant="outlined"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.hospital}
-                  helperText={touched.hospital ? errors.hospital : ""}
-                  error={touched.hospital && !!errors.hospital}
-                  name="hospital"
-                />
-              </FormControl>
+              <SelectField
+                fullWidth={true}
+                className="field-form"
+                name="hospital"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                label="Hospital de paciente"
+                options={hospitalOptions}
+                helperText={touched.hospital ? errors.hospital : ""}
+                error={touched.hospital && !!errors.hospital}
+                value={values.hospital}
+              />
               <SelectField
                 fullWidth={true}
                 className="field-form"

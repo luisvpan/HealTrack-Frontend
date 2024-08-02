@@ -124,6 +124,9 @@ const Table: FunctionComponent<Props> = ({ items, className, fetchItems }) => {
               Editar
             </Button>
           ),
+
+          //Comentar siempre, usar en caso de emergencia
+
           /*
           (row: Patient) => (
             <Button
