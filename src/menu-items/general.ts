@@ -1,6 +1,6 @@
 // assets
 import store from "store";
-import { IconUser, IconBuildingHospital, IconClipboardList } from "@tabler/icons";
+import { IconUser, IconBuildingHospital, IconClipboardList, IconQuestionMark } from "@tabler/icons";
 import { AllRole } from "core/users/types";
 import { MenuItem, MenuItemType } from "./types";
 
@@ -82,6 +82,29 @@ const other: MenuItem = {
                 title: "Crear recomendación",
                 type: MenuItemType.Item,
                 url: "/recommendations/create",
+                breadcrumbs: false,
+              },
+            ],
+          },
+          {
+            id: "faqs",
+            title: "Preguntas Frecuentes",
+            type: MenuItemType.Collapse,
+            icon: IconQuestionMark,
+            breadcrumbs: false,
+            children: [
+              {
+                id: "list-faqs",
+                title: "Lista de Preguntas Frecuentes",
+                type: MenuItemType.Item,
+                url: "/faqs",
+                breadcrumbs: false,
+              },
+              {
+                id: "create-faqs",
+                title: "Crear Pregunta Frecuente",
+                type: MenuItemType.Item,
+                url: "/faqs/create",
                 breadcrumbs: false,
               },
             ],
@@ -188,6 +211,22 @@ const other: MenuItem = {
                 title: "Lista de recomendaciones",
                 type: MenuItemType.Item,
                 url: "/recommendations",
+                breadcrumbs: false,
+              },
+            ],
+          },
+          {
+            id: "faqs",
+            title: "Preguntas Frecuentes",
+            type: MenuItemType.Collapse,
+            icon: IconQuestionMark,
+            breadcrumbs: false,
+            children: [
+              {
+                id: "list-faqs",
+                title: "Ver Preguntas Frecuentes",
+                type: MenuItemType.Item,
+                url: "/faqs",
                 breadcrumbs: false,
               },
             ],

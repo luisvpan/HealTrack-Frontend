@@ -33,6 +33,12 @@ import Reports from "views/reports";
 import CreateReport from "views/reports/create";
 import EditReport from "views/reports/edit";
 
+// FAQs
+import FAQs from "views/FAQs";
+import CreateFAQ from "views/FAQs/create"; // Asegúrate de que la ruta y el nombre del archivo sean correctos
+import EditFAQ from "views/FAQs/edit"; // Asegúrate de que la ruta y el nombre del archivo sean correctos
+
+
 // Roles
 import { AllRole } from "core/users/types";
 
@@ -128,6 +134,29 @@ const GeneralRoutes: RouteObject[] = [
         {
           path: "recommendations",
           element: <Recomendations />,
+        },
+      ]),
+
+  // FAQs
+  ...(isAdmin
+    ? [
+        {
+          path: "faqs",
+          element: <FAQs />,
+        },
+        {
+          path: "faqs/create",
+          element: <CreateFAQ />,
+        },
+        {
+          path: "faqs/edit/:id",
+          element: <EditFAQ />,
+        },
+      ]
+    : [
+        {
+          path: "faqs",
+          element: <FAQs />,
         },
       ]),
 

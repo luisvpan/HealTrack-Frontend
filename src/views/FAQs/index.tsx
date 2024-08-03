@@ -1,94 +1,62 @@
-import { styled } from "styled-components";
+import { styled } from "@mui/material/styles";
 import { useNavigate } from "react-router";
 import { IconCirclePlus, IconFileText, IconEdit, IconTrash } from "@tabler/icons";
 import MainCard from "components/cards/MainCard";
 import { Box, Button, Typography, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
 import { FunctionComponent, useCallback, useState } from "react";
 import useData from "./useData";
-import { Recommendation } from "core/recommendations/types";
+import { FAQs } from "core/FAQs/types";
 import store from "store";
 import { AllRole } from "core/users/types";
 import { setIsLoading, setSuccessMessage, setErrorMessage } from "store/customizationSlice";
 import { useAppDispatch } from "store/index";
 import BackendError from "exceptions/backend-error";
-import deleteRecommendation from "services/recomendations/delete-recommendation";
+import deleteFAQ from "services/FAQs/delete-FAQ";
 import DialogDelete from "components/dialogDelete";
 
-// Define los estilos para el modal
-const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({
-  textAlign: 'center',
-  fontWeight: 'bold',
-  fontSize: '40px',
-}));
-
-const StyledDialogContent = styled(DialogContent)(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '8px',
-}));
-
-const StyledTitle = styled(Typography)(({ theme }) => ({
-  textAlign: 'center',
-  fontWeight: 'bold',
-  fontStyle: 'italic',
-  fontSize: '25px',
-  marginBottom: '8px',
-}));
-
-const StyledContentContainer = styled('div')(({ theme }) => ({
-  width: '100%',
-  maxHeight: '200px',  // Ajusta la altura máxima del contenedor de respuesta
-  overflowY: 'auto',  // Agrega un scroll si el contenido es muy largo
-  padding: '12px',
-  border: '1px solid #ddd',
-  borderRadius: '4px',
-  fontSize: '20px',
-  lineHeight: '1',  // Ajusta el interlineado
-}));
-
-const RecommendationList: FunctionComponent<Prop> = ({ className }) => {
-  const { items, fetchRecommendations } = useData();
+const FAQList: FunctionComponent<Prop> = ({ className }) => {
+  const { items, fetchFAQs } = useData();
   const userRole = store.getState().auth.user?.role;
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [open, setOpen] = useState<boolean>(false);
-  const [recommendationId, setRecommendationId] = useState<number>(0);
+  const [faqId, setFaqId] = useState<number>(0);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const [selectedRecommendation, setSelectedRecommendation] = useState<Recommendation | null>(null);
+  const [selectedFAQ, setSelectedFAQ] = useState<FAQs | null>(null);
 
   const goToCreate = useCallback(() => {
-    navigate("/recommendations/create");
+    navigate("/faqs/create");
   }, [navigate]);
 
-  const goToRecommendation = useCallback(
-    (recommendation: Recommendation) => {
-      setSelectedRecommendation(recommendation);
+  const goToFAQ = useCallback(
+    (faq: FAQs) => {
+      setSelectedFAQ(faq);
       setModalOpen(true);
     },
     []
   );
 
-  const handleOpen = useCallback((recommendationId: number) => {
+  const handleOpen = useCallback((faqId: number) => {
     setOpen(true);
-    setRecommendationId(recommendationId);
+    setFaqId(faqId);
   }, []);
 
   const handleClose = useCallback(() => {
     setOpen(false);
-    setRecommendationId(0);
+    setFaqId(0);
   }, []);
 
   const handleModalClose = useCallback(() => {
     setModalOpen(false);
-    setSelectedRecommendation(null);
+    setSelectedFAQ(null);
   }, []);
 
   const onDelete = useCallback(
-    async (recommendationId: number) => {
+    async (faqId: number) => {
       try {
         dispatch(setIsLoading(true));
-        await deleteRecommendation(recommendationId);
-        dispatch(setSuccessMessage(`Recomendación eliminada correctamente`));
+        await deleteFAQ(faqId);
+        dispatch(setSuccessMessage(`FAQ eliminada correctamente`));
       } catch (error) {
         if (error instanceof BackendError) {
           dispatch(setErrorMessage(error.getMessage()));
@@ -96,20 +64,20 @@ const RecommendationList: FunctionComponent<Prop> = ({ className }) => {
       } finally {
         dispatch(setIsLoading(false));
         handleClose();
-        fetchRecommendations();
+        fetchFAQs();
       }
     },
-    [dispatch, fetchRecommendations, handleClose]
+    [dispatch, fetchFAQs, handleClose]
   );
 
   return (
     <MainCard
       className={className}
-      headerClass={"recommendations-header"}
+      headerClass={"faqs-header"}
       title={
-        <div className={"recommendations-header"}>
+        <div className={"faqs-header"}>
           <Typography variant="h3" className={"title-header"}>
-            Recomendaciones
+            Preguntas Frecuentes
           </Typography>
           {userRole === AllRole.ADMIN && (
             <Button
@@ -131,7 +99,7 @@ const RecommendationList: FunctionComponent<Prop> = ({ className }) => {
           flexGrow: 1,
         }}
       >
-        {items.map((item: Recommendation) => (
+        {items.map((item: FAQs) => (
           <Box
             key={item.id}
             sx={{
@@ -150,7 +118,7 @@ const RecommendationList: FunctionComponent<Prop> = ({ className }) => {
                 backgroundColor: "#e0e0e0",
               },
             }}
-            onClick={() => goToRecommendation(item)}
+            onClick={() => goToFAQ(item)}
           >
             <Box
               sx={{
@@ -167,7 +135,7 @@ const RecommendationList: FunctionComponent<Prop> = ({ className }) => {
               sx={{ display: "flex", flexDirection: "row", flexGrow: 1, ml: 2 }}
             >
               <Box sx={{ display: "flex", flexDirection: "column", flexGrow: 1 }}>
-                <Typography variant="subtitle1">{item.title}</Typography>
+                <Typography variant="subtitle1">{item.question}</Typography>
               </Box>
             </Box>
 
@@ -184,7 +152,7 @@ const RecommendationList: FunctionComponent<Prop> = ({ className }) => {
                   color="primary"
                   onClick={(e) => {
                     e.stopPropagation(); // Previene que el click en el botón afecte el Box principal
-                    navigate("/recommendations/edit/" + item.id);
+                    navigate("/faqs/edit/" + item.id);
                   }}
                   startIcon={<IconEdit />}
                 >
@@ -208,17 +176,19 @@ const RecommendationList: FunctionComponent<Prop> = ({ className }) => {
       <DialogDelete
         handleClose={handleClose}
         onDelete={() => {
-          onDelete(recommendationId);
+          onDelete(faqId);
         }}
         open={open}
       />
-      <Dialog open={modalOpen} onClose={handleModalClose}>
-        <StyledDialogTitle>Detalles de la Recomendación</StyledDialogTitle>
+      <StyledDialog open={modalOpen} onClose={handleModalClose}>
+        <StyledDialogTitle>Detalles de la Pregunta</StyledDialogTitle>
         <StyledDialogContent>
-          {selectedRecommendation && (
+          {selectedFAQ && (
             <>
-              <StyledTitle>"{selectedRecommendation.title}"</StyledTitle>
-              <StyledContentContainer>{selectedRecommendation.content}</StyledContentContainer>
+              <StyledQuestion>"{selectedFAQ.question}"</StyledQuestion>
+              <StyledAnswerContainer>
+                {selectedFAQ.answer}
+              </StyledAnswerContainer>
             </>
           )}
         </StyledDialogContent>
@@ -227,21 +197,59 @@ const RecommendationList: FunctionComponent<Prop> = ({ className }) => {
             Cerrar
           </Button>
         </DialogActions>
-      </Dialog>
+      </StyledDialog>
     </MainCard>
   );
 };
+
+const StyledDialog = styled(Dialog)(({ theme }) => ({
+  '& .MuiDialog-paper': {
+    width: '80%',  // Ajusta el ancho del diálogo
+    maxWidth: '600px',  // Ajusta el ancho máximo del diálogo
+  },
+}));
+
+const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({
+  textAlign: 'center',
+  fontWeight: 'bold',
+  fontSize: '40px',
+}));
+
+const StyledDialogContent = styled(DialogContent)(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+}));
+
+const StyledQuestion = styled(Typography)(({ theme }) => ({
+  textAlign: 'center',
+  fontWeight: 'bold',
+  fontStyle: 'italic',
+  fontSize: '25px',
+  marginBottom: '8px',
+}));
+
+const StyledAnswerContainer = styled('div')(({ theme }) => ({
+  width: '100%',
+  maxHeight: '200px',  // Ajusta la altura máxima del contenedor de respuesta
+  overflowY: 'auto',  // Agrega un scroll si el contenido es muy largo
+  padding: '12px',
+  border: '1px solid #ddd',
+  borderRadius: '4px',
+  fontSize: '20px',
+  lineHeight: '1',  // Ajusta el interlineado del texto
+}));
 
 interface Prop {
   className?: string;
 }
 
-export default styled(RecommendationList)`
+export default styled(FAQList)`
   width: 100%;
   display: flex;
   flex-direction: column;
 
-  .recommendations-header {
+  .faqs-header {
     flex: 1;
     width: 100%;
     display: flex;
