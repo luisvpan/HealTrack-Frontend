@@ -129,7 +129,7 @@ const Chat = () => {
                 </Typography>
               )}
               {
-                //<p>En línea</p>
+                //<p>En línea</p> //Ver si se implementa
               }
             </span>
           )}

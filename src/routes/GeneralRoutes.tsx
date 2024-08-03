@@ -18,6 +18,11 @@ import Hospitals from "views/hospitals";
 import CreateHospital from "views/hospitals/create";
 import EditHospital from "views/hospitals/edit";
 
+// Recomendaciones
+import Recomendations from "views/Recomendations";
+import CreateRecommendation from "views/Recomendations/create";
+import EditRecommendation from "views/Recomendations/edit";
+
 // Chat
 import Chat from "views/chat";
 import ChatList from "views/chat/chat-list";
@@ -102,6 +107,29 @@ const GeneralRoutes: RouteObject[] = [
         },
       ]
     : []),
+
+  // Recomendaciones
+  ...(isAdmin
+    ? [
+        {
+          path: "recommendations",
+          element: <Recomendations />,
+        },
+        {
+          path: "recommendations/create",
+          element: <CreateRecommendation />,
+        },
+        {
+          path: "recommendations/edit/:id",
+          element: <EditRecommendation />,
+        },
+      ]
+    : [
+        {
+          path: "recommendations",
+          element: <Recomendations />,
+        },
+      ]),
 
   // Chat
   {

@@ -1,13 +1,14 @@
 // assets
 import store from "store";
-import { IconUser, IconBuildingHospital } from "@tabler/icons";
+import { IconUser, IconBuildingHospital, IconClipboardList } from "@tabler/icons";
 import { AllRole } from "core/users/types";
 import { MenuItem, MenuItemType } from "./types";
-// constant
+
 const userRole = store.getState().auth.user?.role;
 
 const isAssistant = userRole === AllRole.ASSISTANT;
 const isAdmin = userRole === AllRole.ADMIN;
+const isPatient = userRole === AllRole.PATIENT;
 
 const other: MenuItem = {
   id: "agencies-crud-category-general",
@@ -62,6 +63,29 @@ const other: MenuItem = {
               },
             ],
           },
+          {
+            id: "recommendations",
+            title: "Recomendaciones",
+            type: MenuItemType.Collapse,
+            icon: IconClipboardList,
+            breadcrumbs: false,
+            children: [
+              {
+                id: "list-recommendations",
+                title: "Lista de recomendaciones",
+                type: MenuItemType.Item,
+                url: "/recommendations",
+                breadcrumbs: false,
+              },
+              {
+                id: "create-recommendations",
+                title: "Crear recomendación",
+                type: MenuItemType.Item,
+                url: "/recommendations/create",
+                breadcrumbs: false,
+              },
+            ],
+          },
         ]
       : []),
 
@@ -109,6 +133,7 @@ const other: MenuItem = {
             ],
           },
         ]),
+
     {
       id: "chat",
       title: "Chat",
@@ -148,6 +173,27 @@ const other: MenuItem = {
         },
       ],
     },
+
+    ...(isPatient
+      ? [
+          {
+            id: "recommendations",
+            title: "Recomendaciones",
+            type: MenuItemType.Collapse,
+            icon: IconClipboardList,
+            breadcrumbs: false,
+            children: [
+              {
+                id: "list-recommendations",
+                title: "Lista de recomendaciones",
+                type: MenuItemType.Item,
+                url: "/recommendations",
+                breadcrumbs: false,
+              },
+            ],
+          },
+        ]
+      : []),
   ],
 };
 
