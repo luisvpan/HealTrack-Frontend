@@ -66,7 +66,7 @@ const GeneralRoutes: RouteObject[] = [
     : []),
 
   // Pacientes
-  ...(isAssistant
+  ...(isAdmin || isAssistant
     ? [
         {
           path: "patients",

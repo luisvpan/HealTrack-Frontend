@@ -77,7 +77,7 @@ const FAQList: FunctionComponent<Prop> = ({ className }) => {
       title={
         <div className={"faqs-header"}>
           <Typography variant="h3" className={"title-header"}>
-            Preguntas Frecuentes
+            ¡Bienvenido al ChatBot! Busque su pregunta con confianza 😊
           </Typography>
           {userRole === AllRole.ADMIN && (
             <Button

@@ -61,6 +61,10 @@ const ChatList: FunctionComponent<Prop> = ({ className }) => {
               alignItems: "center",
               px: "30px",
               py: "10px",
+              borderBottom: "1px solid #ccc",
+              marginBottom: "10px",
+              textTransform: "none",
+              justifyContent: "space-between"
             }}
             onClick={() => goToChat(item.id)}
           >

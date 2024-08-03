@@ -1,6 +1,6 @@
 // assets
 import store from "store";
-import { IconUser, IconBuildingHospital, IconClipboardList, IconQuestionMark } from "@tabler/icons";
+import { IconUser, IconBuildingHospital, IconClipboardList, IconQuestionMark, IconRobot } from "@tabler/icons";
 import { AllRole } from "core/users/types";
 import { MenuItem, MenuItemType } from "./types";
 
@@ -217,14 +217,14 @@ const other: MenuItem = {
           },
           {
             id: "faqs",
-            title: "Preguntas Frecuentes",
+            title: "ChatBot",
             type: MenuItemType.Collapse,
-            icon: IconQuestionMark,
+            icon: IconRobot,
             breadcrumbs: false,
             children: [
               {
                 id: "list-faqs",
-                title: "Ver Preguntas Frecuentes",
+                title: "Busque su pregunta",
                 type: MenuItemType.Item,
                 url: "/faqs",
                 breadcrumbs: false,
