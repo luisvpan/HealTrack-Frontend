@@ -20,58 +20,59 @@ const CreatePatient: FunctionComponent<Props> = ({ className }) => {
   const dispatch = useAppDispatch();
 
   const onSubmit = useCallback(
-    async (
-      values: any,
-      { setErrors, setStatus, setSubmitting }: FormikHelpers<FormValues>
-    ) => {
-      try {
-        dispatch(setIsLoading(true));
-        setErrors({});
-        setStatus({});
-        setSubmitting(true);
-        const formatedValues = {
-          ...values,
-          age: Number(values.age),
-          automaticTracking: true,
-          hospital: {
-            name: values.hospital,
-          },
-          user: {
-            name: values.name,
-            lastname: values.lastname,
-            email: values.email,
-            identification: values.identification,
-            password: values.password,
-            role: "patient",
-          },
-        };
-        delete formatedValues.name;
-        delete formatedValues.lastname;
-        delete formatedValues.email;
-        delete formatedValues.identification;
-        delete formatedValues.password;
-        delete formatedValues.submit;
-        await createPatient(formatedValues);
-        navigate("/patients");
-        dispatch(
-          setSuccessMessage(`Paciente ${values.name} creado correctamente`)
-        );
-      } catch (error) {
-        if (error instanceof BackendError) {
-          setErrors({
-            ...error.getFieldErrorsMessages(),
-            submit: error.getMessage(),
-          });
-          dispatch(setErrorMessage(error.getMessage()));
-        }
-        setStatus({ success: false });
-      } finally {
-        dispatch(setIsLoading(false));
-        setSubmitting(false);
-      }
+    (values: any, { setErrors, setStatus, setSubmitting }: FormikHelpers<FormValues>) => {
+      dispatch(setIsLoading(true));
+      setErrors({});
+      setStatus({});
+      setSubmitting(true);
+  
+      const formatedValues = {
+        ...values,
+        age: Number(values.age),
+        automaticTracking: true,
+        hospital: {
+          name: values.hospital,
+        },
+        user: {
+          name: values.name,
+          lastname: values.lastname,
+          email: values.email,
+          identification: values.identification,
+          password: values.password,
+          role: "patient",
+        },
+      };
+      delete formatedValues.name;
+      delete formatedValues.lastname;
+      delete formatedValues.email;
+      delete formatedValues.identification;
+      delete formatedValues.password;
+      delete formatedValues.submit;
+  
+      createPatient(formatedValues)
+        .then(() => {
+          navigate("/patients");
+          dispatch(
+            setSuccessMessage(`Paciente ${values.name} creado correctamente`)
+          );
+        })
+        .catch((error) => {
+          if (error instanceof BackendError) {
+            setErrors({
+              ...error.getFieldErrorsMessages(),
+              submit: error.getMessage(),
+            });
+            dispatch(setErrorMessage(error.getMessage()));
+          }
+          setStatus({ success: false });
+        })
+        .finally(() => {
+          dispatch(setIsLoading(false));
+          setSubmitting(false);
+        });
     },
     [dispatch, navigate]
-  );
+  );  
 
   return (
     <div className={className}>

@@ -20,39 +20,40 @@ const CreateHospital: FunctionComponent<Props> = ({ className }) => {
   const dispatch = useAppDispatch();
 
   const onSubmit = useCallback(
-    async (
-      values: any,
-      { setErrors, setStatus, setSubmitting }: FormikHelpers<FormValues>
-    ) => {
-      try {
-        dispatch(setIsLoading(true));
-        setErrors({});
-        setStatus({});
-        setSubmitting(true);
-        const formatedValues = {
-          name: values.name,
-        };
-        await createHospital(formatedValues);
-        navigate("/hospitals");
-        dispatch(
-          setSuccessMessage(`Hospital ${values.name} creado correctamente`)
-        );
-      } catch (error) {
-        if (error instanceof BackendError) {
-          setErrors({
-            ...error.getFieldErrorsMessages(),
-            submit: error.getMessage(),
-          });
-          dispatch(setErrorMessage(error.getMessage()));
-        }
-        setStatus({ success: false });
-      } finally {
-        dispatch(setIsLoading(false));
-        setSubmitting(false);
-      }
+    (values: any, { setErrors, setStatus, setSubmitting }: FormikHelpers<FormValues>) => {
+      dispatch(setIsLoading(true));
+      setErrors({});
+      setStatus({});
+      setSubmitting(true);
+  
+      const formatedValues = {
+        name: values.name,
+      };
+  
+      createHospital(formatedValues)
+        .then(() => {
+          navigate("/hospitals");
+          dispatch(
+            setSuccessMessage(`Hospital ${values.name} creado correctamente`)
+          );
+        })
+        .catch((error) => {
+          if (error instanceof BackendError) {
+            setErrors({
+              ...error.getFieldErrorsMessages(),
+              submit: error.getMessage(),
+            });
+            dispatch(setErrorMessage(error.getMessage()));
+          }
+          setStatus({ success: false });
+        })
+        .finally(() => {
+          dispatch(setIsLoading(false));
+          setSubmitting(false);
+        });
     },
     [dispatch, navigate]
-  );
+  );  
 
   return (
     <div className={className}>

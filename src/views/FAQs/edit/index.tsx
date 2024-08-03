@@ -27,40 +27,41 @@ const EditFAQ: FunctionComponent<Props> = ({ className }) => {
   const faq = useFAQById(faqNumberId);
 
   const onSubmit = useCallback(
-    async (
-      values: any,
-      { setErrors, setStatus, setSubmitting }: FormikHelpers<FormValues>
-    ) => {
-      try {
-        dispatch(setIsLoading(true));
-        setErrors({});
-        setStatus({});
-        setSubmitting(true);
-        const formatedValues = {
-          question: values.question,
-          answer: values.answer,
-        };
-        await editFAQ(faqNumberId!, formatedValues);
-        navigate("/faqs");
-        dispatch(
-          setSuccessMessage(`FAQ ${values.question} editado correctamente`)
-        );
-      } catch (error) {
-        if (error instanceof BackendError) {
-          setErrors({
-            ...error.getFieldErrorsMessages(),
-            submit: error.getMessage(),
-          });
-          dispatch(setErrorMessage(error.getMessage()));
-        }
-        setStatus({ success: false });
-      } finally {
-        setSubmitting(false);
-        dispatch(setIsLoading(false));
-      }
+    (values: any, { setErrors, setStatus, setSubmitting }: FormikHelpers<FormValues>) => {
+      dispatch(setIsLoading(true));
+      setErrors({});
+      setStatus({});
+      setSubmitting(true);
+  
+      const formatedValues = {
+        question: values.question,
+        answer: values.answer,
+      };
+  
+      editFAQ(faqNumberId!, formatedValues)
+        .then(() => {
+          navigate("/faqs");
+          dispatch(
+            setSuccessMessage(`FAQ ${values.question} editado correctamente`)
+          );
+        })
+        .catch((error) => {
+          if (error instanceof BackendError) {
+            setErrors({
+              ...error.getFieldErrorsMessages(),
+              submit: error.getMessage(),
+            });
+            dispatch(setErrorMessage(error.getMessage()));
+          }
+          setStatus({ success: false });
+        })
+        .finally(() => {
+          setSubmitting(false);
+          dispatch(setIsLoading(false));
+        });
     },
     [dispatch, navigate, faqNumberId]
-  );
+  );  
 
   return (
     <div className={className}>

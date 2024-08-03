@@ -1,6 +1,7 @@
 import { FunctionComponent } from "react";
 import * as Yup from "yup";
 import { Formik, FormikHelpers } from "formik";
+import useHospitalOptions from "core/hospitals/use-hospitals-options";
 // material-ui
 import MainCard from "components/cards/MainCard";
 import SelectField from "components/SelectField";
@@ -16,6 +17,7 @@ const Form: FunctionComponent<Props> = ({
   initialValues,
   isEdit,
 }) => {
+  const hospitalOptions = useHospitalOptions();
   const aditionalFieldValidations: any = isEdit
     ? {}
     : {
@@ -114,19 +116,18 @@ const Form: FunctionComponent<Props> = ({
                   name="email"
                 />
               </FormControl>
-              <FormControl className="field-form" fullWidth>
-                <TextField
-                  id="hospital"
-                  label="Hospital de empleado"
-                  variant="outlined"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.hospital}
-                  helperText={touched.hospital ? errors.hospital : ""}
-                  error={touched.hospital && !!errors.hospital}
-                  name="hospital"
-                />
-              </FormControl>
+              <SelectField
+                fullWidth={true}
+                className="field-form"
+                name="hospital"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                label="Hospital de paciente"
+                options={hospitalOptions}
+                helperText={touched.hospital ? errors.hospital : ""}
+                error={touched.hospital && !!errors.hospital}
+                value={values.hospital}
+              />
               <SelectField
                 fullWidth={true}
                 className="field-form"

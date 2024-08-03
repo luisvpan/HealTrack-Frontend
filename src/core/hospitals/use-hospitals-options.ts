@@ -29,6 +29,6 @@ export default function useHospitalOptions(): SelectOption[] {
 
   return hospitals.map((hospital) => ({
     label: hospital.name,
-    value: hospital.id,
+    value: hospital.name,
   }));
 }

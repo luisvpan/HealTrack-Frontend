@@ -29,7 +29,7 @@ const DialogChangeState: FunctionComponent<Prop> = ({
 }) => {
   const dispatch = useAppDispatch();
 
-  const onSubmit = async (
+  const onSubmit = (
     values: any,
     {
       setErrors,
@@ -38,31 +38,34 @@ const DialogChangeState: FunctionComponent<Prop> = ({
       resetForm,
     }: FormikHelpers<{ status: string }>
   ) => {
-    try {
-      dispatch(setIsLoading(true));
-      setErrors({});
-      setStatus({});
-      setSubmitting(true);
-      await changePatientState(patientId, values);
-      dispatch(
-        setSuccessMessage(`Estado del paciente actualizado correctamente`)
-      );
-      resetForm();
-      handleClose();
-      fetchItems();
-    } catch (error) {
-      if (error instanceof BackendError) {
-        setErrors({
-          ...error.getFieldErrorsMessages(),
-        });
-        dispatch(setErrorMessage(error.getMessage()));
-      }
-      setStatus({ success: false });
-    } finally {
-      dispatch(setIsLoading(false));
-      setSubmitting(false);
-    }
-  };
+    dispatch(setIsLoading(true));
+    setErrors({});
+    setStatus({});
+    setSubmitting(true);
+  
+    changePatientState(patientId, values)
+      .then(() => {
+        dispatch(
+          setSuccessMessage(`Estado del paciente actualizado correctamente`)
+        );
+        resetForm();
+        handleClose();
+        fetchItems();
+      })
+      .catch((error) => {
+        if (error instanceof BackendError) {
+          setErrors({
+            ...error.getFieldErrorsMessages(),
+          });
+          dispatch(setErrorMessage(error.getMessage()));
+        }
+        setStatus({ success: false });
+      })
+      .finally(() => {
+        dispatch(setIsLoading(false));
+        setSubmitting(false);
+      });
+  };  
 
   return (
     <div className={className}>

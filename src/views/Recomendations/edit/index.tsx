@@ -27,40 +27,41 @@ const EditRecommendation: FunctionComponent<Props> = ({ className }) => {
   const recommendation = useRecommendationById(recommendationNumberId);
 
   const onSubmit = useCallback(
-    async (
-      values: any,
-      { setErrors, setStatus, setSubmitting }: FormikHelpers<FormValues>
-    ) => {
-      try {
-        dispatch(setIsLoading(true));
-        setErrors({});
-        setStatus({});
-        setSubmitting(true);
-        const formatedValues = {
-          title: values.title,
-          content: values.content,
-        };
-        await editRecommendation(recommendationNumberId!, formatedValues);
-        navigate("/recommendations");
-        dispatch(
-          setSuccessMessage(`Recomendación ${values.title} editada correctamente`)
-        );
-      } catch (error) {
-        if (error instanceof BackendError) {
-          setErrors({
-            ...error.getFieldErrorsMessages(),
-            submit: error.getMessage(),
-          });
-          dispatch(setErrorMessage(error.getMessage()));
-        }
-        setStatus({ success: false });
-      } finally {
-        setSubmitting(false);
-        dispatch(setIsLoading(false));
-      }
+    (values: any, { setErrors, setStatus, setSubmitting }: FormikHelpers<FormValues>) => {
+      dispatch(setIsLoading(true));
+      setErrors({});
+      setStatus({});
+      setSubmitting(true);
+  
+      const formatedValues = {
+        title: values.title,
+        content: values.content,
+      };
+  
+      editRecommendation(recommendationNumberId!, formatedValues)
+        .then(() => {
+          navigate("/recommendations");
+          dispatch(
+            setSuccessMessage(`Recomendación ${values.title} editada correctamente`)
+          );
+        })
+        .catch((error) => {
+          if (error instanceof BackendError) {
+            setErrors({
+              ...error.getFieldErrorsMessages(),
+              submit: error.getMessage(),
+            });
+            dispatch(setErrorMessage(error.getMessage()));
+          }
+          setStatus({ success: false });
+        })
+        .finally(() => {
+          setSubmitting(false);
+          dispatch(setIsLoading(false));
+        });
     },
     [dispatch, navigate, recommendationNumberId]
-  );
+  );  
 
   return (
     <div className={className}>

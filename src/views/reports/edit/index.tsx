@@ -24,45 +24,46 @@ const EditReport: FunctionComponent<Props> = ({ className }) => {
   const report = useReportById(reportId);
 
   const onSubmit = useCallback(
-    async (
-      values: any,
-      { setErrors, setStatus, setSubmitting }: FormikHelpers<FormValues>
-    ) => {
-      try {
-        dispatch(setIsLoading(true));
-        setErrors({});
-        setStatus({});
-        setSubmitting(true);
-        delete values.id;
-        delete values.file;
-        delete values.submit;
-        for (const key in values) {
-          if (values[key] === "true") {
-            values[key] = true;
-          }
+    (values: any, { setErrors, setStatus, setSubmitting }: FormikHelpers<FormValues>) => {
+      dispatch(setIsLoading(true));
+      setErrors({});
+      setStatus({});
+      setSubmitting(true);
+  
+      // Prepare values for submission
+      delete values.id;
+      delete values.file;
+      delete values.submit;
+      for (const key in values) {
+        if (values[key] === "true") {
+          values[key] = true;
         }
-
-        await editReport(reportId!, values);
-        navigate("/reports");
-        dispatch(
-          setSuccessMessage(`Paciente ${values.name} editado correctamente`)
-        );
-      } catch (error) {
-        if (error instanceof BackendError) {
-          setErrors({
-            ...error.getFieldErrorsMessages(),
-            submit: error.getMessage(),
-          });
-          dispatch(setErrorMessage(error.getMessage()));
-        }
-        setStatus({ success: false });
-      } finally {
-        setSubmitting(false);
-        dispatch(setIsLoading(false));
       }
+  
+      editReport(reportId!, values)
+        .then(() => {
+          navigate("/reports");
+          dispatch(
+            setSuccessMessage(`Paciente ${values.name} editado correctamente`)
+          );
+        })
+        .catch((error) => {
+          if (error instanceof BackendError) {
+            setErrors({
+              ...error.getFieldErrorsMessages(),
+              submit: error.getMessage(),
+            });
+            dispatch(setErrorMessage(error.getMessage()));
+          }
+          setStatus({ success: false });
+        })
+        .finally(() => {
+          setSubmitting(false);
+          dispatch(setIsLoading(false));
+        });
     },
     [dispatch, navigate, reportId]
-  );
+  );  
 
   return (
     <div className={className}>

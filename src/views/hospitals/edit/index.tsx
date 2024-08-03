@@ -24,39 +24,40 @@ const EditHospital: FunctionComponent<Props> = ({ className }) => {
   const hospital = useHospitalById(hospitalId);
 
   const onSubmit = useCallback(
-    async (
-      values: any,
-      { setErrors, setStatus, setSubmitting }: FormikHelpers<FormValues>
-    ) => {
-      try {
-        dispatch(setIsLoading(true));
-        setErrors({});
-        setStatus({});
-        setSubmitting(true);
-        const formatedValues = {
-          name: values.name,
-        };
-        await editHospital(hospitalId!, formatedValues);
-        navigate("/hospitals");
-        dispatch(
-          setSuccessMessage(`Hospital ${values.name} editado correctamente`)
-        );
-      } catch (error) {
-        if (error instanceof BackendError) {
-          setErrors({
-            ...error.getFieldErrorsMessages(),
-            submit: error.getMessage(),
-          });
-          dispatch(setErrorMessage(error.getMessage()));
-        }
-        setStatus({ success: false });
-      } finally {
-        setSubmitting(false);
-        dispatch(setIsLoading(false));
-      }
+    (values: any, { setErrors, setStatus, setSubmitting }: FormikHelpers<FormValues>) => {
+      dispatch(setIsLoading(true));
+      setErrors({});
+      setStatus({});
+      setSubmitting(true);
+  
+      const formatedValues = {
+        name: values.name,
+      };
+  
+      editHospital(hospitalId!, formatedValues)
+        .then(() => {
+          navigate("/hospitals");
+          dispatch(
+            setSuccessMessage(`Hospital ${values.name} editado correctamente`)
+          );
+        })
+        .catch((error) => {
+          if (error instanceof BackendError) {
+            setErrors({
+              ...error.getFieldErrorsMessages(),
+              submit: error.getMessage(),
+            });
+            dispatch(setErrorMessage(error.getMessage()));
+          }
+          setStatus({ success: false });
+        })
+        .finally(() => {
+          setSubmitting(false);
+          dispatch(setIsLoading(false));
+        });
     },
     [dispatch, navigate, hospitalId]
-  );
+  );  
 
   return (
     <div className={className}>
