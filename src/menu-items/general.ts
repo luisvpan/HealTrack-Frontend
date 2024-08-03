@@ -138,24 +138,7 @@ const other: MenuItem = {
             ],
           },
         ]
-      : [
-          {
-            id: "patients",
-            title: "Pacientes",
-            type: MenuItemType.Collapse,
-            icon: IconUser,
-            breadcrumbs: false,
-            children: [
-              {
-                id: "list-patients",
-                title: "Lista de pacientes",
-                type: MenuItemType.Item,
-                url: "/patients",
-                breadcrumbs: false,
-              },
-            ],
-          },
-        ]),
+      : []),
 
     {
       id: "chat",
