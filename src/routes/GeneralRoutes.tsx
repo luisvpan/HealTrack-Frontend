@@ -47,6 +47,9 @@ const isAssistant = userRole === AllRole.ASSISTANT;
 const isAdmin = userRole === AllRole.ADMIN;
 
 const GeneralRoutes: RouteObject[] = [
+
+
+
   // Empleados
   ...(isAdmin
     ? [

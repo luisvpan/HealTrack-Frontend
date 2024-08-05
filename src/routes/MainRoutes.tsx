@@ -9,10 +9,13 @@ import { RouteObject } from "react-router";
 import Logout from "views/logout";
 import GeneralRoutes from "./GeneralRoutes";
 
+// Main
+import MainPage from "views/main";
+
 // dashboard routing
-const DashboardDefault = Loadable(
-  lazy(() => import("views/dashboard/Default"))
-);
+// const DashboardDefault = Loadable(
+//   lazy(() => import("views/dashboard/Default"))
+// );
 const SamplePage = Loadable(lazy(() => import("views/sample-page")));
 
 // ==============================|| MAIN ROUTING ||============================== //
@@ -23,7 +26,7 @@ const MainRoutes: RouteObject = {
   children: [
     {
       path: "/",
-      element: <DashboardDefault />,
+      element: <MainPage />,
     },
     /*
     {

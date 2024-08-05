@@ -9,6 +9,7 @@ const userRole = store.getState().auth.user?.role;
 const isAssistant = userRole === AllRole.ASSISTANT;
 const isAdmin = userRole === AllRole.ADMIN;
 const isPatient = userRole === AllRole.PATIENT;
+const isSpecialist = userRole === AllRole.SPECIALIST;
 
 const other: MenuItem = {
   id: "agencies-crud-category-general",
@@ -179,6 +180,43 @@ const other: MenuItem = {
         },
       ],
     },
+
+    ...(isAssistant || isSpecialist
+      ? [
+          {
+            id: "recommendations",
+            title: "Recomendaciones",
+            type: MenuItemType.Collapse,
+            icon: IconClipboardList,
+            breadcrumbs: false,
+            children: [
+              {
+                id: "list-recommendations",
+                title: "Lista de recomendaciones",
+                type: MenuItemType.Item,
+                url: "/recommendations",
+                breadcrumbs: false,
+              },
+            ],
+          },
+          {
+            id: "faqs",
+            title: "Preguntas Frecuentes",
+            type: MenuItemType.Collapse,
+            icon: IconQuestionMark,
+            breadcrumbs: false,
+            children: [
+              {
+                id: "list-faqs",
+                title: "Lista de Preguntas Frecuentes",
+                type: MenuItemType.Item,
+                url: "/faqs",
+                breadcrumbs: false,
+              },
+            ],
+          },
+        ]
+      : []),
 
     ...(isPatient
       ? [
