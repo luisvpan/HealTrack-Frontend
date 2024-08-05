@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import { Avatar, Box, ButtonBase } from '@mui/material';
+import { Avatar, Box, ButtonBase, Typography } from '@mui/material';
 
 // project imports
 import LogoSection from '../LogoSection';
@@ -29,12 +29,31 @@ const Header = ({ handleLeftDrawerToggle }) => {
           display: 'flex',
           [theme.breakpoints.down('md')]: {
             width: 'auto'
-          }
+          },
+          position: 'relative', // Added to position the app name correctly
+          alignItems: 'center' // Center items vertically
         }}
       >
         <Box component="span" sx={{ display: { xs: 'none', md: 'block' }, flexGrow: 1 }}>
           <LogoSection />
         </Box>
+
+        {/* App Name */}
+        <Typography
+          variant="h6"
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '57%',
+            transform: 'translate(-50%, -50%)', // Center the text
+            color: theme.palette.text.primary,
+            zIndex: 1, // Ensure it's above the LogoSection
+            fontSize: '1.2rem' // Adjust font size as needed
+          }}
+        >
+          HealTrack
+        </Typography>
+
         <ButtonBase sx={{ borderRadius: '12px', overflow: 'hidden' }}>
           <Avatar
             variant="rounded"
@@ -63,7 +82,6 @@ const Header = ({ handleLeftDrawerToggle }) => {
       <Box sx={{ flexGrow: 1 }} />
 
       {/* notification & profile */}
-      
       <ProfileSection />
     </>
   );
