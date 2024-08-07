@@ -16,6 +16,8 @@ const other: MenuItem = {
   type: MenuItemType.Group,
   title: "General",
   children: [
+
+    // Actividades para el administrador
     ...(isAdmin
       ? [
           {
@@ -113,6 +115,29 @@ const other: MenuItem = {
         ]
       : []),
 
+    //Lista de pacientes para Especialistas
+    ...(isAssistant || isAdmin || isSpecialist
+      ? [
+          {
+            id: "patients",
+            title: "Pacientes",
+            type: MenuItemType.Collapse,
+            icon: IconUser,
+            breadcrumbs: false,
+            children: [
+              {
+                id: "list-patients",
+                title: "Lista de pacientes",
+                type: MenuItemType.Item,
+                url: "/patients",
+                breadcrumbs: false,
+              },
+            ],
+          },
+        ]
+      : []),
+
+    //Lista de pacientes para Enfermeros
     ...(isAssistant
       ? [
           {
@@ -141,6 +166,7 @@ const other: MenuItem = {
         ]
       : []),
 
+    // Item de Chat entre usuarios
     {
       id: "chat",
       title: "Chat",
@@ -157,6 +183,8 @@ const other: MenuItem = {
         },
       ],
     },
+
+    //Reportes
     {
       id: "reports",
       title: "Reportes",
@@ -181,6 +209,8 @@ const other: MenuItem = {
       ],
     },
 
+
+    // recomendaciones y preguntas frecuentes para especialistas y enfermeros
     ...(isAssistant || isSpecialist
       ? [
           {
@@ -218,6 +248,7 @@ const other: MenuItem = {
         ]
       : []),
 
+    // recomendaciones y preguntas frecuentes para pacientes
     ...(isPatient
       ? [
           {

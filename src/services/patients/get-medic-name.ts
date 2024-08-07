@@ -1,23 +1,19 @@
 import axios from "axios";
 // Own
 import { API_BASE_URL } from "config/constants";
-import { Report } from "core/reports/types";
 import BackendError from "exceptions/backend-error";
 import store from "store";
 
-const URL = `${API_BASE_URL}/reports`;
+const URL = `${API_BASE_URL}/patients`;
 
-export default async function editReport(
-  idReport: number,
-  body: FormData
-): Promise<Report> {
+export default async function getMedicName(patientId: number): Promise<string> {
   try {
-    const response = await axios.patch<Report>(`${URL}/${idReport}`, body, {
+    const response = await axios.get<{ medicName: string }>(`${URL}/${patientId}/medic-name`, {
       headers: {
         Authorization: `Bearer ${store.getState().auth.token}`,
       },
     });
-    return response.data;
+    return response.data.medicName;
   } catch (error: unknown) {
     console.log(error);
     throw new BackendError(error);

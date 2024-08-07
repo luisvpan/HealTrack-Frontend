@@ -16,6 +16,7 @@ import editReport from "services/reports/edit-report";
 import useReportById from "./use-report-by-id";
 import useReportId from "./use-report-id";
 import { FormikHelpers } from "formik";
+import jsonToFormData from "helpers/json-to-formData";
 
 const EditReport: FunctionComponent<Props> = ({ className }) => {
   const navigate = useNavigate();
@@ -29,10 +30,11 @@ const EditReport: FunctionComponent<Props> = ({ className }) => {
       setErrors({});
       setStatus({});
       setSubmitting(true);
+
+      console.log("antes: ", values)
   
       // Prepare values for submission
       delete values.id;
-      delete values.file;
       delete values.submit;
       for (const key in values) {
         if (values[key] === "true") {
@@ -40,11 +42,15 @@ const EditReport: FunctionComponent<Props> = ({ className }) => {
         }
       }
   
-      editReport(reportId!, values)
+      console.log("Despues: ", values)
+
+      const valuesToSend = jsonToFormData(values);
+
+      editReport(reportId!, valuesToSend)
         .then(() => {
           navigate("/reports");
           dispatch(
-            setSuccessMessage(`Paciente ${values.name} editado correctamente`)
+            setSuccessMessage(`Reporte ${values.id} editado correctamente`)
           );
         })
         .catch((error) => {

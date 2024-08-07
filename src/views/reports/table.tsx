@@ -1,6 +1,6 @@
 import { Button, Typography, Pagination } from "@mui/material";
 import dayjs from "dayjs";
-import { IconTrash, IconEye } from "@tabler/icons";
+import { IconTrash, IconEye, IconEdit } from "@tabler/icons";
 import DynamicTable, { Settings } from "components/DynamicTable";
 // Own
 import { PaginationData, Report } from "core/reports/types";
@@ -17,6 +17,7 @@ import BackendError from "exceptions/backend-error";
 import DialogDelete from "components/dialogDelete";
 import DialogImage from "components/dialogImage";
 import { AllRole } from "core/users/types";
+import { useNavigate } from "react-router";
 
 const Table: FunctionComponent<Props> = ({
   items,
@@ -27,6 +28,7 @@ const Table: FunctionComponent<Props> = ({
 }) => {
   const role = store.getState().auth.user?.role;
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const [open, setOpen] = useState<boolean>(false);
   const [openImage, setOpenImage] = useState<boolean>(false);
   const [dialogImage, setDialogImage] = useState<string | null>("");
@@ -150,6 +152,17 @@ const Table: FunctionComponent<Props> = ({
                 Ver Imagen
               </Button>
             ) : null,
+          (row: Report) => (
+            <Button
+              color="primary"
+              onClick={() => {
+                navigate("/reports/edit/" + row.id);
+              }}
+              startIcon={<IconEdit />}
+            >
+              Editar
+            </Button>
+          ),
           (row: Report) => (
             <Button
               color="error"
