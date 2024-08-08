@@ -116,7 +116,7 @@ const other: MenuItem = {
       : []),
 
     //Lista de pacientes para Especialistas
-    ...(isAssistant || isAdmin || isSpecialist
+    ...(isAdmin || isSpecialist
       ? [
           {
             id: "patients",

@@ -164,18 +164,20 @@ const Table: FunctionComponent<Props> = ({
                 Ver Imagen
               </Button>
             ) : null,
-          (row: Report) => (
-            <Button
-              color="primary"
-              onClick={() => {
-                navigate("/reports/edit/" + row.id);
-              }}
-              startIcon={<IconEdit />}
-            >
-              Editar
-            </Button>
-          ),
-          (row: Report) => (
+            (row: Report) =>
+              role === AllRole.PATIENT ? (
+                <Button
+                  color="primary"
+                  onClick={() => {
+                    navigate("/reports/edit/" + row.id);
+                  }}
+                  startIcon={<IconEdit />}
+                >
+                  Editar
+                </Button>
+            ) : null,
+          (row: Report) =>
+            role === AllRole.ADMIN ? (
             <Button
               color="error"
               onClick={() => handleOpen(row.id)}
@@ -183,7 +185,7 @@ const Table: FunctionComponent<Props> = ({
             >
               Eliminar
             </Button>
-          ),
+          ): null,
         ]}
       />
       <DialogDelete

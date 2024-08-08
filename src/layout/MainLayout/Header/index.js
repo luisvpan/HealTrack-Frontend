@@ -1,24 +1,22 @@
 import PropTypes from 'prop-types';
-
-// material-ui
 import { useTheme } from '@mui/material/styles';
 import { Avatar, Box, ButtonBase, Typography } from '@mui/material';
-
-// project imports
 import LogoSection from '../LogoSection';
 import SearchSection from './SearchSection';
 import ProfileSection from './ProfileSection';
 import NotificationSection from './NotificationSection';
-
-// assets
 import { IconMenu2 } from '@tabler/icons';
 import useScriptRef from 'hooks/useScriptRef';
+import { useAppSelector } from 'store';
 
 // ==============================|| MAIN NAVBAR / HEADER ||============================== //
 
 const Header = ({ handleLeftDrawerToggle }) => {
   const theme = useTheme();
   const scriptRef = useScriptRef();
+
+  // Obtén la información del usuario desde el store
+  const user = useAppSelector((state) => state.auth.user);
 
   return (
     <>
@@ -30,8 +28,8 @@ const Header = ({ handleLeftDrawerToggle }) => {
           [theme.breakpoints.down('md')]: {
             width: 'auto'
           },
-          position: 'relative', // Added to position the app name correctly
-          alignItems: 'center' // Center items vertically
+          position: 'relative',
+          alignItems: 'center'
         }}
       >
         <Box component="span" sx={{ display: { xs: 'none', md: 'block' }, flexGrow: 1 }}>
@@ -45,10 +43,10 @@ const Header = ({ handleLeftDrawerToggle }) => {
             position: 'absolute',
             top: '50%',
             left: '57%',
-            transform: 'translate(-50%, -50%)', // Center the text
+            transform: 'translate(-50%, -50%)',
             color: theme.palette.text.primary,
-            zIndex: 1, // Ensure it's above the LogoSection
-            fontSize: '1.2rem' // Adjust font size as needed
+            zIndex: 1,
+            fontSize: '1.2rem'
           }}
         >
           HealTrack
@@ -79,6 +77,12 @@ const Header = ({ handleLeftDrawerToggle }) => {
       {/* header search */}
       {false && <SearchSection />}
       <Box sx={{ flexGrow: 1 }} />
+
+      {/* Nombre, Apellido y Rol del Usuario */}
+      <Typography variant="body1" sx={{ marginRight: '1rem', fontSize: "40px" }}>
+        {`${user?.name}, ${user?.role}`}
+      </Typography>
+
       <Box sx={{ flexGrow: 1 }} />
 
       {/* notification & profile */}

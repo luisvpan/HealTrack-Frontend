@@ -6,10 +6,12 @@ import { Box, Button, Typography } from "@mui/material";
 import { FunctionComponent, useCallback } from "react";
 import useData from "./useData";
 import { Chat } from "core/chats/types";
+import { AllRole } from "core/users/types";
 
 import store from "store";
 
 const ChatList: FunctionComponent<Prop> = ({ className }) => {
+  const role = store.getState().auth.user?.role;
   const { items } = useData();
   const user = store.getState().auth.user;
   const navigate = useNavigate();
@@ -34,14 +36,16 @@ const ChatList: FunctionComponent<Prop> = ({ className }) => {
           <Typography variant="h3" className={"title-header"}>
             Chats
           </Typography>
-          <Button
-            color="primary"
-            variant={"outlined"}
-            onClick={goToCreate}
-            startIcon={<IconCirclePlus />}
-          >
-            Crear
-          </Button>
+          {role !== AllRole.PATIENT && (
+            <Button
+              color="primary"
+              variant={"outlined"}
+              onClick={goToCreate}
+              startIcon={<IconCirclePlus />}
+            >
+              Crear
+            </Button>
+          )}
         </div>
       }
     >
