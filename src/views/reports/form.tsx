@@ -158,6 +158,63 @@ const Form: FunctionComponent<Props> = ({
                   </RadioGroup>
                 </FormControl>
                 <FormControl className="field-form" fullWidth>
+                  <Typography sx={{ textAlign: "center", fontSize: "16px" }}>
+                    ¿Tuvo gasto relacionado con la cirugía?
+                  </Typography>
+                  <RadioGroup
+                    name="surgeryExpense"
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      gap: "10px",
+                      alignItems: "center"
+                    }}
+                    onChange={handleChange}
+                    value={values.surgeryExpense}
+                  >
+                    <FormControlLabel
+                      value="No"
+                      control={<Radio />}
+                      label="No"
+                    />
+                    <FormControlLabel
+                      value="Si, de alimentación"
+                      control={<Radio />}
+                      label="Sí, de alimentación"
+                    />
+                    <FormControlLabel
+                      value="Si, de traslado"
+                      control={<Radio />}
+                      label="Sí, de traslado"
+                    />
+                    <FormControlLabel
+                      value="Si, pago a cuidadores"
+                      control={<Radio />}
+                      label="Sí, pago a cuidadores"
+                    />
+                    <FormControlLabel
+                      value="Si, de medicamentos"
+                      control={<Radio />}
+                      label="Sí, de medicamentos"
+                    />
+                  </RadioGroup>
+                </FormControl>
+                {values.surgeryExpense !== "No" && (
+                  <FormControl className="field-form" fullWidth>
+                    <TextField
+                      id="surgeryExpenseAmount"
+                      label="Monto del Gasto en Cirugía"
+                      variant="outlined"
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      value={values.surgeryExpenseAmount}
+                      name="surgeryExpenseAmount"
+                      type="number"
+                    />
+                  </FormControl>
+                )}
+                <FormControl className="field-form" fullWidth>
                   <TextField
                     id="additionalInformation"
                     label="Informacion Adicional"
@@ -209,6 +266,8 @@ export type FormValues = {
   hasRedness: boolean;
   hasSwelling: boolean;
   hasSecretions: boolean;
+  surgeryExpense: string;
+  surgeryExpenseAmount: number;
   additionalInformation: string | null;
   fileUrl: string | null;
   submit: string | null;

@@ -4,7 +4,7 @@ import useData from "./useData";
 import { styled } from "styled-components";
 import { useNavigate } from "react-router";
 import { AllRole } from "core/users/types";
-import { IconCirclePlus } from "@tabler/icons";
+import { IconCirclePlus, IconDownload } from "@tabler/icons";
 import MainCard from "components/cards/MainCard";
 import SelectField from "components/SelectField";
 import { DatePicker } from "@mui/x-date-pickers";
@@ -12,6 +12,7 @@ import { FunctionComponent, useCallback } from "react";
 import { Button, FormControl, Typography } from "@mui/material";
 import usePatientsOptions from "core/patients/use-patients-options";
 import dayjs from "dayjs";
+import { exportReports } from "services/reports/export-report";
 
 const Reports: FunctionComponent<Prop> = ({ className }) => {
   const userRole = store.getState().auth.user?.role;
@@ -33,6 +34,31 @@ const Reports: FunctionComponent<Prop> = ({ className }) => {
   const goToCreate = useCallback(() => {
     navigate("/reports/create");
   }, [navigate]);
+
+  const handleExport = async () => {
+    try {
+      const blob = await exportReports();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+
+      // Obtener la fecha actual
+      const today = new Date();
+      const day = String(today.getDate()).padStart(2, '0');
+      const month = String(today.getMonth() + 1).padStart(2, '0'); // Los meses empiezan desde 0
+      const year = today.getFullYear();
+      
+      // Formatear el nombre del archivo
+      const fileName = `reporte-${day}_${month}_${year}.xlsx`;
+
+      link.href = url;
+      link.setAttribute("download", fileName);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error("Error exporting reports:", error);
+    }
+  };
 
   return (
     <MainCard
@@ -92,14 +118,29 @@ const Reports: FunctionComponent<Prop> = ({ className }) => {
               </FormControl>
             )}
           </div>
-          <Button
-            color="primary"
-            variant={"outlined"}
-            onClick={goToCreate}
-            startIcon={<IconCirclePlus />}
-          >
-            Crear
-          </Button>
+          {userRole === AllRole.PATIENT && (
+            <div>
+              <Button
+                color="primary"
+                variant={"outlined"}
+                onClick={goToCreate}
+                startIcon={<IconCirclePlus />}
+              >
+                Crear
+              </Button>
+            </div>
+          )}
+          {userRole === AllRole.ADMIN && (
+            <Button
+              color="primary"
+              variant={"outlined"}
+              onClick={handleExport}
+              startIcon={<IconDownload />}
+              style={{ marginLeft: "10px" }}
+            >
+              Exportar
+            </Button>
+          )}
         </div>
       }
     >

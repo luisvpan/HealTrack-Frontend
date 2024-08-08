@@ -135,6 +135,18 @@ const Table: FunctionComponent<Props> = ({
             cellAlignment: "center",
           },
           {
+            columnLabel: "¿Tuvo gasto relacionado con la cirugía?",
+            fieldName: "surgeryExpense",
+            cellAlignment: "center",
+          },
+          {
+            columnLabel: "Monto de gasto",
+            onRender: (row: Report) => (
+              <Typography>{row.surgeryExpenseAmount} $</Typography>
+            ),
+            cellAlignment: "center",
+          },
+          {
             columnLabel: "Descripción",
             fieldName: "additionalInformation",
             cellAlignment: "center",

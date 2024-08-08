@@ -11,7 +11,7 @@ import {
   setSuccessMessage,
 } from "store/customizationSlice";
 import { useAppDispatch } from "../../../store/index";
-import Form, { FormValues } from "../form";
+import Form, { FormValues } from "./edit_form";
 import editReport from "services/reports/edit-report";
 import useReportById from "./use-report-by-id";
 import useReportId from "./use-report-id";
@@ -75,7 +75,7 @@ const EditReport: FunctionComponent<Props> = ({ className }) => {
     <div className={className}>
       <MainCard>
         <Typography variant="h3" component="h3">
-          Pacientes
+          Formulario de paciente
         </Typography>
       </MainCard>
       {report && (
@@ -91,7 +91,7 @@ const EditReport: FunctionComponent<Props> = ({ className }) => {
             submit: null,
           }}
           isEdit
-          title={"Editar paciente"}
+          title={"Editar foto o descripcion del Formulario"}
           onSubmit={onSubmit}
         />
       )}

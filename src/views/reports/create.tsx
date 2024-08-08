@@ -79,6 +79,8 @@ const CreateReport: FunctionComponent<Props> = ({ className }) => {
           hasSwelling: false,
           hasSecretions: false,
           additionalInformation: null,
+          surgeryExpense: "No",
+          surgeryExpenseAmount: 0.0,
           fileUrl: null,
           submit: null,
         }}
