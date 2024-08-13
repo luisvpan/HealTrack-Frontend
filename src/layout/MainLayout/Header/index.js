@@ -4,7 +4,7 @@ import { Avatar, Box, ButtonBase, Typography } from '@mui/material';
 import LogoSection from '../LogoSection';
 import SearchSection from './SearchSection';
 import ProfileSection from './ProfileSection';
-import NotificationSection from './NotificationSection';
+import NotificationSection from './NotificationSection'; // Importa NotificationSection
 import { IconMenu2 } from '@tabler/icons';
 import useScriptRef from 'hooks/useScriptRef';
 import { useAppSelector } from 'store';
@@ -86,6 +86,7 @@ const Header = ({ handleLeftDrawerToggle }) => {
       <Box sx={{ flexGrow: 1 }} />
 
       {/* notification & profile */}
+      <NotificationSection /> {/* Agrega NotificationSection aquí */}
       <ProfileSection />
     </>
   );

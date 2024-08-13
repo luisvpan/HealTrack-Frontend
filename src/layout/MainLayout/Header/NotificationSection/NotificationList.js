@@ -1,25 +1,23 @@
-// material-ui
+import React, { useState, useEffect } from 'react';
 import { useTheme, styled } from '@mui/material/styles';
 import {
-  Avatar,
   Button,
   Card,
   CardContent,
-  Chip,
   Divider,
-  Grid,
   List,
   ListItem,
-  ListItemAvatar,
   ListItemSecondaryAction,
   ListItemText,
-  Stack,
-  Typography
+  Typography,
+  Modal,
+  Box
 } from '@mui/material';
-
-// assets
-import { IconBrandTelegram, IconBuildingStore, IconMailbox, IconPhoto } from '@tabler/icons';
-import User1 from 'assets/images/users/user-round.svg';
+import { IconTrash, IconX } from '@tabler/icons';
+import { deleteNotification } from 'services/notifications/delete-notifications';
+import { deleteAllNotificationsByEmployeeId } from 'services/notifications/delete-all-notifications';
+import getNotificationsByUserId from 'services/notifications/get-notifications';
+import { useAppSelector } from 'store';
 
 // styles
 const ListItemWrapper = styled('div')(({ theme }) => ({
@@ -33,60 +31,117 @@ const ListItemWrapper = styled('div')(({ theme }) => ({
   }
 }));
 
-// ==============================|| NOTIFICATION LIST ITEM ||============================== //
-
 const NotificationList = () => {
   const theme = useTheme();
+  const user = useAppSelector((state) => state.auth.user);
+  const [notifications, setNotifications] = useState([]);
+  const [selectedNotification, setSelectedNotification] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
 
-  const chipSX = {
-    height: 24,
-    padding: '0 6px'
-  };
-  const chipErrorSX = {
-    ...chipSX,
-    color: theme.palette.orange.dark,
-    backgroundColor: theme.palette.orange.light,
-    marginRight: '5px'
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      if (user) {
+        const data = await getNotificationsByUserId(user.id);
+        setNotifications(data);
+      }
+    };
+
+    fetchNotifications();
+  }, [user]);
+
+  const handleDeleteNotification = async (id) => {
+    await deleteNotification(id);
+    setNotifications(notifications.filter(notification => notification.id !== id));
   };
 
-  const chipWarningSX = {
-    ...chipSX,
-    color: theme.palette.warning.dark,
-    backgroundColor: theme.palette.warning.light
+  const handleDeleteAllNotifications = async () => {
+    if (user) {
+      await deleteAllNotificationsByEmployeeId(user.id);
+      setNotifications([]);
+    }
   };
 
-  const chipSuccessSX = {
-    ...chipSX,
-    color: theme.palette.success.dark,
-    backgroundColor: theme.palette.success.light,
-    height: 28
+  const handleOpenModal = (notification) => {
+    setSelectedNotification(notification);
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+    setSelectedNotification(null);
   };
 
   return (
-    <List
-      sx={{
-        width: '100%',
-        maxWidth: 330,
-        py: 0,
-        borderRadius: '10px',
-        [theme.breakpoints.down('md')]: {
-          maxWidth: 300
-        },
-        '& .MuiListItemSecondaryAction-root': {
-          top: 22
-        },
-        '& .MuiDivider-root': {
-          my: 0
-        },
-        '& .list-container': {
-          pl: 7
-        }
-      }}
-    >
-      <ListItemWrapper>
-      </ListItemWrapper>
-    </List>
+    <>
+      <List
+        sx={{
+          width: '100%',
+          maxWidth: 330,
+          py: 0,
+          borderRadius: '10px',
+          [theme.breakpoints.down('md')]: {
+            maxWidth: 300
+          },
+          '& .MuiDivider-root': {
+            my: 0
+          }
+        }}
+      >
+        {notifications.map((notification) => (
+          <ListItemWrapper key={notification.id}>
+            <ListItem onClick={() => handleOpenModal(notification)}>
+              <ListItemText
+                primary={notification.title}
+                secondary={null} // Eliminar el mensaje del secundario
+              />
+              <ListItemSecondaryAction>
+                <Button onClick={() => handleDeleteNotification(notification.id)}>
+                  <IconTrash stroke={1.5} size="1rem" />
+                </Button>
+              </ListItemSecondaryAction>
+            </ListItem>
+            <Divider />
+          </ListItemWrapper>
+        ))}
+        {notifications.length > 0 && (
+          <Button onClick={handleDeleteAllNotifications}>
+            Eliminar todas
+          </Button>
+        )}
+      </List>
+
+      {/* Modal for notification details */}
+      <Modal
+        open={openModal}
+        onClose={handleCloseModal}
+      >
+        <Box sx={{ ...modalStyle }}>
+          <IconX onClick={handleCloseModal} style={{ position: 'absolute', top: 10, right: 10, cursor: 'pointer' }} />
+          {selectedNotification && (
+            <Card>
+              <CardContent>
+                <Typography variant="h6">{selectedNotification.title}</Typography>
+                <Typography variant="body2">{selectedNotification.message}</Typography>
+              </CardContent>
+            </Card>
+          )}
+        </Box>
+      </Modal>
+    </>
   );
+};
+
+// Style for modal
+const modalStyle = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 600,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4
 };
 
 export default NotificationList;
