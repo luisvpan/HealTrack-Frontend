@@ -43,6 +43,13 @@ const NotificationSection = () => {
 
   useEffect(() => {
     fetchUnreadNotificationsCount();
+
+    // Polling every 10 seconds to update unread notifications count
+    const intervalId = setInterval(() => {
+      fetchUnreadNotificationsCount();
+    }, 10000); // 10 seconds interval
+
+    return () => clearInterval(intervalId); // Cleanup on unmount
   }, [fetchUnreadNotificationsCount]);
 
   const handleToggle = () => {
@@ -65,7 +72,7 @@ const NotificationSection = () => {
   }, [open]);
 
   const handleNotificationRead = async () => {
-    await fetchUnreadNotificationsCount(); // Actualiza el contador de notificaciones no leídas
+    await fetchUnreadNotificationsCount(); // Update unread notifications count
   };
 
   return (
