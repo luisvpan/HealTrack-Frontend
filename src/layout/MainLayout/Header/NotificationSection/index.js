@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { useTheme } from '@mui/material/styles';
 import {
   Avatar,
@@ -9,22 +9,41 @@ import {
   Popper,
   ClickAwayListener,
   Typography,
-  useMediaQuery
+  useMediaQuery,
+  Badge
 } from '@mui/material';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import MainCard from 'components/cards/MainCard';
 import Transitions from 'components/extended/Transitions';
 import NotificationList from './NotificationList';
 import { IconBell } from '@tabler/icons';
+import { useAppSelector } from 'store';
+import { getUnreadNotificationsCount } from 'services/notifications/get-notifications-unread';
 
 // ==============================|| NOTIFICATION ||============================== //
 
 const NotificationSection = () => {
   const theme = useTheme();
+  const user = useAppSelector((state) => state.auth.user);
   const matchesXs = useMediaQuery(theme.breakpoints.down('md'));
 
   const [open, setOpen] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
   const anchorRef = useRef(null);
+
+  // Fetch unread notifications count
+  const fetchUnreadNotificationsCount = useCallback(async () => {
+    try {
+      const count = await getUnreadNotificationsCount(user?.id);
+      setUnreadCount(count);
+    } catch (error) {
+      console.error('Error fetching unread notifications count:', error);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    fetchUnreadNotificationsCount();
+  }, [fetchUnreadNotificationsCount]);
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -45,6 +64,10 @@ const NotificationSection = () => {
     prevOpen.current = open;
   }, [open]);
 
+  const handleNotificationRead = async () => {
+    await fetchUnreadNotificationsCount(); // Actualiza el contador de notificaciones no leídas
+  };
+
   return (
     <>
       <Box
@@ -57,27 +80,38 @@ const NotificationSection = () => {
         }}
       >
         <ButtonBase sx={{ borderRadius: '12px' }}>
-          <Avatar
-            variant="rounded"
+          <Badge
+            badgeContent={unreadCount}
+            color="error"
+            invisible={unreadCount === 0}
             sx={{
-              ...theme.typography.commonAvatar,
-              ...theme.typography.mediumAvatar,
-              transition: 'all .2s ease-in-out',
-              background: theme.palette.secondary.light,
-              color: theme.palette.secondary.dark,
-              '&[aria-controls="menu-list-grow"],&:hover': {
-                background: theme.palette.secondary.dark,
-                color: theme.palette.secondary.light
+              '& .MuiBadge-dot': {
+                backgroundColor: theme.palette.error.main,
               }
             }}
-            ref={anchorRef}
-            aria-controls={open ? 'menu-list-grow' : undefined}
-            aria-haspopup="true"
-            onClick={handleToggle}
-            color="inherit"
           >
-            <IconBell stroke={1.5} size="1.3rem" />
-          </Avatar>
+            <Avatar
+              variant="rounded"
+              sx={{
+                ...theme.typography.commonAvatar,
+                ...theme.typography.mediumAvatar,
+                transition: 'all .2s ease-in-out',
+                background: theme.palette.secondary.light,
+                color: theme.palette.secondary.dark,
+                '&[aria-controls="menu-list-grow"],&:hover': {
+                  background: theme.palette.secondary.dark,
+                  color: theme.palette.secondary.light
+                }
+              }}
+              ref={anchorRef}
+              aria-controls={open ? 'menu-list-grow' : undefined}
+              aria-haspopup="true"
+              onClick={handleToggle}
+              color="inherit"
+            >
+              <IconBell stroke={1.5} size="1.3rem" />
+            </Avatar>
+          </Badge>
         </ButtonBase>
       </Box>
       <Popper
@@ -113,7 +147,7 @@ const NotificationSection = () => {
                     </Grid>
                     <Grid item xs={12}>
                       <PerfectScrollbar style={{ height: '100%', maxHeight: 'calc(100vh - 205px)', overflowX: 'hidden' }}>
-                        <NotificationList />
+                        <NotificationList onNotificationRead={handleNotificationRead} />
                       </PerfectScrollbar>
                     </Grid>
                   </Grid>

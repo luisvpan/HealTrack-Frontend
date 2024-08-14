@@ -4,10 +4,11 @@ import { Avatar, Box, ButtonBase, Typography } from '@mui/material';
 import LogoSection from '../LogoSection';
 import SearchSection from './SearchSection';
 import ProfileSection from './ProfileSection';
-import NotificationSection from './NotificationSection'; // Importa NotificationSection
+import NotificationSection from './NotificationSection';
 import { IconMenu2 } from '@tabler/icons';
 import useScriptRef from 'hooks/useScriptRef';
 import { useAppSelector } from 'store';
+import { AllRole } from "core/users/types";
 
 // ==============================|| MAIN NAVBAR / HEADER ||============================== //
 
@@ -15,8 +16,10 @@ const Header = ({ handleLeftDrawerToggle }) => {
   const theme = useTheme();
   const scriptRef = useScriptRef();
 
-  // Obtén la información del usuario desde el store
   const user = useAppSelector((state) => state.auth.user);
+
+  const isSpecialist = user?.role === AllRole.SPECIALIST;
+  const isAssistant = user?.role === AllRole.ASSISTANT;
 
   return (
     <>
@@ -86,7 +89,7 @@ const Header = ({ handleLeftDrawerToggle }) => {
       <Box sx={{ flexGrow: 1 }} />
 
       {/* notification & profile */}
-      <NotificationSection /> {/* Agrega NotificationSection aquí */}
+      {(isSpecialist || isAssistant) && <NotificationSection />}
       <ProfileSection />
     </>
   );

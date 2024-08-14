@@ -17,12 +17,15 @@ import { IconTrash, IconX } from '@tabler/icons';
 import { deleteNotification } from 'services/notifications/delete-notifications';
 import { deleteAllNotificationsByEmployeeId } from 'services/notifications/delete-all-notifications';
 import getNotificationsByUserId from 'services/notifications/get-notifications';
+import markNotificationAsRead from 'services/notifications/mark-as-read';
 import { useAppSelector } from 'store';
+import { format } from 'date-fns';
 
 // styles
-const ListItemWrapper = styled('div')(({ theme }) => ({
+const ListItemWrapper = styled('div')(({ theme, isRead }) => ({
   cursor: 'pointer',
   padding: 16,
+  backgroundColor: isRead ? 'inherit' : theme.palette.action.focus,
   '&:hover': {
     background: theme.palette.primary.light
   },
@@ -31,7 +34,7 @@ const ListItemWrapper = styled('div')(({ theme }) => ({
   }
 }));
 
-const NotificationList = () => {
+const NotificationList = ({ onNotificationRead }) => {
   const theme = useTheme();
   const user = useAppSelector((state) => state.auth.user);
   const [notifications, setNotifications] = useState([]);
@@ -61,9 +64,13 @@ const NotificationList = () => {
     }
   };
 
-  const handleOpenModal = (notification) => {
+  const handleOpenModal = async (notification) => {
     setSelectedNotification(notification);
     setOpenModal(true);
+    if (!notification.isRead) {
+      await markNotificationAsRead(notification.id);
+      onNotificationRead();
+    }
   };
 
   const handleCloseModal = () => {
@@ -88,13 +95,18 @@ const NotificationList = () => {
         }}
       >
         {notifications.map((notification) => (
-          <ListItemWrapper key={notification.id}>
+          <ListItemWrapper key={notification.id} isRead={notification.isRead}>
             <ListItem onClick={() => handleOpenModal(notification)}>
               <ListItemText
                 primary={notification.title}
-                secondary={null} // Eliminar el mensaje del secundario
+                secondary={format(new Date(notification.createdAt), 'dd-MM-yyyy HH:mm')}
               />
-              <ListItemSecondaryAction>
+              <ListItemSecondaryAction
+                sx={{
+                  right: -17,  // Asegura que el botón esté en el extremo derecho
+                  marginLeft: '10px'  // Agrega un margen entre el texto y el botón
+                }}
+              >
                 <Button onClick={() => handleDeleteNotification(notification.id)}>
                   <IconTrash stroke={1.5} size="1rem" />
                 </Button>
@@ -120,7 +132,8 @@ const NotificationList = () => {
           {selectedNotification && (
             <Card>
               <CardContent>
-                <Typography variant="h6">{selectedNotification.title}</Typography>
+                <Typography sx = {{variant:"h6", fontSize: "20px"}}>{selectedNotification.title}</Typography>
+                <p></p>
                 <Typography variant="body2">{selectedNotification.message}</Typography>
               </CardContent>
             </Card>
@@ -141,6 +154,7 @@ const modalStyle = {
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
+  borderRadius: 4,
   p: 4
 };
 
