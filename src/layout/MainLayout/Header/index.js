@@ -5,6 +5,7 @@ import LogoSection from '../LogoSection';
 import SearchSection from './SearchSection';
 import ProfileSection from './ProfileSection';
 import NotificationSection from './NotificationSection';
+import MessageNotificationSection from './MessageNotficationSection';
 import { IconMenu2 } from '@tabler/icons';
 import useScriptRef from 'hooks/useScriptRef';
 import { useAppSelector } from 'store';
@@ -90,6 +91,9 @@ const Header = ({ handleLeftDrawerToggle }) => {
 
       {/* notification & profile */}
       {(isSpecialist || isAssistant) && <NotificationSection />}
+      
+      <MessageNotificationSection />
+
       <ProfileSection />
     </>
   );
