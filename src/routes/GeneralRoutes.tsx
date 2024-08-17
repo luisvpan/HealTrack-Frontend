@@ -18,6 +18,11 @@ import Hospitals from "views/hospitals";
 import CreateHospital from "views/hospitals/create";
 import EditHospital from "views/hospitals/edit";
 
+// Cirugías
+import Surgeries from "views/surgeries";
+import CreateSurgery from "views/surgeries/create";
+import EditSurgery from "views/surgeries/edit";
+
 // Recomendaciones
 import Recomendations from "views/Recomendations";
 import CreateRecommendation from "views/Recomendations/create";
@@ -35,9 +40,8 @@ import EditReport from "views/reports/edit";
 
 // FAQs
 import FAQs from "views/FAQs";
-import CreateFAQ from "views/FAQs/create"; // Asegúrate de que la ruta y el nombre del archivo sean correctos
-import EditFAQ from "views/FAQs/edit"; // Asegúrate de que la ruta y el nombre del archivo sean correctos
-
+import CreateFAQ from "views/FAQs/create";
+import EditFAQ from "views/FAQs/edit";
 
 // Roles
 import { AllRole } from "core/users/types";
@@ -47,8 +51,6 @@ const isAssistant = userRole === AllRole.ASSISTANT;
 const isAdmin = userRole === AllRole.ADMIN;
 
 const GeneralRoutes: RouteObject[] = [
-
-
 
   // Empleados
   ...(isAdmin
@@ -113,6 +115,24 @@ const GeneralRoutes: RouteObject[] = [
         {
           path: "hospitals/edit/:id",
           element: <EditHospital />,
+        },
+      ]
+    : []),
+
+  // Cirugías
+  ...(isAdmin
+    ? [
+        {
+          path: "surgeries",
+          element: <Surgeries />,
+        },
+        {
+          path: "surgeries/create",
+          element: <CreateSurgery />,
+        },
+        {
+          path: "surgeries/edit/:id",
+          element: <EditSurgery />,
         },
       ]
     : []),

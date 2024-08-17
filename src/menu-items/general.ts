@@ -1,6 +1,6 @@
 // assets
 import store from "store";
-import { IconUser, IconBuildingHospital, IconClipboardList, IconQuestionMark, IconRobot } from "@tabler/icons";
+import { IconUser, IconBuildingHospital, IconClipboardList, IconQuestionMark, IconRobot, IconMedicalCross } from "@tabler/icons";
 import { AllRole } from "core/users/types";
 import { MenuItem, MenuItemType } from "./types";
 
@@ -67,6 +67,29 @@ const other: MenuItem = {
             ],
           },
           {
+            id: "surgeries",
+            title: "Cirugías",
+            type: MenuItemType.Collapse,
+            icon: IconMedicalCross,
+            breadcrumbs: false,
+            children: [
+              {
+                id: "list-surgeries",
+                title: "Lista de cirugías",
+                type: MenuItemType.Item,
+                url: "/surgeries",
+                breadcrumbs: false,
+              },
+              {
+                id: "create-surgeries",
+                title: "Crear cirugía",
+                type: MenuItemType.Item,
+                url: "/surgeries/create",
+                breadcrumbs: false,
+              },
+            ],
+          },
+          {
             id: "recommendations",
             title: "Recomendaciones",
             type: MenuItemType.Collapse,
@@ -115,7 +138,7 @@ const other: MenuItem = {
         ]
       : []),
 
-    //Lista de pacientes para Especialistas
+    // Lista de pacientes para Especialistas
     ...(isAdmin || isSpecialist
       ? [
           {
@@ -137,7 +160,7 @@ const other: MenuItem = {
         ]
       : []),
 
-    //Lista de pacientes para Enfermeros
+    // Lista de pacientes para Enfermeros
     ...(isAssistant
       ? [
           {
@@ -184,7 +207,7 @@ const other: MenuItem = {
       ],
     },
 
-    //Reportes
+    // Reportes
     {
       id: "reports",
       title: "Reportes",
@@ -209,8 +232,7 @@ const other: MenuItem = {
       ],
     },
 
-
-    // recomendaciones y preguntas frecuentes para especialistas y enfermeros
+    // Recomendaciones y preguntas frecuentes para especialistas y enfermeros
     ...(isAssistant || isSpecialist
       ? [
           {
@@ -248,7 +270,7 @@ const other: MenuItem = {
         ]
       : []),
 
-    // recomendaciones y preguntas frecuentes para pacientes
+    // Recomendaciones y preguntas frecuentes para pacientes
     ...(isPatient
       ? [
           {

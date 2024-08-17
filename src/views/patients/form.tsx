@@ -6,6 +6,7 @@ import SelectField from "components/SelectField";
 import MainCard from "components/cards/MainCard";
 import useEmployeesOptions from "core/employees/use-employees-options";
 import useHospitalOptions from "core/hospitals/use-hospitals-options";
+import useSurgeryOptions from "core/surgeries/use-surgery-options";
 // material-ui
 import { Button, FormControl, FormHelperText, TextField } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
@@ -22,6 +23,7 @@ const Form: FunctionComponent<Props> = ({
 }) => {
   const employeeOptions = useEmployeesOptions();
   const hospitalOptions = useHospitalOptions();
+  const surgeryOptions = useSurgeryOptions();
   const aditionalFieldValidations: any = isEdit
     ? {}
     : {
@@ -236,21 +238,18 @@ const Form: FunctionComponent<Props> = ({
                   </FormHelperText>
                 )}
               </FormControl>
-              <FormControl className="field-form" fullWidth>
-                <TextField
-                  id="surgeryProcedure"
-                  label="Nombre de procedimiento"
-                  variant="outlined"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.surgeryProcedure}
-                  helperText={
-                    touched.surgeryProcedure ? errors.surgeryProcedure : ""
-                  }
-                  error={touched.surgeryProcedure && !!errors.surgeryProcedure}
-                  name="surgeryProcedure"
-                />
-              </FormControl>
+              <SelectField
+                fullWidth={true}
+                className="field-form"
+                name="surgeryProcedure"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                label="Nombre de procedimiento"
+                options={surgeryOptions} // Utiliza las opciones de procedimientos quirúrgicos
+                helperText={touched.surgeryProcedure ? errors.surgeryProcedure : ""}
+                error={touched.surgeryProcedure && !!errors.surgeryProcedure}
+                value={values.surgeryProcedure}
+              />
               <SelectField
                 fullWidth={true}
                 className="field-form"
