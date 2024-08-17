@@ -44,10 +44,10 @@ const NotificationSection = () => {
   useEffect(() => {
     fetchUnreadNotificationsCount();
 
-    // Polling every 10 seconds to update unread notifications count
+    // Polling every 3 seconds to update unread notifications count
     const intervalId = setInterval(() => {
       fetchUnreadNotificationsCount();
-    }, 10000); // 10 seconds interval
+    }, 3000); // 3 seconds interval
 
     return () => clearInterval(intervalId); // Cleanup on unmount
   }, [fetchUnreadNotificationsCount]);
