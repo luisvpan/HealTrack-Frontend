@@ -1,6 +1,16 @@
 // assets
 import store from "store";
-import { IconUser, IconBuildingHospital, IconClipboardList, IconQuestionMark, IconRobot, IconMedicalCross } from "@tabler/icons";
+import { 
+  IconUser, 
+  IconBuildingHospital, 
+  IconClipboardList, 
+  IconQuestionMark, 
+  IconRobot, 
+  IconMedicalCross,
+  IconReportMedical, 
+  IconMessages,
+  IconWheelchair,
+} from "@tabler/icons";
 import { AllRole } from "core/users/types";
 import { MenuItem, MenuItemType } from "./types";
 
@@ -145,7 +155,7 @@ const other: MenuItem = {
             id: "patients",
             title: "Pacientes",
             type: MenuItemType.Collapse,
-            icon: IconUser,
+            icon: IconWheelchair,
             breadcrumbs: false,
             children: [
               {
@@ -167,7 +177,7 @@ const other: MenuItem = {
             id: "patients",
             title: "Pacientes",
             type: MenuItemType.Collapse,
-            icon: IconUser,
+            icon: IconWheelchair,
             breadcrumbs: false,
             children: [
               {
@@ -194,7 +204,7 @@ const other: MenuItem = {
       id: "chat",
       title: "Chat",
       type: MenuItemType.Collapse,
-      icon: IconUser,
+      icon: IconMessages,
       breadcrumbs: false,
       children: [
         {
@@ -212,7 +222,7 @@ const other: MenuItem = {
       id: "reports",
       title: "Reportes",
       type: MenuItemType.Collapse,
-      icon: IconUser,
+      icon: IconReportMedical,
       breadcrumbs: false,
       children: [
         {
