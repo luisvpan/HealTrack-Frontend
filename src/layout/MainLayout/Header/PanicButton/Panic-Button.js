@@ -41,20 +41,23 @@ const PanicButtonModal = ({ open, handleClose, patientId }) => {
           ¿Estás seguro de que deseas activar el botón de pánico?
         </Typography>
         <p></p>
-        <Button
-          variant="contained"
-          color="error"
-          onClick={handlePanic}
-          sx={{
-            mt: 3,
-            display: 'block',
-            margin: '0 auto', 
-            minWidth: 100,
-          }}
-          disabled={loading}
-        >
-          {loading ? "Activando..." : "Sí"}
-        </Button>
+        <Box sx={{ display: 'flex', justifyContent: 'space-around', mt: 3 }}>
+          <Button
+            variant="contained"
+            color="error"
+            onClick={handlePanic}
+            disabled={loading}
+          >
+            {loading ? "Activando..." : "Sí"}
+          </Button>
+          <Button
+            variant="contained"
+            onClick={handleClose}
+            disabled={loading}
+          >
+            No
+          </Button>
+        </Box>
       </Box>
     </Modal>
   );

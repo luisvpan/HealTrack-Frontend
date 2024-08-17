@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import {
-  Avatar,
+  // Avatar,
   Box,
   Chip,
   ClickAwayListener,
@@ -27,7 +27,6 @@ import { IconLogout, IconSettings } from "@tabler/icons";
 import { useAppSelector } from "store";
 import useLogout from "hooks/use-logout";
 import ChangePasswordModal from './ChangePasswordModal';
-import PanicButtonModal from './Panic-Button';
 import { AllRole } from "core/users/types";
 
 const ProfileSection = () => {
@@ -200,25 +199,6 @@ const ProfileSection = () => {
                             }
                           />
                         </ListItemButton>
-                        {isPatient && ( 
-                          <ListItemButton
-                            sx={{
-                              borderRadius: `${customization.borderRadius}px`,
-                            }}
-                            onClick={() => setPanicModalOpen(true)} 
-                          >
-                            <ListItemIcon>
-                              <IconSettings stroke={1.5} size="1.3rem" />
-                            </ListItemIcon>
-                            <ListItemText
-                              primary={
-                                <Typography variant="body2">
-                                  Activar botón de pánico
-                                </Typography>
-                              }
-                            />
-                          </ListItemButton>
-                        )}
                         <ListItemButton
                           sx={{
                             borderRadius: `${customization.borderRadius}px`,
@@ -247,11 +227,6 @@ const ProfileSection = () => {
       <ChangePasswordModal
         open={modalOpen}
         handleClose={() => setModalOpen(false)}
-      />
-      <PanicButtonModal
-        open={panicModalOpen}
-        handleClose={() => setPanicModalOpen(false)}
-        patientId={user?.id} // Pasar el ID del usuario como patientId
       />
     </>
   );

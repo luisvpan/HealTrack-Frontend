@@ -6,6 +6,7 @@ import SearchSection from './SearchSection';
 import ProfileSection from './ProfileSection';
 import NotificationSection from './NotificationSection';
 import MessageNotificationSection from './MessageNotficationSection';
+import PanicButtonSection from './PanicButton';
 import { IconMenu2 } from '@tabler/icons';
 import useScriptRef from 'hooks/useScriptRef';
 import { useAppSelector } from 'store';
@@ -19,8 +20,10 @@ const Header = ({ handleLeftDrawerToggle }) => {
 
   const user = useAppSelector((state) => state.auth.user);
 
+  const isAdmin = user?.role === AllRole.ADMIN;
   const isSpecialist = user?.role === AllRole.SPECIALIST;
   const isAssistant = user?.role === AllRole.ASSISTANT;
+  const isPatient = user?.role === AllRole.PATIENT;
 
   return (
     <>
@@ -39,22 +42,6 @@ const Header = ({ handleLeftDrawerToggle }) => {
         <Box component="span" sx={{ display: { xs: 'none', md: 'block' }, flexGrow: 1 }}>
           <LogoSection />
         </Box>
-
-        {/* App Name */}
-        <Typography
-          variant="h6"
-          sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '57%',
-            transform: 'translate(-50%, -50%)',
-            color: theme.palette.text.primary,
-            zIndex: 1,
-            fontSize: '1.2rem'
-          }}
-        >
-          HealTrack
-        </Typography>
 
         <ButtonBase sx={{ borderRadius: '12px', overflow: 'hidden' }}>
           <Avatar
@@ -89,10 +76,13 @@ const Header = ({ handleLeftDrawerToggle }) => {
 
       <Box sx={{ flexGrow: 1 }} />
 
+      {/* Panic Button */}
+      {(isPatient) && <PanicButtonSection />}
+
       {/* notification & profile */}
       {(isSpecialist || isAssistant) && <NotificationSection />}
       
-      <MessageNotificationSection />
+      {(!isAdmin) && <MessageNotificationSection />}
 
       <ProfileSection />
     </>
