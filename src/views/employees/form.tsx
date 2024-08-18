@@ -41,7 +41,7 @@ const Form: FunctionComponent<Props> = ({
           name: Yup.string().max(50).required("El nombre es requerido"),
           lastname: Yup.string().max(50).required("El apellido es requerido"),
           identification: Yup.string()
-            .min(2)
+            .min(5)
             .max(20)
             .required("La cedula es requerida"),
           email: Yup.string().max(120).required("El email es requerido"),

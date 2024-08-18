@@ -199,23 +199,27 @@ const other: MenuItem = {
         ]
       : []),
 
-    // Item de Chat entre usuarios
-    {
-      id: "chat",
-      title: "Chat",
-      type: MenuItemType.Collapse,
-      icon: IconMessages,
-      breadcrumbs: false,
-      children: [
-        {
-          id: "chat",
-          title: "Lista de chats",
-          type: MenuItemType.Item,
-          url: "/chat-list",
-          breadcrumbs: false,
-        },
-      ],
-    },
+      ...(!isAdmin
+        ?[
+          // Item de Chat entre usuarios
+          {
+            id: "chat",
+            title: "Chat",
+            type: MenuItemType.Collapse,
+            icon: IconMessages,
+            breadcrumbs: false,
+            children: [
+              {
+                id: "chat",
+                title: "Lista de chats",
+                type: MenuItemType.Item,
+                url: "/chat-list",
+                breadcrumbs: false,
+              },
+            ],
+          },
+        ]
+      : []),
 
     // Reportes
     {
