@@ -10,6 +10,7 @@ import {
   IconReportMedical, 
   IconMessages,
   IconWheelchair,
+  IconDatabase,
 } from "@tabler/icons";
 import { AllRole } from "core/users/types";
 import { MenuItem, MenuItemType } from "./types";
@@ -30,6 +31,14 @@ const other: MenuItem = {
     // Actividades para el administrador
     ...(isAdmin
       ? [
+          {
+            id: "database-actions",
+            title: "Acciones de Base de Datos",
+            type: MenuItemType.Item,
+            icon: IconDatabase,
+            url: "/database-actions",
+            breadcrumbs: false,
+          },
           {
             id: "employees",
             title: "Empleados",

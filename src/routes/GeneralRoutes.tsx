@@ -43,6 +43,9 @@ import FAQs from "views/FAQs";
 import CreateFAQ from "views/FAQs/create";
 import EditFAQ from "views/FAQs/edit";
 
+// DatabaseActions
+import DatabaseActions from "views/databaseActions";
+
 // Roles
 import { AllRole } from "core/users/types";
 
@@ -51,6 +54,16 @@ const isAssistant = userRole === AllRole.ASSISTANT;
 const isAdmin = userRole === AllRole.ADMIN;
 
 const GeneralRoutes: RouteObject[] = [
+
+  // Database Actions (Solo para administradores)
+  ...(isAdmin
+    ? [
+        {
+          path: "database-actions",
+          element: <DatabaseActions />,
+        },
+      ]
+    : []),
 
   // Empleados
   ...(isAdmin

@@ -1,0 +1,35 @@
+.database-actions-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+}
+
+.export-section, .import-section {
+  flex: 1;
+  text-align: center;
+}
+
+.export-button, .import-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.divider {
+  width: 2px;
+  background-color: #ccc;
+  height: 150px;
+  margin: 0 20px;
+}
+
+.file-input {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.import-result {
+  margin-top: 10px;
+  color: green;
+}
