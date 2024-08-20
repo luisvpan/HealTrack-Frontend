@@ -25,7 +25,7 @@ const AuthenticationRoutes: RouteObject = {
       element: <ResetPassword /> 
     },
     {
-      path: "database-actions/import",
+      path: "database-actions/import/:token",
       element: <DatabaseImport />,
     },
   ]

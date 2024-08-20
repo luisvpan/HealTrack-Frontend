@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import { importDatabase } from 'services/databaseActions/import-database'; // Asegúrate de que la ruta sea correcta
+import { importDatabaseWithToken } from 'services/databaseActions/import-database-by-token';
 import { useParams, useNavigate } from 'react-router-dom';
 import './styles.css';
 
-const ImportDatabase = () => {
+const ImportDatabaseEmergency = () => {
   const [file, setFile] = useState(null);
   const [importResult, setImportResult] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
+  const { token } = useParams();
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files?.[0] || null;
@@ -31,7 +32,7 @@ const ImportDatabase = () => {
         const formData = new FormData();
         formData.append('file', file);
 
-        const result = await importDatabase(formData);
+        const result = await importDatabaseWithToken(formData, token);
         setImportResult(result);
 
         setTimeout(() => {
@@ -69,4 +70,4 @@ const ImportDatabase = () => {
   );
 };
 
-export default ImportDatabase;
+export default ImportDatabaseEmergency;
