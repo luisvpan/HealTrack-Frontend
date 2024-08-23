@@ -6,5 +6,6 @@ export interface Notification {
   message: string;
   isRead: boolean;
   createdAt: Date;
+  deletedAt: Date;
   employee: Employee;
 }
