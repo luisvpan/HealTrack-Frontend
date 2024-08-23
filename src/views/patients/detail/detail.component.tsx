@@ -106,6 +106,12 @@ const Detail: FunctionComponent<Props> = ({ className, patient }) => {
                   <TableCell align="right">{patient.age}</TableCell>
                 </TableRow>
                 <TableRow>
+                  <TableCell>Sexo:</TableCell>
+                  <TableCell align="right">
+                    {patient.sex === "M" ? "Masculino" : "Femenino"}
+                  </TableCell>
+                </TableRow>
+                <TableRow>
                   <TableCell>Dirección:</TableCell>
                   <TableCell align="right">{patient.address}</TableCell>
                 </TableRow>

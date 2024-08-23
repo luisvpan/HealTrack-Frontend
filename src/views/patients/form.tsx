@@ -47,6 +47,7 @@ const Form: FunctionComponent<Props> = ({
           name: Yup.string().max(50).required("El nombre es requerido"),
           lastname: Yup.string().max(50).required("El apellido es requerido"),
           age: Yup.number().required("La edad es requerida"),
+          sex: Yup.string().oneOf(["M", "F"]).required("El sexo es requerido"),
           address: Yup.string().required("La direccion es requerida"),
           personalPhone: Yup.string().required("El celular es requerido"),
           homePhone: Yup.string().required("El telefono es requerido"),
@@ -119,6 +120,23 @@ const Form: FunctionComponent<Props> = ({
                   helperText={touched.age ? errors.age : ""}
                   error={touched.age && !!errors.age}
                   name="age"
+                />
+              </FormControl>
+              <FormControl className="field-form" fullWidth>
+                <SelectField
+                  fullWidth={true}
+                  className="field-form"
+                  name="sex"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  label="Sexo"
+                  options={[
+                    { label: "Masculino", value: "M" },
+                    { label: "Femenino", value: "F" },
+                  ]}
+                  helperText={touched.sex ? errors.sex : ""}
+                  error={touched.sex && !!errors.sex}
+                  value={values.sex}
                 />
               </FormControl>
               <FormControl className="field-form" fullWidth>
@@ -315,6 +333,7 @@ export type FormValues = {
   name: string;
   lastname: string;
   age: number;
+  sex: string;
   address: string;
   personalPhone: string;
   homePhone: string;

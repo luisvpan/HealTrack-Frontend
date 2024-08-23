@@ -2,6 +2,11 @@ import { Employee, Hospital } from "core/employees/types";
 import { User } from "core/users/types";
 import { PaginatedReportResult } from "core/reports/types";
 
+export enum SexType {
+  SEX1 = "M",
+  SEX2 = "F",
+}
+
 export enum SurgeryType {
   SURGERYTYPE1 = "A",
   SURGERYTYPE2 = "B",
@@ -33,6 +38,7 @@ export interface Patient {
   id: number;
   user: User;
   age: number;
+  sex: SexType;
   address: string;
   personalPhone: string;
   homePhone: string;

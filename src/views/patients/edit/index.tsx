@@ -90,6 +90,7 @@ const EditPatient: FunctionComponent<Props> = ({ className }) => {
             name: patient.user.name,
             lastname: patient.user.lastname,
             age: patient.age,
+            sex: patient.sex,
             address: patient.address,
             personalPhone: patient.personalPhone,
             homePhone: patient.homePhone,

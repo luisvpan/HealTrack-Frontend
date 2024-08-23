@@ -29,6 +29,7 @@ const CreatePatient: FunctionComponent<Props> = ({ className }) => {
       const formatedValues = {
         ...values,
         age: Number(values.age),
+        sex: values.sex,
         automaticTracking: true,
         hospital: {
           name: values.hospital,
@@ -87,6 +88,7 @@ const CreatePatient: FunctionComponent<Props> = ({ className }) => {
           name: "",
           lastname: "",
           age: 0,
+          sex: "",
           address: "",
           personalPhone: "",
           homePhone: "",
