@@ -167,7 +167,7 @@ const RecommendationList: FunctionComponent<Prop> = ({ className }) => {
               sx={{ display: "flex", flexDirection: "row", flexGrow: 1, ml: 2 }}
             >
               <Box sx={{ display: "flex", flexDirection: "column", flexGrow: 1 }}>
-                <Typography variant="subtitle1">{item.title}</Typography>
+                <Typography variant="h1" sx={{fontSize: '25px', fontWeight: 'bold'}}>{item.title}</Typography>
               </Box>
             </Box>
 

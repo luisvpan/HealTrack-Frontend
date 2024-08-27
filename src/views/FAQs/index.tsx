@@ -135,7 +135,7 @@ const FAQList: FunctionComponent<Prop> = ({ className }) => {
               sx={{ display: "flex", flexDirection: "row", flexGrow: 1, ml: 2 }}
             >
               <Box sx={{ display: "flex", flexDirection: "column", flexGrow: 1 }}>
-                <Typography variant="subtitle1">{item.question}</Typography>
+                <Typography variant="h1" sx={{fontSize: '25px', fontWeight: 'bold'}}>{item.question}</Typography>
               </Box>
             </Box>
 

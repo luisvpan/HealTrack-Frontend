@@ -93,7 +93,7 @@ const ChatList: FunctionComponent<Prop> = ({ className }) => {
                 >
                   {item.created_by.id === user!.id ? (
                     <p>
-                      {item.users[0].name} {item.users[0].lastname}
+                      {item.users[1].name} {item.users[1].lastname}
                     </p>
                   ) : (
                     <p>

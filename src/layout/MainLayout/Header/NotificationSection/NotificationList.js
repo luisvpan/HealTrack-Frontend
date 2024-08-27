@@ -27,7 +27,7 @@ const ListItemWrapper = styled('div')(({ theme, isRead }) => ({
   padding: 16,
   backgroundColor: isRead ? 'inherit' : theme.palette.action.focus,
   '&:hover': {
-    background: theme.palette.primary.light
+    backgroundColor: theme.palette.action.hover, // Color ligeramente más claro en lugar de transparente
   },
   '& .MuiListItem-root': {
     padding: 0
@@ -40,6 +40,7 @@ const NotificationList = ({ onNotificationRead }) => {
   const [notifications, setNotifications] = useState([]);
   const [selectedNotification, setSelectedNotification] = useState(null);
   const [openModal, setOpenModal] = useState(false);
+  const [openConfirmModal, setOpenConfirmModal] = useState(false); // Nuevo estado para el modal de confirmación
 
   useEffect(() => {
     const fetchNotifications = async () => {
@@ -62,6 +63,7 @@ const NotificationList = ({ onNotificationRead }) => {
       await deleteAllNotificationsByEmployeeId(user.id);
       setNotifications([]);
     }
+    setOpenConfirmModal(false); // Cierra el modal de confirmación
   };
 
   const handleOpenModal = async (notification) => {
@@ -78,8 +80,22 @@ const NotificationList = ({ onNotificationRead }) => {
     setSelectedNotification(null);
   };
 
+  const handleOpenConfirmModal = () => {
+    setOpenConfirmModal(true);
+  };
+
+  const handleCloseConfirmModal = () => {
+    setOpenConfirmModal(false);
+  };
+
   return (
     <>
+      <Button
+        onClick={handleOpenConfirmModal}
+      >
+        Eliminar todas las notificaciones
+      </Button>
+
       <List
         sx={{
           width: '100%',
@@ -103,11 +119,11 @@ const NotificationList = ({ onNotificationRead }) => {
               />
               <ListItemSecondaryAction
                 sx={{
-                  right: -17,  // Asegura que el botón esté en el extremo derecho
-                  marginLeft: '10px'  // Agrega un margen entre el texto y el botón
+                  right: -17, // Asegura que el botón esté en el extremo derecho
+                  marginLeft: '10px' // Agrega un margen entre el texto y el botón
                 }}
               >
-                <Button onClick={() => handleDeleteNotification(notification.id)}>
+                <Button onClick={(e) => { e.stopPropagation(); handleDeleteNotification(notification.id); }}>
                   <IconTrash stroke={1.5} size="1rem" />
                 </Button>
               </ListItemSecondaryAction>
@@ -115,11 +131,6 @@ const NotificationList = ({ onNotificationRead }) => {
             <Divider />
           </ListItemWrapper>
         ))}
-        {notifications.length > 0 && (
-          <Button onClick={handleDeleteAllNotifications}>
-            Eliminar todas
-          </Button>
-        )}
       </List>
 
       {/* Modal for notification details */}
@@ -132,19 +143,63 @@ const NotificationList = ({ onNotificationRead }) => {
           {selectedNotification && (
             <Card>
               <CardContent>
-                <Typography sx = {{variant:"h6", fontSize: "20px"}}>{selectedNotification.title}</Typography>
-                <p></p>
-                <Typography variant="body2">{selectedNotification.message}</Typography>
+                <Typography
+                  variant="h6"
+                  sx={{ fontSize: '20px', fontWeight: 'bold', textAlign: 'center', mb: 2 }}
+                >
+                  {selectedNotification.title}
+                </Typography>
+                <Box
+                  sx={{
+                    bgcolor: 'grey.200',
+                    p: 2,
+                    borderRadius: 2,
+                    fontSize: '12px',
+                    maxHeight: '200px', // Ajusta la altura máxima según lo necesites
+                    overflowY: 'auto'  // Añade un scroll vertical
+                  }}
+                >
+                  <Typography 
+                    variant="body2"
+                    sx={{ fontSize: '15px', fontWeight: 'bold' }}
+                  >
+                    {selectedNotification.message}
+                  </Typography>
+                </Box>
               </CardContent>
             </Card>
           )}
+        </Box>
+      </Modal>
+
+      {/* Confirm Delete All Modal */}
+      <Modal
+        open={openConfirmModal}
+        onClose={handleCloseConfirmModal}
+      >
+        <Box sx={{ ...confirmModalStyle }}>
+          <Typography variant="h6" sx={{ mb: 2 }}>
+            ¿Quieres borrar todas tus notificaciones?
+          </Typography>
+          <Button
+            onClick={handleDeleteAllNotifications}
+            sx={{ backgroundColor: 'green', color: 'white', mr: 2 }}
+          >
+            Sí
+          </Button>
+          <Button
+            onClick={handleCloseConfirmModal}
+            sx={{ backgroundColor: 'red', color: 'white' }}
+          >
+            No
+          </Button>
         </Box>
       </Modal>
     </>
   );
 };
 
-// Style for modal
+// Style for modals
 const modalStyle = {
   position: 'absolute',
   top: '50%',
@@ -156,6 +211,20 @@ const modalStyle = {
   boxShadow: 24,
   borderRadius: 4,
   p: 4
+};
+
+const confirmModalStyle = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  borderRadius: 4,
+  p: 4,
+  textAlign: 'center'
 };
 
 export default NotificationList;
