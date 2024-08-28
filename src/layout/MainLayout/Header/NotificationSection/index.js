@@ -47,7 +47,7 @@ const NotificationSection = () => {
     // Polling every 3 seconds to update unread notifications count
     const intervalId = setInterval(() => {
       fetchUnreadNotificationsCount();
-    }, 3000); // 3 seconds interval
+    }, 30000); // 30 seconds interval
 
     return () => clearInterval(intervalId); // Cleanup on unmount
   }, [fetchUnreadNotificationsCount]);

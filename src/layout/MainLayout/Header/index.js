@@ -67,21 +67,48 @@ const Header = ({ handleLeftDrawerToggle }) => {
       {false && <SearchSection />}
       <Box sx={{ flexGrow: 1 }} />
 
-      {/* Nombre, Apellido y Rol del Usuario, display es un rango */}
-      <Typography variant="body1" sx={{ marginRight: '1rem', fontSize: "40px", display: { xs: 'none', sm: 'block' } }}>
-        {`${user?.name}, ${user?.role}`}
-      </Typography>
+        {/* Nombre, Apellido y Rol del Usuario, display es un rango */}
+        <Typography variant="body1" sx={{ marginRight: '1rem', fontSize: "40px", display: { xs: 'none', md: 'block' } }}>
+          {`${user?.name}, ${user?.role}`}
+        </Typography>
+            
+        {/* +++++++ DENTRO DEL BOX +++++++ */}
+
+        {/* Panic Button */}
+        <Box sx={{ display: { xs: 'block', md: 'none' } }}>
+          {(isPatient) && <PanicButtonSection />}
+        </Box>
+
+        {/* notifications */}
+        <Box sx={{ display: { xs: 'block', md: 'none' } }}>
+          {(isSpecialist || isAssistant) && <NotificationSection />}
+        </Box>
+        
+        {/* Messagenotifications */}
+        <Box sx={{ display: { xs: 'block', md: 'none' } }}>
+          {(!isAdmin) && <MessageNotificationSection />}
+        </Box>
 
       <Box sx={{ flexGrow: 1 }} />
+      
+      {/* +++++++ FUERA DEL BOX +++++++ */}
 
       {/* Panic Button */}
-      {(isPatient) && <PanicButtonSection />}
+      <Box sx={{ display: { xs: 'none', md: 'block' } }}>
+        {(isPatient) && <PanicButtonSection />}
+      </Box>
 
-      {/* notification & profile */}
-      {(isSpecialist || isAssistant) && <NotificationSection />}
+      {/* notifications */}
+      <Box sx={{ display: { xs: 'none', md: 'block' } }}>
+        {(isSpecialist || isAssistant) && <NotificationSection />}
+      </Box>
       
-      {(!isAdmin) && <MessageNotificationSection />}
+      {/* Messagenotifications */}
+      <Box sx={{ display: { xs: 'none', md: 'block' } }}>
+        {(!isAdmin) && <MessageNotificationSection />}
+      </Box>
 
+      {/* Profile Section */}
       <ProfileSection />
     </>
   );

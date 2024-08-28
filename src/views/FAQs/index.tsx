@@ -263,5 +263,6 @@ export default styled(FAQList)`
     display: flex;
     justify-content: space-between;
     flex-direction: row;
+    textAlign: 'center';
   }
 `;
