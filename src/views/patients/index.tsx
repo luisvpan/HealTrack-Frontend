@@ -4,13 +4,13 @@ import { styled } from "styled-components";
 import { useNavigate } from "react-router";
 import { IconCirclePlus, IconDownload } from "@tabler/icons";
 import MainCard from "components/cards/MainCard";
-import { Button, FormControl, Typography } from "@mui/material";
+import { Box, Button, FormControl, Typography } from "@mui/material";
 import { FunctionComponent, useCallback } from "react";
 import SelectField from "components/SelectField";
 import { StatusPatientOptions } from "core/patients/types";
 import store from "store";
 import { exportPanicButtonCounts } from "services/notifications/export-panic-button-count";
-import { useAppSelector } from 'store';
+import { useAppSelector } from "store";
 import { AllRole } from "core/users/types";
 
 const Patients: FunctionComponent<Prop> = ({ className }) => {
@@ -29,13 +29,11 @@ const Patients: FunctionComponent<Prop> = ({ className }) => {
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
 
-      // Obtener la fecha actual
       const today = new Date();
-      const day = String(today.getDate()).padStart(2, '0');
-      const month = String(today.getMonth() + 1).padStart(2, '0');
+      const day = String(today.getDate()).padStart(2, "0");
+      const month = String(today.getMonth() + 1).padStart(2, "0");
       const year = today.getFullYear();
 
-      // Formatear el nombre del archivo
       const fileName = `pacientes-panic-button-count-${day}_${month}_${year}.xlsx`;
 
       link.href = url;
@@ -50,16 +48,21 @@ const Patients: FunctionComponent<Prop> = ({ className }) => {
 
   return (
     <MainCard
-      className={className}
-      headerClass={"patients-header"}
       title={
-        <div className={"patients-header"}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: { xs: "column", sm: "row" },
+            gap: "20px",
+            alignItems: "center",
+            justifyContent: {sm: "space-between"}
+          }}
+        >
           <Typography variant="h3" className={"title-header"}>
             Pacientes
           </Typography>
-          <FormControl className={"field-form-header-container"}>
+          <FormControl sx={{width: { xs:"100%", sm: "200px"}}}>
             <SelectField
-              className="field-form-header"
               fullWidth={true}
               name="status"
               onChange={(e) => {
@@ -77,7 +80,7 @@ const Patients: FunctionComponent<Prop> = ({ className }) => {
             variant={"outlined"}
             onClick={goToCreate}
             startIcon={<IconCirclePlus />}
-            sx={role !== "assistant" ? { display: "none" } : null}
+            sx={role !== "assistant" ? { display: "none" } : {width: { xs:"100%", sm: "100px"}}}
           >
             Crear
           </Button>
@@ -92,7 +95,7 @@ const Patients: FunctionComponent<Prop> = ({ className }) => {
               Exportar
             </Button>
           )}
-        </div>
+        </Box>
       }
     >
       <Table items={items} fetchItems={fetchPatients} />

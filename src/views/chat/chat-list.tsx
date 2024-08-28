@@ -7,7 +7,6 @@ import { FunctionComponent, useCallback } from "react";
 import useData from "./useData";
 import { Chat } from "core/chats/types";
 import { AllRole } from "core/users/types";
-
 import store from "store";
 
 const ChatList: FunctionComponent<Prop> = ({ className }) => {
@@ -27,13 +26,26 @@ const ChatList: FunctionComponent<Prop> = ({ className }) => {
     [navigate]
   );
 
+  // Función para truncar texto
+  const truncateText = (text: string, maxLength: number) => {
+    return text.length > maxLength ? `${text.slice(0, maxLength)}...` : text;
+  };
+
   return (
     <MainCard
       className={className}
       headerClass={"chats-header"}
       title={
-        <div className={"chats-header"}>
-          <Typography variant="h3" className={"title-header"}>
+        <Box sx={{
+          display: "flex",
+          flexDirection: "row",
+          gap: "20px",
+          alignItems: "center",
+          justifyContent: "space-between",
+          marginRight: "40px",
+          marginLeft: "40px",
+        }}>
+          <Typography variant="h4" className={"title-header"}>
             Chats
           </Typography>
           {role !== AllRole.PATIENT && (
@@ -42,17 +54,19 @@ const ChatList: FunctionComponent<Prop> = ({ className }) => {
               variant={"outlined"}
               onClick={goToCreate}
               startIcon={<IconCirclePlus />}
+              sx={{ fontSize: "0.8rem", padding: "5px 10px" }}
             >
               Crear
             </Button>
           )}
-        </div>
+        </Box>
       }
     >
       <Box
         sx={{
-          display: "flex",
-          flexDirection: "column",
+          display: "grid",
+          gridTemplateColumns: "1fr",
+          gap: "10px",
           flexGrow: 1,
         }}
       >
@@ -60,74 +74,77 @@ const ChatList: FunctionComponent<Prop> = ({ className }) => {
           <Button
             key={item.id}
             sx={{
-              display: "flex",
-              flexDirection: "row",
+              display: "grid",
+              gridTemplateColumns: "50px 1fr auto",
               alignItems: "center",
-              px: "30px",
-              py: "10px",
+              padding: "10px",
               borderBottom: "1px solid #ccc",
-              marginBottom: "10px",
               textTransform: "none",
-              justifyContent: "space-between"
             }}
             onClick={() => goToChat(item.id)}
           >
             <Box
               sx={{
-                height: "50px",
-                width: "50px",
-                maxHeight: "50px",
-                maxWidth: "50px",
+                height: "40px",
+                width: "40px",
+                maxHeight: "40px",
+                maxWidth: "40px",
               }}
             >
-              <IconUserCircle height="50px" width="50px" color="gray" />
+              <IconUserCircle height="40px" width="40px" color="gray" />
+            </Box>
+
+            <Box sx={{ display: "flex", flexDirection: "column" }}>
+              <Typography variant="body2" noWrap>
+                {item.created_by.id === user!.id
+                  ? `${item.users[0].name} ${item.users[0].lastname}`
+                  : `${item.created_by.name} ${item.created_by.lastname}`}
+              </Typography>
+              <Typography
+                variant="body2"
+                noWrap
+                color="primary"
+                sx={{ color: "blue" }} // Texto en color azul
+              >
+                {!item.last_message
+                  ? "Sé el primero en escribir un mensaje!"
+                  : truncateText(item.last_message.message, 20)}
+              </Typography>
             </Box>
 
             <Box
-              key={item.id}
-              sx={{ display: "flex", flexDirection: "row", flexGrow: 1 }}
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-end",
+              }}
             >
-              <Box sx={{ display: "flex", flexDirection: "row", flexGrow: 1 }}>
+              {item.unread_messages_count > 0 && (
                 <Box
-                  sx={{ display: "flex", flexDirection: "column", flexGrow: 1 }}
+                  sx={{
+                    backgroundColor: "primary.main",
+                    color: "white",
+                    borderRadius: "50%",
+                    padding: "5px",
+                    minWidth: "20px",
+                    textAlign: "center",
+                  }}
                 >
-                  {item.created_by.id === user!.id ? (
-                    <p>
-                      {item.users[1].name} {item.users[1].lastname}
-                    </p>
-                  ) : (
-                    <p>
-                      {item.created_by.name} {item.created_by.lastname}
-                    </p>
-                  )}
-
-                  {!item.last_message ? (
-                    <Typography>
-                      Se el primero en escribir un mensaje!
-                    </Typography>
-                  ) : (
-                    <Typography>{item.last_message.message}</Typography>
-                  )}
+                  {item.unread_messages_count}
                 </Box>
-
-                <div className="info-container">
-                  {item.unread_messages_count > 0 && (
-                    <Box>{item.unread_messages_count}</Box>
+              )}
+              {item.last_message && (
+                <Typography variant="caption" color="textSecondary">
+                  {new Date(item.last_message.updatedAt).toLocaleDateString(
+                    "es-ES",
+                    {
+                      day: "2-digit",
+                      month: "2-digit",
+                      year: "numeric",
+                    }
                   )}
-                  {item.last_message && (
-                    <p>
-                      {new Date(item.last_message.updatedAt).toLocaleDateString(
-                        "es-ES",
-                        {
-                          day: "2-digit",
-                          month: "2-digit",
-                          year: "numeric",
-                        }
-                      )}
-                    </p>
-                  )}
-                </div>
-              </Box>
+                </Typography>
+              )}
             </Box>
           </Button>
         ))}
@@ -146,10 +163,14 @@ export default styled(ChatList)`
   flex-direction: column;
 
   .chats-header {
-    flex: 1;
-    width: 100%;
     display: flex;
     justify-content: space-between;
-    flex-direction: row;
+    align-items: center;
+    padding: 10px 0;
+  }
+
+  .title-header {
+    font-size: 1.5rem;
   }
 `;
+

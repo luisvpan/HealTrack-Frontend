@@ -46,18 +46,22 @@ const MainPage: React.FC = () => {
   return (
     <Box sx={{ p: 2 }}>
       <Stack spacing={2}>
-        <Typography variant="h1">Bienvenido a la aplicación HealTrack, {user?.name}</Typography>
+        <Typography variant="h1" sx={{textAlign: { xs:"center", sm:"start" }}}>
+          Bienvenido a la aplicación HealTrack, {user?.name}
+        </Typography>
         {loading ? (
           <Typography variant="body1">Cargando datos...</Typography>
         ) : user?.role === AllRole.PATIENT ? (
           <PatientDetail />
         ) : user?.role === AllRole.ADMIN ? (
           <>
-            <Typography variant="body1">
+            <Typography variant="body1" sx={{textAlign: { xs:"center", sm:"start" }}}>
               Esta es la página principal de la aplicación donde encontrarás información relevante.
             </Typography>
             <EmployeeDetail />
-            <Typography variant="h3">Ultimos 10 empleados en ser registrados:</Typography>
+            <Typography variant="h3">
+              Ultimos 10 empleados en ser registrados:  
+            </Typography>
             <TableNewestEmployees items={employees} />
             <Typography variant="h3"></Typography>
             <Typography variant="h3">Ultimos 10 pacientes en ser registrados:</Typography>
@@ -65,7 +69,7 @@ const MainPage: React.FC = () => {
           </>
         ) : (
           <>
-            <Typography variant="body1">
+            <Typography variant="body1" sx={{textAlign: { xs:"center", sm:"start" }}}>
               Esta es la página principal de la aplicación donde encontrarás información relevante.
             </Typography>
             <EmployeeDetail />

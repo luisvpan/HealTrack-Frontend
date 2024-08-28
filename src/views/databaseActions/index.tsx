@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
+import { Button, Box, Typography, Divider, TextField, Alert } from '@mui/material';
 import { exportDatabase } from 'services/databaseActions/export-database';
 import { importDatabase } from 'services/databaseActions/import-database';
-import './styles.css';
 
 const DatabaseActions: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -31,7 +31,7 @@ const DatabaseActions: React.FC = () => {
       
       if (fileExtension === 'sql') {
         setFile(selectedFile);
-        // setErrorMessage('');  // Clear any previous error message
+        setErrorMessage('');  // Clear any previous error message
       } else {
         setFile(null);
         setErrorMessage('Solo se permiten archivos con la extensión .sql');
@@ -54,33 +54,55 @@ const DatabaseActions: React.FC = () => {
   };
 
   return (
-    <div className="database-actions-container">
-      <div className="export-section">
-        <h2>Exportar Base de Datos</h2>
-        <button className="export-button" onClick={handleExport}>Exportar</button>
-      </div>
+    <Box sx={{ p: 3, maxWidth: '600px', margin: 'auto' }}>
+      <Box sx={{ mb: 4 }}>
+        <Typography variant="h4" gutterBottom>
+          Exportar Base de Datos
+        </Typography>
+        <Button 
+          variant="contained" 
+          color="primary" 
+          onClick={handleExport}
+          sx={{ mt: 2 }}
+        >
+          Exportar
+        </Button>
+      </Box>
 
-      <div className="divider" />
+      <Divider sx={{ my: 4 }} />
 
-      <div className="import-section">
-        <h2>Importar Base de Datos</h2>
-        <input 
-          type="file" 
-          onChange={handleFileChange} 
-          className="file-input" 
-          accept=".sql"
+      <Box>
+        <Typography variant="h4" gutterBottom>
+          Importar Base de Datos
+        </Typography>
+        <TextField
+          type="file"
+          onChange={handleFileChange}
+          inputProps={{ accept: '.sql' }}
+          fullWidth
+          sx={{ mt: 2 }}
         />
-        {errorMessage && <p className="error-message">{errorMessage}</p>}
-        <button 
-          className="import-button" 
+        {errorMessage && (
+          <Alert severity="error" sx={{ mt: 2 }}>
+            {errorMessage}
+          </Alert>
+        )}
+        <Button 
+          variant="contained" 
+          color="primary" 
           onClick={handleImport} 
           disabled={!file}
+          sx={{ mt: 2 }}
         >
           Importar
-        </button>
-        {importResult && <p className="import-result">{importResult}</p>}
-      </div>
-    </div>
+        </Button>
+        {importResult && (
+          <Alert severity="success" sx={{ mt: 2 }}>
+            {importResult}
+          </Alert>
+        )}
+      </Box>
+    </Box>
   );
 };
 

@@ -13,6 +13,7 @@ import { Button, FormControl, Typography } from "@mui/material";
 import usePatientsOptions from "core/patients/use-patients-options";
 import dayjs from "dayjs";
 import { exportReports } from "services/reports/export-report";
+import { Box } from "@mui/system";
 
 const Reports: FunctionComponent<Prop> = ({ className }) => {
   const userRole = store.getState().auth.user?.role;
@@ -65,7 +66,13 @@ const Reports: FunctionComponent<Prop> = ({ className }) => {
       className={className}
       headerClass={"reports-header"}
       title={
-        <div className={"reports-header"}>
+        <Box sx={{
+          display: "flex",
+          flexDirection: { xs: "column", sm: "row" },
+          gap: "20px",
+          alignItems: "center",
+          justifyContent: {sm: "space-between"}
+        }}>
           <Typography variant="h3" className={"title-header"}>
             Reportes
           </Typography>
@@ -141,7 +148,7 @@ const Reports: FunctionComponent<Prop> = ({ className }) => {
               Exportar
             </Button>
           )}
-        </div>
+        </Box>
       }
     >
       <Table

@@ -8,7 +8,6 @@ import NotificationSection from './NotificationSection';
 import MessageNotificationSection from './MessageNotficationSection';
 import PanicButtonSection from './PanicButton';
 import { IconMenu2 } from '@tabler/icons';
-import useScriptRef from 'hooks/useScriptRef';
 import { useAppSelector } from 'store';
 import { AllRole } from "core/users/types";
 
@@ -16,7 +15,6 @@ import { AllRole } from "core/users/types";
 
 const Header = ({ handleLeftDrawerToggle }) => {
   const theme = useTheme();
-  const scriptRef = useScriptRef();
 
   const user = useAppSelector((state) => state.auth.user);
 
@@ -69,8 +67,8 @@ const Header = ({ handleLeftDrawerToggle }) => {
       {false && <SearchSection />}
       <Box sx={{ flexGrow: 1 }} />
 
-      {/* Nombre, Apellido y Rol del Usuario */}
-      <Typography variant="body1" sx={{ marginRight: '1rem', fontSize: "40px" }}>
+      {/* Nombre, Apellido y Rol del Usuario, display es un rango */}
+      <Typography variant="body1" sx={{ marginRight: '1rem', fontSize: "40px", display: { xs: 'none', sm: 'block' } }}>
         {`${user?.name}, ${user?.role}`}
       </Typography>
 

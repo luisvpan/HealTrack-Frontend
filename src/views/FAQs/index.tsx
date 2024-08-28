@@ -75,9 +75,15 @@ const FAQList: FunctionComponent<Prop> = ({ className }) => {
       className={className}
       headerClass={"faqs-header"}
       title={
-        <div className={"faqs-header"}>
+        <Box sx={{
+          display: "flex",
+          flexDirection: { xs: "column", sm: "row" },
+          gap: "20px",
+          alignItems: "center",
+          justifyContent: {sm: "space-between"}
+        }}>
           <Typography variant="h3" className={"title-header"}>
-            ¡Bienvenido al ChatBot! Busque su pregunta con confianza 😊
+            ¡Bienvenido al ChatBot! Busque su pregunta con confianza! 😊
           </Typography>
           {userRole === AllRole.ADMIN && (
             <Button
@@ -89,7 +95,7 @@ const FAQList: FunctionComponent<Prop> = ({ className }) => {
               Crear
             </Button>
           )}
-        </div>
+        </Box>
       }
     >
       <Box
@@ -104,7 +110,7 @@ const FAQList: FunctionComponent<Prop> = ({ className }) => {
             key={item.id}
             sx={{
               display: "flex",
-              flexDirection: "row",
+              flexDirection: {xs: "column", ms: "row"},
               alignItems: "center",
               px: "30px",
               py: "10px",
@@ -135,7 +141,9 @@ const FAQList: FunctionComponent<Prop> = ({ className }) => {
               sx={{ display: "flex", flexDirection: "row", flexGrow: 1, ml: 2 }}
             >
               <Box sx={{ display: "flex", flexDirection: "column", flexGrow: 1 }}>
-                <Typography variant="h1" sx={{fontSize: '25px', fontWeight: 'bold'}}>{item.question}</Typography>
+                <Typography variant="h1" sx={{fontSize: {xs: '15px', sm: '20px'}, fontWeight: 'bold', textAlign: "center"}}>
+                  {item.question}
+                </Typography>
               </Box>
             </Box>
 
@@ -212,7 +220,7 @@ const StyledDialog = styled(Dialog)(({ theme }) => ({
 const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({
   textAlign: 'center',
   fontWeight: 'bold',
-  fontSize: '40px',
+  fontSize: '30px',
 }));
 
 const StyledDialogContent = styled(DialogContent)(({ theme }) => ({

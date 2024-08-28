@@ -18,7 +18,7 @@ import DialogDelete from "components/dialogDelete";
 const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({
   textAlign: 'center',
   fontWeight: 'bold',
-  fontSize: '40px',
+  fontSize: '30px',
 }));
 
 const StyledDialogContent = styled(DialogContent)(({ theme }) => ({
@@ -107,7 +107,13 @@ const RecommendationList: FunctionComponent<Prop> = ({ className }) => {
       className={className}
       headerClass={"recommendations-header"}
       title={
-        <div className={"recommendations-header"}>
+        <Box sx={{
+          display: "flex",
+          flexDirection: { xs: "column", sm: "row" },
+          gap: "20px",
+          alignItems: "center",
+          justifyContent: {sm: "space-between"}
+        }}>
           <Typography variant="h3" className={"title-header"}>
             Recomendaciones
           </Typography>
@@ -121,7 +127,7 @@ const RecommendationList: FunctionComponent<Prop> = ({ className }) => {
               Crear
             </Button>
           )}
-        </div>
+        </Box>
       }
     >
       <Box
@@ -136,7 +142,7 @@ const RecommendationList: FunctionComponent<Prop> = ({ className }) => {
             key={item.id}
             sx={{
               display: "flex",
-              flexDirection: "row",
+              flexDirection: {xs: "column", ms: "row"},
               alignItems: "center",
               px: "30px",
               py: "10px",
@@ -167,7 +173,9 @@ const RecommendationList: FunctionComponent<Prop> = ({ className }) => {
               sx={{ display: "flex", flexDirection: "row", flexGrow: 1, ml: 2 }}
             >
               <Box sx={{ display: "flex", flexDirection: "column", flexGrow: 1 }}>
-                <Typography variant="h1" sx={{fontSize: '25px', fontWeight: 'bold'}}>{item.title}</Typography>
+                <Typography variant="h1" sx={{fontSize: {xs: '15px', sm: '20px'}, fontWeight: 'bold', textAlign: "center"}}>
+                  {item.title}
+                </Typography>
               </Box>
             </Box>
 

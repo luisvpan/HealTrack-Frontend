@@ -96,10 +96,8 @@ const FAQList: FunctionComponent<Prop> = ({ className }) => {
             key={item.id}
             sx={{
               display: "flex",
-              flexDirection: "row",
+              flexDirection: {xs: "column", ms: "row"},
               alignItems: "center",
-              px: "30px",
-              py: "10px",
               borderBottom: "1px solid #e0e0e0",
             }}
           >
@@ -115,16 +113,14 @@ const FAQList: FunctionComponent<Prop> = ({ className }) => {
             </Box>
 
             <Box
-              sx={{ display: "flex", flexDirection: "row", flexGrow: 1 }}
+              sx={{ display: "flex", flexDirection: {xs: "column", ms: "row"}, flexGrow: 1 }}
               onClick={() => goToFAQ(item.id)}
             >
-              <Box sx={{ display: "flex", flexDirection: "column", flexGrow: 1 }}>
                 <Typography variant="subtitle1">{item.question}</Typography>
                 <Typography variant="body2">{item.answer}</Typography>
-              </Box>
             </Box>
             {userRole === AllRole.ADMIN && (
-              <Box sx={{ display: "flex", flexDirection: "row", gap: 1 }}>
+              <Box sx={{ display: "flex", flexDirection: {xs: "column", ms: "row"} , gap: 1 }}>
                 <Button
                   color="primary"
                   onClick={() => navigate("/faqs/edit/" + item.id)}
