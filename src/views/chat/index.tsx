@@ -5,7 +5,6 @@ import {
   Button,
   Paper,
   Typography,
-  IconButton,
   Modal,
 } from "@mui/material";
 import ChatMessage from "./ChatMessage";
@@ -14,7 +13,7 @@ import store from "store";
 import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 import getMessagesById from "services/messages/get-messages-by-id.service";
 import sendMessage from "services/messages/create-message.service";
-import sendImage from "services/messages/upload-chat-image.service"; // Import the sendImage function
+import sendImage from "services/messages/upload-chat-image.service";
 import { useNavigate, useParams } from "react-router-dom";
 import { Socket, io } from "socket.io-client";
 import MainCard from "components/cards/MainCard";
@@ -205,14 +204,6 @@ const Chat = () => {
 
         <Box component="form" onSubmit={submitMessage}>
           <Paper sx={{ display: "flex", p: 2 }}>
-            <IconButton
-              color="primary"
-              component="label"
-              onClick={() => setIsModalOpen(true)}
-            >
-              <PhotoCameraIcon />
-            </IconButton>
-
             <TextField
               fullWidth
               placeholder="Escribe un mensaje..."
@@ -223,7 +214,23 @@ const Chat = () => {
               }}
               value={messageToSend}
             />
-            <Button variant="contained" color="primary" type="submit">
+
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => setIsModalOpen(true)}
+              style={{ minWidth: 'auto', padding: 10 }}
+              sx={{ mr: 2 }}
+            >
+              <PhotoCameraIcon />
+            </Button>
+
+            <Button 
+              variant="contained" 
+              color="primary" 
+              type="submit"
+              sx={{ mr: 2 }}
+            >
               Enviar
             </Button>
           </Paper>
