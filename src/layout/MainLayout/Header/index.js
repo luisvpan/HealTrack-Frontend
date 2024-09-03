@@ -23,6 +23,21 @@ const Header = ({ handleLeftDrawerToggle }) => {
   const isAssistant = user?.role === AllRole.ASSISTANT;
   const isPatient = user?.role === AllRole.PATIENT;
 
+  const getRoleName = (role) => {
+    switch(role) {
+      case AllRole.ADMIN:
+        return 'Administrador(a)';
+      case AllRole.ASSISTANT:
+        return 'Enfermero(a)';
+      case AllRole.SPECIALIST:
+        return 'Especialista';
+      case AllRole.PATIENT:
+        return 'Paciente';
+      default:
+        return role;
+    }
+  };
+
   return (
     <>
       {/* logo & toggler button */}
@@ -68,8 +83,8 @@ const Header = ({ handleLeftDrawerToggle }) => {
       <Box sx={{ flexGrow: 1 }} />
 
         {/* Nombre, Apellido y Rol del Usuario, display es un rango */}
-        <Typography variant="body1" sx={{ marginRight: '1rem', fontSize: "40px", display: { xs: 'none', md: 'block' } }}>
-          {`${user?.name}, ${user?.role}`}
+        <Typography variant="body1" sx={{ marginRight: '1rem', fontSize: "30px", display: { xs: 'none', md: 'block' } }}>
+          {`${user?.name}, ${getRoleName(user?.role)}`}
         </Typography>
             
         {/* +++++++ DENTRO DEL BOX +++++++ */}

@@ -47,7 +47,7 @@ const Chat = () => {
         },
       });
     }
-  }, [token]);
+  }, [token, URL]);
 
   const getAllMessages = useCallback(async () => {
     try {
@@ -96,13 +96,14 @@ const Chat = () => {
     if (imageFile) {
       try {
         await sendImage(imageFile, Number(chatId));
-        setImageFile(null);
         setIsModalOpen(false);
 
         socket.current!.emit("send_message", {
           user,
-          message: { message: "Image sent" },
+          message: { message: "", attachment: imageFile, filename: imageFile.name },
         });
+
+        setImageFile(null);
       } catch (error) {
         console.log(error);
       }
@@ -123,6 +124,10 @@ const Chat = () => {
         user: newMessage.user,
         attachment: newMessage.message.attachment,
       };
+
+      console.log(adaptedMessage)
+
+      console.log("New message: ", newMessage)
 
       setMessages((prevMessages) => {
         if (!prevMessages.some((message) => message.id === adaptedMessage.id)) {
