@@ -1,24 +1,42 @@
 import PropTypes from 'prop-types';
-
-// material-ui
 import { useTheme } from '@mui/material/styles';
-import { Avatar, Box, ButtonBase } from '@mui/material';
-
-// project imports
+import { Avatar, Box, ButtonBase, Typography } from '@mui/material';
 import LogoSection from '../LogoSection';
 import SearchSection from './SearchSection';
 import ProfileSection from './ProfileSection';
 import NotificationSection from './NotificationSection';
-
-// assets
+import MessageNotificationSection from './MessageNotficationSection';
+import PanicButtonSection from './PanicButton';
 import { IconMenu2 } from '@tabler/icons';
-import useScriptRef from 'hooks/useScriptRef';
+import { useAppSelector } from 'store';
+import { AllRole } from "core/users/types";
 
 // ==============================|| MAIN NAVBAR / HEADER ||============================== //
 
 const Header = ({ handleLeftDrawerToggle }) => {
   const theme = useTheme();
-  const scriptRef = useScriptRef();
+
+  const user = useAppSelector((state) => state.auth.user);
+
+  const isAdmin = user?.role === AllRole.ADMIN;
+  const isSpecialist = user?.role === AllRole.SPECIALIST;
+  const isAssistant = user?.role === AllRole.ASSISTANT;
+  const isPatient = user?.role === AllRole.PATIENT;
+
+  const getRoleName = (role) => {
+    switch(role) {
+      case AllRole.ADMIN:
+        return 'Administrador(a)';
+      case AllRole.ASSISTANT:
+        return 'Enfermero(a)';
+      case AllRole.SPECIALIST:
+        return 'Especialista';
+      case AllRole.PATIENT:
+        return 'Paciente';
+      default:
+        return role;
+    }
+  };
 
   return (
     <>
@@ -29,12 +47,15 @@ const Header = ({ handleLeftDrawerToggle }) => {
           display: 'flex',
           [theme.breakpoints.down('md')]: {
             width: 'auto'
-          }
+          },
+          position: 'relative',
+          alignItems: 'center'
         }}
       >
         <Box component="span" sx={{ display: { xs: 'none', md: 'block' }, flexGrow: 1 }}>
           <LogoSection />
         </Box>
+
         <ButtonBase sx={{ borderRadius: '12px', overflow: 'hidden' }}>
           <Avatar
             variant="rounded"
@@ -60,10 +81,49 @@ const Header = ({ handleLeftDrawerToggle }) => {
       {/* header search */}
       {false && <SearchSection />}
       <Box sx={{ flexGrow: 1 }} />
-      <Box sx={{ flexGrow: 1 }} />
 
-      {/* notification & profile */}
+        {/* Nombre, Apellido y Rol del Usuario, display es un rango */}
+        <Typography variant="body1" sx={{ marginRight: '1rem', fontSize: "30px", display: { xs: 'none', md: 'block' } }}>
+          {`${user?.name}, ${getRoleName(user?.role)}`}
+        </Typography>
+            
+        {/* +++++++ DENTRO DEL BOX +++++++ */}
+
+        {/* Panic Button */}
+        <Box sx={{ display: { xs: 'block', md: 'none' } }}>
+          {(isPatient) && <PanicButtonSection />}
+        </Box>
+
+        {/* notifications */}
+        <Box sx={{ display: { xs: 'block', md: 'none' } }}>
+          {(isSpecialist || isAssistant) && <NotificationSection />}
+        </Box>
+        
+        {/* Messagenotifications */}
+        <Box sx={{ display: { xs: 'block', md: 'none' } }}>
+          {(!isAdmin) && <MessageNotificationSection />}
+        </Box>
+
+      <Box sx={{ flexGrow: 1 }} />
       
+      {/* +++++++ FUERA DEL BOX +++++++ */}
+
+      {/* Panic Button */}
+      <Box sx={{ display: { xs: 'none', md: 'block' } }}>
+        {(isPatient) && <PanicButtonSection />}
+      </Box>
+
+      {/* notifications */}
+      <Box sx={{ display: { xs: 'none', md: 'block' } }}>
+        {(isSpecialist || isAssistant) && <NotificationSection />}
+      </Box>
+      
+      {/* Messagenotifications */}
+      <Box sx={{ display: { xs: 'none', md: 'block' } }}>
+        {(!isAdmin) && <MessageNotificationSection />}
+      </Box>
+
+      {/* Profile Section */}
       <ProfileSection />
     </>
   );

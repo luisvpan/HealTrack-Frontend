@@ -13,78 +13,90 @@ const ResetPassword = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     if (password !== confirmPassword) {
       setMessage('Las contraseñas no coinciden.');
       return;
     }
 
-    try {
-      await resetPassword({ token, newPassword: password });
-      setMessage('Tu contraseña ha sido restablecida exitosamente.');
-      setTimeout(() => {
-        navigate('/pages/login');
-      }, 2000); // Redirige después de 2 segundos
-    } catch (error) {
-      setMessage('Error al restablecer la contraseña.');
-    }
+    resetPassword({ token, newPassword: password })
+      .then(() => {
+        setMessage('Tu contraseña ha sido restablecida exitosamente.');
+        setTimeout(() => {
+          navigate('/pages/login');
+        }, 2000); // Redirige después de 2 segundos
+      })
+      .catch(() => {
+        setMessage('Error al restablecer la contraseña.');
+      });
   };
 
   return (
     <Box
       sx={{
-        width: { xs: '90%', sm: '400px' },
-        margin: '0 auto',
-        mt: 8,
-        p: 2,
-        border: '1px solid #000',
-        borderRadius: 40,
-        textAlign: 'center'
+        width: '100vw',
+        height: '100vh', // Hace que la sección abarque toda la pantalla
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
       }}
     >
-      <Typography variant="h6" component="h2" sx={{ mb: 2 }}>
-        Restablecer contraseña
-      </Typography>
-      <TextField
-        label="Nueva contraseña"
-        variant="outlined"
-        type={showPassword ? 'text' : 'password'}
-        fullWidth
-        margin="normal"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton onClick={() => setShowPassword(!showPassword)}>
-                {showPassword ? <VisibilityOff /> : <Visibility />}
-              </IconButton>
-            </InputAdornment>
-          )
+      <Box
+        sx={{
+          width: '95%', 
+          height: '95%', 
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          flexDirection: 'column',
+          p: 2,
+          border: '1px solid #000',
+          borderRadius: 10,
+          textAlign: 'center'
         }}
-      />
-      <TextField
-        label="Confirmar nueva contraseña"
-        variant="outlined"
-        type={showConfirmPassword ? 'text' : 'password'}
-        fullWidth
-        margin="normal"
-        value={confirmPassword}
-        onChange={(e) => setConfirmPassword(e.target.value)}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
-                {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
-              </IconButton>
-            </InputAdornment>
-          )
-        }}
-      />
-      <Button variant="contained" color="primary" onClick={handleSubmit} sx={{ mt: 2 }}>
-        Restablecer
-      </Button>
-      {message && <Typography variant="body2" sx={{ mt: 2 }}>{message}</Typography>}
+      >
+        <Typography variant="h4" component="h2" sx={{ mb: 2, fontSize: '40px' }}>
+          Restablecer contraseña
+        </Typography>
+        <TextField
+          label="Nueva contraseña"
+          variant="outlined"
+          type={showPassword ? 'text' : 'password'}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          sx={{ width: '55%' }} // Misma anchura que el botón
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={() => setShowPassword(!showPassword)}>
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            )
+          }}
+        />
+        <TextField
+          label="Confirmar nueva contraseña"
+          variant="outlined"
+          type={showConfirmPassword ? 'text' : 'password'}
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          sx={{ width: '55%', mt: 2 }} // Misma anchura que el botón
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
+                  {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            )
+          }}
+        />
+        <Button variant="contained" color="primary" onClick={handleSubmit} sx={{ mt: 2, width: '55%', fontSize: "20px" }}>
+          Restablecer
+        </Button>
+        {message && <Typography variant="body2" sx={{ mt: 2 }}>{message}</Typography>}
+      </Box>
     </Box>
   );
 };

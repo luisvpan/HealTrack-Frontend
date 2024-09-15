@@ -1,18 +1,18 @@
 import axios from "axios";
 // Own
 import { API_BASE_URL } from "config/constants";
-import { Patient } from "core/patients/types";
+import { Report } from "core/reports/types";
 import BackendError from "exceptions/backend-error";
 import store from "store";
 
-const URL = `${API_BASE_URL}/patients`;
+const URL = `${API_BASE_URL}/reports`;
 
-export default async function editPatient(
-  idPatient: number,
-  body: PatientPayload
-): Promise<Patient> {
+export default async function editReport(
+  idReport: number,
+  body: FormData
+): Promise<Report> {
   try {
-    const response = await axios.patch<Patient>(`${URL}/${idPatient}`, body, {
+    const response = await axios.patch<Report>(`${URL}/${idReport}`, body, {
       headers: {
         Authorization: `Bearer ${store.getState().auth.token}`,
       },
@@ -23,5 +23,3 @@ export default async function editPatient(
     throw new BackendError(error);
   }
 }
-
-export type PatientPayload = Omit<Patient, "id" | "deletedAt" | "password">;

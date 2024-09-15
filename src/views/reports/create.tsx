@@ -21,46 +21,47 @@ const CreateReport: FunctionComponent<Props> = ({ className }) => {
   const dispatch = useAppDispatch();
 
   const onSubmit = useCallback(
-    async (
-      values: any,
-      { setErrors, setStatus, setSubmitting }: FormikHelpers<FormValues>
-    ) => {
-      try {
-        dispatch(setIsLoading(true));
-        setErrors({});
-        setStatus({});
-        setSubmitting(true);
-        for (const key in values) {
-          if (values[key] === "true") {
-            values[key] = true;
-          }
+    (values: any, { setErrors, setStatus, setSubmitting }: FormikHelpers<FormValues>) => {
+      dispatch(setIsLoading(true));
+      setErrors({});
+      setStatus({});
+      setSubmitting(true);
+  
+      // Prepare values for submission
+      for (const key in values) {
+        if (values[key] === "true") {
+          values[key] = true;
         }
-        if (!values.file) {
-          delete values.file;
-        }
-        delete values.id;
-        delete values.submit;
-        const valuesToSend = jsonToFormData(values);
-
-        await createReport(valuesToSend);
-        navigate("/reports");
-        dispatch(setSuccessMessage(`Reporte creado correctamente`));
-      } catch (error) {
-        if (error instanceof BackendError) {
-          setErrors({
-            ...error.getFieldErrorsMessages(),
-            submit: error.getMessage(),
-          });
-          dispatch(setErrorMessage(error.getMessage()));
-        }
-        setStatus({ success: false });
-      } finally {
-        dispatch(setIsLoading(false));
-        setSubmitting(false);
       }
+      if (!values.file) {
+        delete values.file;
+      }
+      delete values.id;
+      delete values.submit;
+      const valuesToSend = jsonToFormData(values);
+  
+      createReport(valuesToSend)
+        .then(() => {
+          navigate("/reports");
+          dispatch(setSuccessMessage(`Reporte creado correctamente`));
+        })
+        .catch((error) => {
+          if (error instanceof BackendError) {
+            setErrors({
+              ...error.getFieldErrorsMessages(),
+              submit: error.getMessage(),
+            });
+            dispatch(setErrorMessage(error.getMessage()));
+          }
+          setStatus({ success: false });
+        })
+        .finally(() => {
+          dispatch(setIsLoading(false));
+          setSubmitting(false);
+        });
     },
     [dispatch, navigate]
-  );
+  );  
 
   return (
     <div className={className}>
@@ -78,6 +79,8 @@ const CreateReport: FunctionComponent<Props> = ({ className }) => {
           hasSwelling: false,
           hasSecretions: false,
           additionalInformation: null,
+          surgeryExpense: "No",
+          surgeryExpenseAmount: 0.0,
           fileUrl: null,
           submit: null,
         }}

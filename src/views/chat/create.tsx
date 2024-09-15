@@ -34,29 +34,38 @@ const CreateChat = () => {
   }, [fetchAllUsers]);
 
   const createChat = useCallback(
-    async (userId: number) => {
+    (userId: number) => {
       if (!employeeId) return;
-      try {
-        dispatch(setIsLoading(true));
-        const existingChat = await checkIfChatExists(employeeId, userId);
-        if (!!existingChat) {
-          navigate(`/chat/${existingChat.id}`);
-          return;
-        }
-
-        const createdChat = await postChat(userId, employeeId);
-        navigate(`/chat/${createdChat.id}`);
-      } catch (error) {
-        console.log(error);
-        if (error instanceof BackendError) {
-          dispatch(setErrorMessage(error.getMessage()));
-        }
-      } finally {
-        dispatch(setIsLoading(false));
-      }
+      dispatch(setIsLoading(true));
+  
+      checkIfChatExists(employeeId, userId)
+        .then(existingChat => {
+          if (existingChat) {
+            navigate(`/chat/${existingChat.id}`);
+            throw new Error("Chat already exists"); // Stop further execution
+          } else {
+            return postChat(userId, employeeId);
+          }
+        })
+        .then(createdChat => {
+          if (createdChat) {
+            navigate(`/chat/${createdChat.id}`);
+          }
+        })
+        .catch(error => {
+          if (error.message !== "Chat already exists") { // Ignore specific error
+            console.log(error);
+            if (error instanceof BackendError) {
+              dispatch(setErrorMessage(error.getMessage()));
+            }
+          }
+        })
+        .finally(() => {
+          dispatch(setIsLoading(false));
+        });
     },
     [dispatch, employeeId, navigate]
-  );
+  );  
 
   const goToChatList = useCallback(() => {
     navigate("/chat-list");

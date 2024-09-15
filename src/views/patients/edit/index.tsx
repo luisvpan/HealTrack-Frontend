@@ -24,57 +24,58 @@ const EditPatient: FunctionComponent<Props> = ({ className }) => {
   const patient = usePatientById(patientId);
 
   const onSubmit = useCallback(
-    async (
-      values: any,
-      { setErrors, setStatus, setSubmitting }: FormikHelpers<FormValues>
-    ) => {
-      try {
-        dispatch(setIsLoading(true));
-        setErrors({});
-        setStatus({});
-        setSubmitting(true);
-        const formatedValues = {
-          ...values,
-          age: Number(values.age),
-          automaticTracking: true,
-          hospital: {
-            name: values.hospital,
-          },
-          user: {
-            name: values.name,
-            lastname: values.lastname,
-            email: values.email,
-            identification: values.identification,
-            role: "patient",
-          },
-        };
-        delete formatedValues.name;
-        delete formatedValues.lastname;
-        delete formatedValues.email;
-        delete formatedValues.identification;
-        delete formatedValues.password;
-        delete formatedValues.submit;
-        await editPatient(patientId!, formatedValues);
-        navigate("/patients");
-        dispatch(
-          setSuccessMessage(`Paciente ${values.name} editado correctamente`)
-        );
-      } catch (error) {
-        if (error instanceof BackendError) {
-          setErrors({
-            ...error.getFieldErrorsMessages(),
-            submit: error.getMessage(),
-          });
-          dispatch(setErrorMessage(error.getMessage()));
-        }
-        setStatus({ success: false });
-      } finally {
-        setSubmitting(false);
-        dispatch(setIsLoading(false));
-      }
+    (values: any, { setErrors, setStatus, setSubmitting }: FormikHelpers<FormValues>) => {
+      dispatch(setIsLoading(true));
+      setErrors({});
+      setStatus({});
+      setSubmitting(true);
+  
+      const formatedValues = {
+        ...values,
+        age: Number(values.age),
+        automaticTracking: true,
+        hospital: {
+          name: values.hospital,
+        },
+        user: {
+          name: values.name,
+          lastname: values.lastname,
+          email: values.email,
+          identification: values.identification,
+          role: "patient",
+        },
+      };
+      delete formatedValues.name;
+      delete formatedValues.lastname;
+      delete formatedValues.email;
+      delete formatedValues.identification;
+      delete formatedValues.password;
+      delete formatedValues.submit;
+  
+      editPatient(patientId!, formatedValues)
+        .then(() => {
+          navigate("/patients");
+          dispatch(
+            setSuccessMessage(`Paciente ${values.name} editado correctamente`)
+          );
+        })
+        .catch((error) => {
+          if (error instanceof BackendError) {
+            setErrors({
+              ...error.getFieldErrorsMessages(),
+              submit: error.getMessage(),
+            });
+            dispatch(setErrorMessage(error.getMessage()));
+          }
+          setStatus({ success: false });
+        })
+        .finally(() => {
+          setSubmitting(false);
+          dispatch(setIsLoading(false));
+        });
     },
     [dispatch, navigate, patientId]
-  );
+  );  
 
   return (
     <div className={className}>
@@ -89,6 +90,7 @@ const EditPatient: FunctionComponent<Props> = ({ className }) => {
             name: patient.user.name,
             lastname: patient.user.lastname,
             age: patient.age,
+            sex: patient.sex,
             address: patient.address,
             personalPhone: patient.personalPhone,
             homePhone: patient.homePhone,

@@ -11,11 +11,12 @@ import {
   setSuccessMessage,
 } from "store/customizationSlice";
 import { useAppDispatch } from "../../../store/index";
-import Form, { FormValues } from "../form";
+import Form, { FormValues } from "./edit_form";
 import editReport from "services/reports/edit-report";
 import useReportById from "./use-report-by-id";
 import useReportId from "./use-report-id";
 import { FormikHelpers } from "formik";
+import jsonToFormData from "helpers/json-to-formData";
 
 const EditReport: FunctionComponent<Props> = ({ className }) => {
   const navigate = useNavigate();
@@ -24,51 +25,57 @@ const EditReport: FunctionComponent<Props> = ({ className }) => {
   const report = useReportById(reportId);
 
   const onSubmit = useCallback(
-    async (
-      values: any,
-      { setErrors, setStatus, setSubmitting }: FormikHelpers<FormValues>
-    ) => {
-      try {
-        dispatch(setIsLoading(true));
-        setErrors({});
-        setStatus({});
-        setSubmitting(true);
-        delete values.id;
-        delete values.file;
-        delete values.submit;
-        for (const key in values) {
-          if (values[key] === "true") {
-            values[key] = true;
-          }
-        }
+    (values: any, { setErrors, setStatus, setSubmitting }: FormikHelpers<FormValues>) => {
+      dispatch(setIsLoading(true));
+      setErrors({});
+      setStatus({});
+      setSubmitting(true);
 
-        await editReport(reportId!, values);
-        navigate("/reports");
-        dispatch(
-          setSuccessMessage(`Paciente ${values.name} editado correctamente`)
-        );
-      } catch (error) {
-        if (error instanceof BackendError) {
-          setErrors({
-            ...error.getFieldErrorsMessages(),
-            submit: error.getMessage(),
-          });
-          dispatch(setErrorMessage(error.getMessage()));
+      console.log("antes: ", values)
+  
+      // Prepare values for submission
+      delete values.id;
+      delete values.submit;
+      for (const key in values) {
+        if (values[key] === "true") {
+          values[key] = true;
         }
-        setStatus({ success: false });
-      } finally {
-        setSubmitting(false);
-        dispatch(setIsLoading(false));
       }
+  
+      console.log("Despues: ", values)
+
+      const valuesToSend = jsonToFormData(values);
+
+      editReport(reportId!, valuesToSend)
+        .then(() => {
+          navigate("/reports");
+          dispatch(
+            setSuccessMessage(`Reporte ${values.id} editado correctamente`)
+          );
+        })
+        .catch((error) => {
+          if (error instanceof BackendError) {
+            setErrors({
+              ...error.getFieldErrorsMessages(),
+              submit: error.getMessage(),
+            });
+            dispatch(setErrorMessage(error.getMessage()));
+          }
+          setStatus({ success: false });
+        })
+        .finally(() => {
+          setSubmitting(false);
+          dispatch(setIsLoading(false));
+        });
     },
     [dispatch, navigate, reportId]
-  );
+  );  
 
   return (
     <div className={className}>
       <MainCard>
         <Typography variant="h3" component="h3">
-          Pacientes
+          Formulario de paciente
         </Typography>
       </MainCard>
       {report && (
@@ -84,7 +91,7 @@ const EditReport: FunctionComponent<Props> = ({ className }) => {
             submit: null,
           }}
           isEdit
-          title={"Editar paciente"}
+          title={"Editar foto o descripcion del Formulario"}
           onSubmit={onSubmit}
         />
       )}

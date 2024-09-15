@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import {
-  Avatar,
+  // Avatar,
   Box,
   Chip,
   ClickAwayListener,
@@ -23,15 +23,11 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 // project imports
 import MainCard from "components/cards/MainCard";
 import Transitions from "components/extended/Transitions";
-//import User1 from "assets/images/users/user-round.svg";
-
-// assets
 import { IconLogout, IconSettings } from "@tabler/icons";
 import { useAppSelector } from "store";
 import useLogout from "hooks/use-logout";
 import ChangePasswordModal from './ChangePasswordModal';
-
-// ==============================|| PROFILE MENU ||============================== //
+import { AllRole } from "core/users/types";
 
 const ProfileSection = () => {
   const theme = useTheme();
@@ -43,6 +39,7 @@ const ProfileSection = () => {
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [open, setOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const [panicModalOpen, setPanicModalOpen] = useState(false); 
 
   const anchorRef = useRef(null);
 
@@ -74,6 +71,9 @@ const ProfileSection = () => {
 
     prevOpen.current = open;
   }, [open]);
+
+  // Verificar si el rol del usuario es 'PATIENT'
+  const isPatient = user?.role === AllRole.PATIENT;
 
   return (
     <>

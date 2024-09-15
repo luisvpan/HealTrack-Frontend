@@ -1,14 +1,17 @@
 import { useState } from 'react';
-import { Modal, Box, Button, TextField, Typography } from '@mui/material';
+import { Modal, Box, Button, TextField, Typography, IconButton, InputAdornment } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import changePassword from "../../../../services/users/change-password";
 import { useAppSelector } from "store";
 
 const ChangePasswordModal = ({ open, handleClose }) => {
   const [email, setEmail] = useState('');
   const [currentPassword, setCurrentPassword] = useState('');
-  const currentEmail = useAppSelector((state) => state.auth.user.email);
   const [newPassword, setNewPassword] = useState('');
   const [errors, setErrors] = useState({ email: false, currentPassword: false, newPassword: false });
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const currentEmail = useAppSelector((state) => state.auth.user.email);
 
   const handleSubmit = async () => {
     const newErrors = {
@@ -25,7 +28,6 @@ const ChangePasswordModal = ({ open, handleClose }) => {
         await changePassword({ userEmail: email, currentPassword, newPassword });
         handleClose();
       } catch (error) {
-        // Maneja el error aquí (por ejemplo, mostrar un mensaje de error al usuario)
         console.error("Error al cambiar la contraseña", error);
       }
     }
@@ -63,24 +65,42 @@ const ChangePasswordModal = ({ open, handleClose }) => {
         <TextField
           label="Contraseña actual"
           variant="outlined"
-          type="password"
+          type={showCurrentPassword ? 'text' : 'password'}
           fullWidth
           margin="normal"
           value={currentPassword}
           onChange={(e) => setCurrentPassword(e.target.value)}
           error={errors.currentPassword}
           helperText={errors.currentPassword ? 'Campo vacío inválido' : ''}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={() => setShowCurrentPassword(!showCurrentPassword)}>
+                  {showCurrentPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            )
+          }}
         />
         <TextField
           label="Nueva contraseña"
           variant="outlined"
-          type="password"
+          type={showNewPassword ? 'text' : 'password'}
           fullWidth
           margin="normal"
           value={newPassword}
           onChange={(e) => setNewPassword(e.target.value)}
           error={errors.newPassword}
           helperText={errors.newPassword ? 'Campo vacío inválido' : ''}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={() => setShowNewPassword(!showNewPassword)}>
+                  {showNewPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            )
+          }}
         />
         <Button variant="contained" color="primary" onClick={handleSubmit} sx={{ mt: 2 }}>
           Cambiar contraseña

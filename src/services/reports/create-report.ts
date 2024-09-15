@@ -22,12 +22,3 @@ export default async function createReport(
     throw new BackendError(error);
   }
 }
-
-interface CreateReportBody {
-  isRespondingForEmployee: boolean;
-  hasHighTemperature: boolean;
-  hasRedness: boolean;
-  hasSwelling: boolean;
-  hasSecretions: boolean;
-  fileUrl: string | null;
-}

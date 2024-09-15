@@ -5,6 +5,8 @@ import { Formik, FormikHelpers } from "formik";
 import SelectField from "components/SelectField";
 import MainCard from "components/cards/MainCard";
 import useEmployeesOptions from "core/employees/use-employees-options";
+import useHospitalOptions from "core/hospitals/use-hospitals-options";
+import useSurgeryOptions from "core/surgeries/use-surgery-options";
 // material-ui
 import { Button, FormControl, FormHelperText, TextField } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
@@ -20,6 +22,8 @@ const Form: FunctionComponent<Props> = ({
   isEdit,
 }) => {
   const employeeOptions = useEmployeesOptions();
+  const hospitalOptions = useHospitalOptions();
+  const surgeryOptions = useSurgeryOptions();
   const aditionalFieldValidations: any = isEdit
     ? {}
     : {
@@ -43,6 +47,7 @@ const Form: FunctionComponent<Props> = ({
           name: Yup.string().max(50).required("El nombre es requerido"),
           lastname: Yup.string().max(50).required("El apellido es requerido"),
           age: Yup.number().required("La edad es requerida"),
+          sex: Yup.string().oneOf(["M", "F"]).required("El sexo es requerido"),
           address: Yup.string().required("La direccion es requerida"),
           personalPhone: Yup.string().required("El celular es requerido"),
           homePhone: Yup.string().required("El telefono es requerido"),
@@ -118,6 +123,23 @@ const Form: FunctionComponent<Props> = ({
                 />
               </FormControl>
               <FormControl className="field-form" fullWidth>
+                <SelectField
+                  fullWidth={true}
+                  className="field-form"
+                  name="sex"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  label="Sexo"
+                  options={[
+                    { label: "Masculino", value: "M" },
+                    { label: "Femenino", value: "F" },
+                  ]}
+                  helperText={touched.sex ? errors.sex : ""}
+                  error={touched.sex && !!errors.sex}
+                  value={values.sex}
+                />
+              </FormControl>
+              <FormControl className="field-form" fullWidth>
                 <TextField
                   id="address"
                   label="Dirección de paciente"
@@ -184,19 +206,18 @@ const Form: FunctionComponent<Props> = ({
                   name="email"
                 />
               </FormControl>
-              <FormControl className="field-form" fullWidth>
-                <TextField
-                  id="hospital"
-                  label="Hospital de paciente"
-                  variant="outlined"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.hospital}
-                  helperText={touched.hospital ? errors.hospital : ""}
-                  error={touched.hospital && !!errors.hospital}
-                  name="hospital"
-                />
-              </FormControl>
+              <SelectField
+                fullWidth={true}
+                className="field-form"
+                name="hospital"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                label="Hospital de paciente"
+                options={hospitalOptions}
+                helperText={touched.hospital ? errors.hospital : ""}
+                error={touched.hospital && !!errors.hospital}
+                value={values.hospital}
+              />
               <SelectField
                 fullWidth={true}
                 className="field-form"
@@ -235,21 +256,18 @@ const Form: FunctionComponent<Props> = ({
                   </FormHelperText>
                 )}
               </FormControl>
-              <FormControl className="field-form" fullWidth>
-                <TextField
-                  id="surgeryProcedure"
-                  label="Nombre de procedimiento"
-                  variant="outlined"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.surgeryProcedure}
-                  helperText={
-                    touched.surgeryProcedure ? errors.surgeryProcedure : ""
-                  }
-                  error={touched.surgeryProcedure && !!errors.surgeryProcedure}
-                  name="surgeryProcedure"
-                />
-              </FormControl>
+              <SelectField
+                fullWidth={true}
+                className="field-form"
+                name="surgeryProcedure"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                label="Nombre de procedimiento"
+                options={surgeryOptions} // Utiliza las opciones de procedimientos quirúrgicos
+                helperText={touched.surgeryProcedure ? errors.surgeryProcedure : ""}
+                error={touched.surgeryProcedure && !!errors.surgeryProcedure}
+                value={values.surgeryProcedure}
+              />
               <SelectField
                 fullWidth={true}
                 className="field-form"
@@ -315,6 +333,7 @@ export type FormValues = {
   name: string;
   lastname: string;
   age: number;
+  sex: string;
   address: string;
   personalPhone: string;
   homePhone: string;

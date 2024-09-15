@@ -4,7 +4,8 @@ import DynamicTable from "components/DynamicTable";
 // Own
 import { Patient, TranslatedPatientStatus } from "core/patients/types";
 import deletePatient from "services/patients/delete-patient";
-import { FunctionComponent, useCallback, useState } from "react";
+import getMedicName from "services/patients/get-medic-name";
+import { FunctionComponent, useCallback, useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router";
 import { useAppDispatch } from "store/index";
@@ -23,12 +24,7 @@ const Table: FunctionComponent<Props> = ({ items, className, fetchItems }) => {
   const [open, setOpen] = useState<boolean>(false);
   const [openChangeState, setOpenChangeState] = useState<boolean>(false);
   const [patientId, setPatientId] = useState<number>(0);
-
-
-  /*const handleOpen = useCallback((patientId: number) => {
-    setOpen(true);
-    setPatientId(patientId);
-  }, []);*/
+  const [medicNames, setMedicNames] = useState<{ [key: number]: string }>({});
 
   const handleClose = useCallback(() => {
     setOpen(false);
@@ -49,7 +45,7 @@ const Table: FunctionComponent<Props> = ({ items, className, fetchItems }) => {
     async (patientId: number) => {
       try {
         dispatch(setIsLoading(true));
-        await deletePatient(patientId!);
+        await deletePatient(patientId);
         dispatch(setSuccessMessage(`Paciente eliminado correctamente`));
       } catch (error) {
         if (error instanceof BackendError) {
@@ -63,6 +59,23 @@ const Table: FunctionComponent<Props> = ({ items, className, fetchItems }) => {
     },
     [dispatch, fetchItems, handleClose]
   );
+
+  useEffect(() => {
+    const fetchMedicNames = async () => {
+      const names: { [key: number]: string } = {};
+      for (const patient of items) {
+        try {
+          const medicName = await getMedicName(patient.id);
+          names[patient.id] = medicName;
+        } catch (error) {
+          console.error(`Error fetching medic name for patient ${patient.id}:`, error);
+        }
+      }
+      setMedicNames(names);
+    };
+
+    fetchMedicNames();
+  }, [items]);
 
   return (
     <div className={className}>
@@ -88,6 +101,11 @@ const Table: FunctionComponent<Props> = ({ items, className, fetchItems }) => {
           {
             columnLabel: "Estado",
             onRender: (row: Patient) => TranslatedPatientStatus[row.status],
+            cellAlignment: "left",
+          },
+          {
+            columnLabel: "Enfermero/a",
+            onRender: (row: Patient) => medicNames[row.id] || 'No asignado',
             cellAlignment: "left",
           },
         ]}

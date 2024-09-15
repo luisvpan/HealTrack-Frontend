@@ -6,19 +6,47 @@ import { RouteObject } from "react-router";
 import Employees from "views/employees";
 import CreateEmployee from "views/employees/create";
 import EditEmployee from "views/employees/edit";
+
 // Pacientes
 import Patients from "views/patients";
 import CreatePatient from "views/patients/create";
 import EditPatient from "views/patients/edit";
 import DetailPatient from "views/patients/detail";
 
-import Chat from "views/chat";
+// Hospitales
+import Hospitals from "views/hospitals";
+import CreateHospital from "views/hospitals/create";
+import EditHospital from "views/hospitals/edit";
 
+// Cirugías
+import Surgeries from "views/surgeries";
+import CreateSurgery from "views/surgeries/create";
+import EditSurgery from "views/surgeries/edit";
+
+// Recomendaciones
+import Recomendations from "views/Recomendations";
+import CreateRecommendation from "views/Recomendations/create";
+import EditRecommendation from "views/Recomendations/edit";
+
+// Chat
+import Chat from "views/chat";
+import ChatList from "views/chat/chat-list";
+import CreateChat from "views/chat/create";
+
+// Reports
 import Reports from "views/reports";
 import CreateReport from "views/reports/create";
 import EditReport from "views/reports/edit";
-import ChatList from "views/chat/chat-list";
-import CreateChat from "views/chat/create";
+
+// FAQs
+import FAQs from "views/FAQs";
+import CreateFAQ from "views/FAQs/create";
+import EditFAQ from "views/FAQs/edit";
+
+// DatabaseActions
+import DatabaseActions from "views/databaseActions";
+
+// Roles
 import { AllRole } from "core/users/types";
 
 const userRole = store.getState().auth.user?.role;
@@ -26,6 +54,17 @@ const isAssistant = userRole === AllRole.ASSISTANT;
 const isAdmin = userRole === AllRole.ADMIN;
 
 const GeneralRoutes: RouteObject[] = [
+
+  // Database Actions (Solo para administradores)
+  ...(isAdmin
+    ? [
+        {
+          path: "database-actions",
+          element: <DatabaseActions />,
+        },
+      ]
+    : []),
+
   // Empleados
   ...(isAdmin
     ? [
@@ -45,7 +84,7 @@ const GeneralRoutes: RouteObject[] = [
     : []),
 
   // Pacientes
-  ...(isAssistant
+  ...(isAdmin || isAssistant
     ? [
         {
           path: "patients",
@@ -75,7 +114,89 @@ const GeneralRoutes: RouteObject[] = [
         },
       ]),
 
-  //Chat
+  // Hospitales
+  ...(isAdmin
+    ? [
+        {
+          path: "hospitals",
+          element: <Hospitals />,
+        },
+        {
+          path: "hospitals/create",
+          element: <CreateHospital />,
+        },
+        {
+          path: "hospitals/edit/:id",
+          element: <EditHospital />,
+        },
+      ]
+    : []),
+
+  // Cirugías
+  ...(isAdmin
+    ? [
+        {
+          path: "surgeries",
+          element: <Surgeries />,
+        },
+        {
+          path: "surgeries/create",
+          element: <CreateSurgery />,
+        },
+        {
+          path: "surgeries/edit/:id",
+          element: <EditSurgery />,
+        },
+      ]
+    : []),
+
+  // Recomendaciones
+  ...(isAdmin
+    ? [
+        {
+          path: "recommendations",
+          element: <Recomendations />,
+        },
+        {
+          path: "recommendations/create",
+          element: <CreateRecommendation />,
+        },
+        {
+          path: "recommendations/edit/:id",
+          element: <EditRecommendation />,
+        },
+      ]
+    : [
+        {
+          path: "recommendations",
+          element: <Recomendations />,
+        },
+      ]),
+
+  // FAQs
+  ...(isAdmin
+    ? [
+        {
+          path: "faqs",
+          element: <FAQs />,
+        },
+        {
+          path: "faqs/create",
+          element: <CreateFAQ />,
+        },
+        {
+          path: "faqs/edit/:id",
+          element: <EditFAQ />,
+        },
+      ]
+    : [
+        {
+          path: "faqs",
+          element: <FAQs />,
+        },
+      ]),
+
+  // Chat
   {
     path: "chat-list",
     element: <ChatList />,
@@ -88,7 +209,8 @@ const GeneralRoutes: RouteObject[] = [
     path: "chat/create",
     element: <CreateChat />,
   },
-  //Reports
+
+  // Reports
   {
     path: "reports",
     element: <Reports />,

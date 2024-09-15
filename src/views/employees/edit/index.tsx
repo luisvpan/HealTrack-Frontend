@@ -24,45 +24,46 @@ const EditEmployee: FunctionComponent<Props> = ({ className }) => {
   const employee = useEmployeeById(employeeId);
 
   const onSubmit = useCallback(
-    async (
-      values: any,
-      { setErrors, setStatus, setSubmitting }: FormikHelpers<FormValues>
-    ) => {
-      try {
-        dispatch(setIsLoading(true));
-        setErrors({});
-        setStatus({});
-        setSubmitting(true);
-        const formatedValues = {
-          user: { ...values },
-          hospital: {
-            name: values.hospital,
-          },
-        };
-        delete formatedValues.user.submit;
-        delete formatedValues.user.hospital;
-        delete formatedValues.user.password;
-        await editEmployee(employeeId!, formatedValues);
-        navigate("/employees");
-        dispatch(
-          setSuccessMessage(`Empleado ${values.name} editado correctamente`)
-        );
-      } catch (error) {
-        if (error instanceof BackendError) {
-          setErrors({
-            ...error.getFieldErrorsMessages(),
-            submit: error.getMessage(),
-          });
-          dispatch(setErrorMessage(error.getMessage()));
-        }
-        setStatus({ success: false });
-      } finally {
-        setSubmitting(false);
-        dispatch(setIsLoading(false));
-      }
+    (values: any, { setErrors, setStatus, setSubmitting }: FormikHelpers<FormValues>) => {
+      dispatch(setIsLoading(true));
+      setErrors({});
+      setStatus({});
+      setSubmitting(true);
+  
+      const formatedValues = {
+        user: { ...values },
+        hospital: {
+          name: values.hospital,
+        },
+      };
+      delete formatedValues.user.submit;
+      delete formatedValues.user.hospital;
+      delete formatedValues.user.password;
+  
+      editEmployee(employeeId!, formatedValues)
+        .then(() => {
+          navigate("/employees");
+          dispatch(
+            setSuccessMessage(`Empleado ${values.name} editado correctamente`)
+          );
+        })
+        .catch((error) => {
+          if (error instanceof BackendError) {
+            setErrors({
+              ...error.getFieldErrorsMessages(),
+              submit: error.getMessage(),
+            });
+            dispatch(setErrorMessage(error.getMessage()));
+          }
+          setStatus({ success: false });
+        })
+        .finally(() => {
+          setSubmitting(false);
+          dispatch(setIsLoading(false));
+        });
     },
     [dispatch, navigate, employeeId]
-  );
+  );  
 
   return (
     <div className={className}>
