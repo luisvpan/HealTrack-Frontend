@@ -6,11 +6,6 @@ import store from "store";
 
 const IMPORT_URL = `${API_BASE_URL}/database-actions/import`;
 
-interface ImportOptions {
-  clean?: boolean;
-  noOwner?: boolean;
-}
-
 export async function importDatabase(formData: FormData): Promise<string> {
   try {
     const response = await axios.post<string>(IMPORT_URL, formData, {

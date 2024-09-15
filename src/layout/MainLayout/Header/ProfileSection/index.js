@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import {
   // Avatar,
@@ -27,20 +26,16 @@ import { IconLogout, IconSettings } from "@tabler/icons";
 import { useAppSelector } from "store";
 import useLogout from "hooks/use-logout";
 import ChangePasswordModal from './ChangePasswordModal';
-import { AllRole } from "core/users/types";
 
 const ProfileSection = () => {
   const theme = useTheme();
   const customization = useAppSelector((state) => state.customization);
   const user = useAppSelector((state) => state.auth.user);
-  const navigate = useNavigate();
   const logout = useLogout();
 
-  const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [selectedIndex] = useState(-1);
   const [open, setOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
-  const [panicModalOpen, setPanicModalOpen] = useState(false); 
-
   const anchorRef = useRef(null);
 
   const handleClose = (event) => {
@@ -48,15 +43,6 @@ const ProfileSection = () => {
       return;
     }
     setOpen(false);
-  };
-
-  const handleListItemClick = (event, index, route = "") => {
-    setSelectedIndex(index);
-    handleClose(event);
-
-    if (route && route !== "") {
-      navigate(route);
-    }
   };
 
   const handleToggle = () => {
@@ -71,9 +57,6 @@ const ProfileSection = () => {
 
     prevOpen.current = open;
   }, [open]);
-
-  // Verificar si el rol del usuario es 'PATIENT'
-  const isPatient = user?.role === AllRole.PATIENT;
 
   return (
     <>

@@ -92,7 +92,7 @@ const Patients: FunctionComponent<Prop> = ({ className }) => {
               startIcon={<IconDownload />}
               style={{ marginLeft: "10px" }}
             >
-              Exportar
+              Exportar en excel
             </Button>
           )}
         </Box>
