@@ -46,6 +46,11 @@ import EditFAQ from "views/FAQs/edit";
 // DatabaseActions
 import DatabaseActions from "views/databaseActions";
 
+// AppFormulary
+import RecommendationsAppPage from "views/appForm";
+import CreateAppForm from "views/appForm/create";
+import AppFormularyDetail from "views/appForm/detail";
+
 // Roles
 import { AllRole } from "core/users/types";
 
@@ -222,6 +227,20 @@ const GeneralRoutes: RouteObject[] = [
   {
     path: "reports/edit/:id",
     element: <EditReport />,
+  },
+
+  // AppFormulary
+  {
+    path: "app-recommendations",
+    element: <RecommendationsAppPage />,
+  },
+  {
+    path: "app-recommendations/create",
+    element: <CreateAppForm />,
+  },
+  {
+    path: "app-recommendations/detail/:id",
+    element: <AppFormularyDetail />,
   },
 ];
 

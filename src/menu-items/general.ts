@@ -27,7 +27,6 @@ const other: MenuItem = {
   type: MenuItemType.Group,
   title: "General",
   children: [
-
     // Actividades para el administrador
     ...(isAdmin
       ? [
@@ -208,8 +207,8 @@ const other: MenuItem = {
         ]
       : []),
 
-      ...(!isAdmin
-        ?[
+    ...(!isAdmin
+      ? [
           // Item de Chat entre usuarios
           {
             id: "chat",
@@ -327,6 +326,20 @@ const other: MenuItem = {
                 breadcrumbs: false,
               },
             ],
+          },
+        ]
+      : []),
+
+    // Para pacientes y administradores
+    ...(isPatient || isAdmin
+      ? [
+          {
+            id: "app-recommendations",
+            title: isPatient ? "Califícanos" : "Formulario de satisfacción",
+            type: MenuItemType.Item,
+            icon: IconClipboardList,
+            url: "/app-recommendations",
+            breadcrumbs: false,
           },
         ]
       : []),
