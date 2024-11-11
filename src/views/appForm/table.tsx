@@ -41,6 +41,10 @@ const Table: FunctionComponent<Props> = ({
     fetchSatisfactionScores();
   }, [items]);
 
+  useEffect(() => {
+    fetchItems();
+  }, [fetchItems, paginationData.page]);
+
   return (
     <div className={className}>
       <DynamicTable
@@ -94,7 +98,6 @@ const Table: FunctionComponent<Props> = ({
           color="primary"
           onChange={(event, page) => {
             setPaginationData({ ...paginationData, page });
-            fetchItems(); // Asegúrate de que se carguen los nuevos elementos
           }}
         />
       </div>

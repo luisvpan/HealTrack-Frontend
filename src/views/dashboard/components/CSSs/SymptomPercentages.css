@@ -1,0 +1,23 @@
+.symptom-percentages-chart {
+  max-width: 400px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 
+  0 4px 6px #00000033,  /* sombra más cercana para dar relieve */
+  0 8px 12px rgba(0, 0, 0, 0.15), /* sombra adicional para profundidad */
+  0 12px 16px rgba(0, 0, 0, 0.1); /* sombra suave final */
+  text-align: center;
+}
+ 
+.symptom-percentages-chart h2 {
+  font-size: 1.5em;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.symptom-percentages-chart p {
+  font-size: 18px; /* Tamaño de fuente para el mensaje de carga */
+  color: #666; /* Color del texto del mensaje */
+}

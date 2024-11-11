@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useTheme } from '@mui/material/styles';
-import { Box, ButtonBase, Modal, IconButton, Typography } from '@mui/material';
+import { Box, ButtonBase, Modal, IconButton } from '@mui/material';
 import { IconAlertCircle } from '@tabler/icons'; // Importa un ícono de Tabler Icons
 import PanicButtonModal from './Panic-Button';
 import { useAppSelector } from "store";

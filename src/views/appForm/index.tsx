@@ -9,8 +9,8 @@ import { AllRole } from "core/users/types";
 import { StatusPatient } from "core/patients/types";
 import getPatientByUserId from "services/patients/get-patient-by-user-id";
 import { calculateTotalSatisfaction } from "services/appForm/total-satisfaction-percentage";
-
-// Verificar si el usuario llenó el formulario
+import { exportAppForm } from "services/appForm/export-app-form"; 
+import dayjs from "dayjs";
 import checkUserFormSubmission from "services/appForm/check-user-form-submission";
 
 // Obtener el rol del usuario
@@ -25,19 +25,18 @@ const RecommendationsAppPage: FunctionComponent = () => {
   const [totalSatisfaction, setTotalSatisfaction] = useState<number | null>(null);
   const [hasSubmitted, setHasSubmitted] = useState<boolean | null>(null);
 
+  // Efecto para obtener formularios al montar el componente
   useEffect(() => {
     fetchFormularies();
+  }, [fetchFormularies]);
 
-    // Solo obtener el estado si el usuario es paciente
+  // Efecto para obtener el estado del paciente y verificar si el formulario fue enviado
+  useEffect(() => {
     if (isPatient && typeof userId === 'number') {
-      const fetchPatientStatus = async () => {
+      const fetchPatientData = async () => {
         const patientData = await getPatientByUserId(userId);
         setPatientStatus(patientData?.status);
-      };
-      fetchPatientStatus();
-
-      // Verificar si el usuario ya envió el formulario
-      const fetchFormSubmissionStatus = async () => {
+        
         try {
           const submitted = await checkUserFormSubmission(userId);
           setHasSubmitted(submitted);
@@ -45,10 +44,12 @@ const RecommendationsAppPage: FunctionComponent = () => {
           console.error("Error al verificar si el usuario envió el formulario:", error);
         }
       };
-      fetchFormSubmissionStatus();
+      fetchPatientData();
     }
+  }, []);
 
-    // Obtener el porcentaje total de satisfacción para todos los usuarios
+  // Efecto para obtener el porcentaje total de satisfacción
+  useEffect(() => {
     if (!isPatient) {
       const fetchTotalSatisfaction = async () => {
         try {
@@ -60,17 +61,35 @@ const RecommendationsAppPage: FunctionComponent = () => {
       };
       fetchTotalSatisfaction();
     }
-  }, [fetchFormularies]);
+  }, []);
 
   const handleNavigateToForm = () => {
     navigate("/app-recommendations/create");
   };
 
+  const handleExport = async () => {
+    try {
+      const blob = await exportAppForm();
+      const url = window.URL.createObjectURL(new Blob([blob]));
+      const link = document.createElement("a");
+      const currentDate = dayjs().format("YYYY-MM-DD");
+      link.href = url;
+      link.setAttribute("download", `app-form-responses-${currentDate}.xlsx`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      console.error("Error al exportar el formulario:", error);
+    }
+  };
+
   const handleSetPagination = (newPagination: { page: number; totalPages: number }) => {
-    setPagination((prev) => ({
-      ...prev,
-      page: newPagination.page,
-    }));
+    setPagination((prev) => {
+      if (prev.page !== newPagination.page) {
+        return { ...prev, page: newPagination.page };
+      }
+      return prev;
+    });
   };
 
   return (
@@ -87,7 +106,7 @@ const RecommendationsAppPage: FunctionComponent = () => {
             No dudes en ser honesto y detallado en tus respuestas.
           </Typography>
           <Box sx={{ textAlign: "center", marginBottom: "40px" }}>
-            {(hasSubmitted) ? (
+            {hasSubmitted ? (
               <Typography variant="body1" sx={{ textAlign: "center", color: "green" }}>
                 Lo siento, usted ya ha realizado el formulario. Gracias por sus comentarios.
               </Typography>
@@ -116,6 +135,11 @@ const RecommendationsAppPage: FunctionComponent = () => {
               Porcentaje total de satisfacción: {(totalSatisfaction * 100).toFixed(2)}%.
             </Typography>
           )}
+          <Box sx={{ textAlign: "center", marginBottom: "20px" }}>
+            <Button variant="contained" onClick={handleExport}>
+              Exportar Excel
+            </Button>
+          </Box>
           <Table
             items={items}
             fetchItems={fetchFormularies}

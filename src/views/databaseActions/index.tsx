@@ -54,7 +54,7 @@ const DatabaseActions: React.FC = () => {
   };
 
   return (
-    <Box sx={{ p: 3, maxWidth: '600px', margin: 'auto' }}>
+    <Box sx={{ p: 3, maxWidth: '600px', margin: 'auto', backgroundColor: '#ffffff', borderRadius: '12px' }}>
       <Box sx={{ mb: 4 }}>
         <Typography variant="h1" gutterBottom>
           Exportar Base de Datos

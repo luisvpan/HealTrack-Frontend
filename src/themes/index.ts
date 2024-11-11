@@ -11,7 +11,6 @@ import { CustomizationState } from 'store/customizationSlice';
 import { ThemeCustomOptions } from './types';
 import { TypographyOptions } from '@mui/material/styles/createTypography';
 import { CustomThemeComponents } from './compStyleOverride';
-import { Typography } from '@mui/material';
 
 export const theme = (customization: CustomizationState): CustomTheme => {
   const color = themeColors;

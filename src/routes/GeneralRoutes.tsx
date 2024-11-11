@@ -2,6 +2,9 @@
 import store from "store";
 import { RouteObject } from "react-router";
 
+// Dasboard
+import DashboardPage from "views/dashboard";
+
 // Empleados
 import Employees from "views/employees";
 import CreateEmployee from "views/employees/create";
@@ -63,6 +66,10 @@ const GeneralRoutes: RouteObject[] = [
   // Database Actions (Solo para administradores)
   ...(isAdmin
     ? [
+        {
+          path: "dashboard",
+          element: <DashboardPage />
+        },
         {
           path: "database-actions",
           element: <DatabaseActions />,
