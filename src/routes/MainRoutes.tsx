@@ -12,10 +12,6 @@ import GeneralRoutes from "./GeneralRoutes";
 // Main
 import MainPage from "views/main";
 
-// dashboard routing
-// const DashboardDefault = Loadable(
-//   lazy(() => import("views/dashboard/Default"))
-// );
 const SamplePage = Loadable(lazy(() => import("views/sample-page")));
 
 // ==============================|| MAIN ROUTING ||============================== //
@@ -28,17 +24,6 @@ const MainRoutes: RouteObject = {
       path: "/",
       element: <MainPage />,
     },
-    /*
-    {
-      path: 'dashboard',
-      children: [
-        {
-          path: 'default',
-          element: <DashboardDefault />
-        }
-      ]
-    },
-    */
     {
       path: "sample-page",
       element: <SamplePage />,

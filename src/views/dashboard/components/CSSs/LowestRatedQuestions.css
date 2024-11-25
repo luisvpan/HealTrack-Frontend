@@ -1,0 +1,42 @@
+.highest-rated-questions-container, .lowest-rated-questions-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  text-align: center;
+}
+
+.highest-rated-questions-card, .lowest-rated-questions-card {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 
+    0 4px 6px #00000033,  /* sombra más cercana para dar relieve */
+    0 8px 12px rgba(0, 0, 0, 0.15), /* sombra adicional para profundidad */
+    0 12px 16px rgba(0, 0, 0, 0.1); /* sombra suave final */
+  padding: 20px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.highest-rated-questions-card h2, .lowest-rated-questions-card h2 {
+  font-size: 1.5em;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.highest-rated-questions-card ul, .lowest-rated-questions-card ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.highest-rated-questions-card li, .lowest-rated-questions-card li {
+  margin-bottom: 15px;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.highest-rated-questions-card li p, .lowest-rated-questions-card li p {
+  margin: 5px 0;
+  font-size: 1em;
+  color: #555;
+}

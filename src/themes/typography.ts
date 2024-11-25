@@ -1,5 +1,4 @@
 import { ThemeCustomOptions } from "./types";
-import { Typography } from '@mui/material';
 
 export default function themeTypography(theme: ThemeCustomOptions) {
   return {

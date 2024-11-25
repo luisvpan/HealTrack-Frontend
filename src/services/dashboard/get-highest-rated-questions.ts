@@ -4,21 +4,19 @@ import { API_BASE_URL } from "config/constants";
 import BackendError from "exceptions/backend-error";
 import store from "store";
 
-const IMPORT_URL = `${API_BASE_URL}/database-actions/import`;
+// Base URL para las preguntas
+const URL = `${API_BASE_URL}/app-formulary/questions`;
 
-export async function importDatabase(formData: FormData): Promise<string> {
+export default async function getHighestRatedQuestions() {
   try {
-    const response = await axios.post<string>(IMPORT_URL, formData, {
+    const response = await axios.get(`${URL}/highest-rated`, {
       headers: {
         Authorization: `Bearer ${store.getState().auth.token}`,
-        'Content-Type': 'multipart/form-data',
       },
     });
-
-    return response.data;
-  } catch (error: unknown) {
+    return response.data; // Devuelve las preguntas mejor calificadas
+  } catch (error) {
     console.log(error);
     throw new BackendError(error);
   }
 }
-

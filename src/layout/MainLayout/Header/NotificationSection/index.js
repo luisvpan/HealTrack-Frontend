@@ -19,6 +19,9 @@ import NotificationList from './NotificationList';
 import { IconBell } from '@tabler/icons';
 import { useAppSelector } from 'store';
 import { getUnreadNotificationsCount } from 'services/notifications/get-notifications-unread';
+import { io } from 'socket.io-client';
+import { API_BASE_URL } from "config/constants";
+import store from "store";
 
 // ==============================|| NOTIFICATION ||============================== //
 
@@ -27,9 +30,46 @@ const NotificationSection = () => {
   const user = useAppSelector((state) => state.auth.user);
   const matchesXs = useMediaQuery(theme.breakpoints.down('md'));
 
+  const URL = API_BASE_URL.endsWith("/api/v1")
+    ? API_BASE_URL.replace("/api/v1", "")
+    : API_BASE_URL;
+
   const [open, setOpen] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
   const anchorRef = useRef(null);
+  const token = store.getState().auth.token;
+  const socket = useRef(null);
+
+  // Connect to socket on mount
+  useEffect(() => {
+    if (!socket.current && URL) {
+      socket.current = io(URL, {
+        extraHeaders: {
+          Authorization: 'Bearer ' + token,
+        },
+      });
+
+      socket.current.on('connect', () => {
+        console.log('Socket connected');
+      });
+      
+      // Listen for unread notification count updates
+      socket.current.on('unread_panic_notifications_count', (data) => {
+        const currentUserUnreadCount = data.data[user?.id];
+        if (currentUserUnreadCount !== undefined) {
+          console.log('New unread count:', currentUserUnreadCount);
+          setUnreadCount(currentUserUnreadCount);
+        }
+      });
+
+      // Cleanup on component unmount
+      return () => {
+        if (socket.current) {
+          socket.current.disconnect();
+        }
+      };
+    }
+  }, [token, URL, user]);
 
   // Fetch unread notifications count
   const fetchUnreadNotificationsCount = useCallback(async () => {
@@ -43,13 +83,6 @@ const NotificationSection = () => {
 
   useEffect(() => {
     fetchUnreadNotificationsCount();
-
-    // Polling every 3 seconds to update unread notifications count
-    const intervalId = setInterval(() => {
-      fetchUnreadNotificationsCount();
-    }, 30000); // 30 seconds interval
-
-    return () => clearInterval(intervalId); // Cleanup on unmount
   }, [fetchUnreadNotificationsCount]);
 
   const handleToggle = () => {

@@ -49,7 +49,9 @@ const ImportDatabaseEmergency = () => {
   return (
     <div className="import-database-container">
       <div className="import-section">
-        <h2>Importar Base de Datos</h2>
+        <h1>Importar Base de Datos</h1>
+        <div></div>
+        <h5>Al presionar el botón se sobre-escribirá la base de datos eliminando todos los cambios que se tengan hasta la fecha.</h5>
         <input 
           type="file" 
           onChange={handleFileChange} 

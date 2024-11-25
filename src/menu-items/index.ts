@@ -1,4 +1,3 @@
-//import dashboard from "./dashboard";
 import general from "./general";
 import { MenuItem } from "./types";
 

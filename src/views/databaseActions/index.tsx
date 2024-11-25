@@ -54,10 +54,13 @@ const DatabaseActions: React.FC = () => {
   };
 
   return (
-    <Box sx={{ p: 3, maxWidth: '600px', margin: 'auto' }}>
+    <Box sx={{ p: 3, maxWidth: '600px', margin: 'auto', backgroundColor: '#ffffff', borderRadius: '12px' }}>
       <Box sx={{ mb: 4 }}>
-        <Typography variant="h4" gutterBottom>
+        <Typography variant="h1" gutterBottom>
           Exportar Base de Datos
+        </Typography>
+        <Typography variant="h5" gutterBottom>
+          Al presionar el botón se descargará una copia de la base de datos actual en formato ".sql".
         </Typography>
         <Button 
           variant="contained" 
@@ -72,8 +75,11 @@ const DatabaseActions: React.FC = () => {
       <Divider sx={{ my: 4 }} />
 
       <Box>
-        <Typography variant="h4" gutterBottom>
+        <Typography variant="h1" gutterBottom>
           Importar Base de Datos
+        </Typography>
+        <Typography variant="h5" gutterBottom>
+          Al presionar el botón se sobre-escribirá la base de datos eliminando todos los cambios que se tengan hasta la fecha.
         </Typography>
         <TextField
           type="file"

@@ -11,6 +11,7 @@ import {
   IconMessages,
   IconWheelchair,
   IconDatabase,
+  IconDashboard,
 } from "@tabler/icons";
 import { AllRole } from "core/users/types";
 import { MenuItem, MenuItemType } from "./types";
@@ -27,10 +28,17 @@ const other: MenuItem = {
   type: MenuItemType.Group,
   title: "General",
   children: [
-
     // Actividades para el administrador
     ...(isAdmin
       ? [
+          {
+            id: "dashboard",
+            title: "Dashboard",
+            type: MenuItemType.Item,
+            icon: IconDashboard,
+            url: "/dashboard",
+            breadcrumbs: false,
+          },
           {
             id: "database-actions",
             title: "Acciones de Base de Datos",
@@ -208,8 +216,8 @@ const other: MenuItem = {
         ]
       : []),
 
-      ...(!isAdmin
-        ?[
+    ...(!isAdmin
+      ? [
           // Item de Chat entre usuarios
           {
             id: "chat",
@@ -327,6 +335,20 @@ const other: MenuItem = {
                 breadcrumbs: false,
               },
             ],
+          },
+        ]
+      : []),
+
+    // Para pacientes y administradores
+    ...(isPatient || isAdmin
+      ? [
+          {
+            id: "app-recommendations",
+            title: isPatient ? "Califícanos" : "Formulario de satisfacción",
+            type: MenuItemType.Item,
+            icon: IconClipboardList,
+            url: "/app-recommendations",
+            breadcrumbs: false,
           },
         ]
       : []),

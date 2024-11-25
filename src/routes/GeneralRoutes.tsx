@@ -2,6 +2,9 @@
 import store from "store";
 import { RouteObject } from "react-router";
 
+// Dasboard
+import DashboardPage from "views/dashboard";
+
 // Empleados
 import Employees from "views/employees";
 import CreateEmployee from "views/employees/create";
@@ -46,6 +49,11 @@ import EditFAQ from "views/FAQs/edit";
 // DatabaseActions
 import DatabaseActions from "views/databaseActions";
 
+// AppFormulary
+import RecommendationsAppPage from "views/appForm";
+import CreateAppForm from "views/appForm/create";
+import AppFormularyDetail from "views/appForm/detail";
+
 // Roles
 import { AllRole } from "core/users/types";
 
@@ -58,6 +66,10 @@ const GeneralRoutes: RouteObject[] = [
   // Database Actions (Solo para administradores)
   ...(isAdmin
     ? [
+        {
+          path: "dashboard",
+          element: <DashboardPage />
+        },
         {
           path: "database-actions",
           element: <DatabaseActions />,
@@ -222,6 +234,20 @@ const GeneralRoutes: RouteObject[] = [
   {
     path: "reports/edit/:id",
     element: <EditReport />,
+  },
+
+  // AppFormulary
+  {
+    path: "app-recommendations",
+    element: <RecommendationsAppPage />,
+  },
+  {
+    path: "app-recommendations/create",
+    element: <CreateAppForm />,
+  },
+  {
+    path: "app-recommendations/detail/:id",
+    element: <AppFormularyDetail />,
   },
 ];
 
