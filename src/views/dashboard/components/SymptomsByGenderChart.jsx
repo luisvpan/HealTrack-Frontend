@@ -15,6 +15,7 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 const SymptomsByGenderChart = () => {
   const [data, setData] = useState([]);
+  const [viewMode, setViewMode] = useState('cases'); // 'cases' o 'percentages'
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,27 +31,35 @@ const SymptomsByGenderChart = () => {
     datasets: [
       {
         label: 'Fiebre Alta',
-        data: data.map((item) => item.symptoms.highTemperature.count), // Usar count en data
+        data:
+          viewMode === 'cases'
+            ? data.map((item) => item.symptoms.highTemperature.count)
+            : data.map((item) => item.symptoms.highTemperature.percentage),
         backgroundColor: '#FF6384',
-        symptomPercentage: data.map((item) => item.symptoms.highTemperature.percentage), // Guarda el porcentaje en dataset
       },
       {
         label: 'Enrojecimiento',
-        data: data.map((item) => item.symptoms.redness.count),
+        data:
+          viewMode === 'cases'
+            ? data.map((item) => item.symptoms.redness.count)
+            : data.map((item) => item.symptoms.redness.percentage),
         backgroundColor: '#36A2EB',
-        symptomPercentage: data.map((item) => item.symptoms.redness.percentage),
       },
       {
         label: 'Hinchazón',
-        data: data.map((item) => item.symptoms.swelling.count),
+        data:
+          viewMode === 'cases'
+            ? data.map((item) => item.symptoms.swelling.count)
+            : data.map((item) => item.symptoms.swelling.percentage),
         backgroundColor: '#FFCE56',
-        symptomPercentage: data.map((item) => item.symptoms.swelling.percentage),
       },
       {
         label: 'Secreciones',
-        data: data.map((item) => item.symptoms.secretions.count),
+        data:
+          viewMode === 'cases'
+            ? data.map((item) => item.symptoms.secretions.count)
+            : data.map((item) => item.symptoms.secretions.percentage),
         backgroundColor: '#4BC0C0',
-        symptomPercentage: data.map((item) => item.symptoms.secretions.percentage),
       },
     ],
   };
@@ -59,6 +68,10 @@ const SymptomsByGenderChart = () => {
     scales: {
       y: {
         beginAtZero: true,
+        title: {
+          display: true,
+          text: viewMode === 'cases' ? 'Número de Casos' : 'Porcentaje (%)',
+        },
       },
     },
     plugins: {
@@ -66,9 +79,8 @@ const SymptomsByGenderChart = () => {
         callbacks: {
           label: function (tooltipItem) {
             const dataset = chartData.datasets[tooltipItem.datasetIndex];
-            const count = tooltipItem.raw;
-            const percentage = dataset.symptomPercentage[tooltipItem.dataIndex].toFixed(2);
-            return `${dataset.label}: ${count} casos (${percentage}%)`;
+            const value = tooltipItem.raw.toFixed(2);
+            return `${dataset.label}: ${value} ${viewMode === 'cases' ? 'casos' : '%'}`;
           },
         },
       },
@@ -76,7 +88,7 @@ const SymptomsByGenderChart = () => {
   };
 
   return (
-    <div 
+    <div
       className="chart"
       style={{
         boxShadow: `
@@ -87,6 +99,42 @@ const SymptomsByGenderChart = () => {
       }}
     >
       <h2>Síntomas por Género</h2>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',  // Centra horizontalmente
+          alignItems: 'center',      // Centra verticalmente si el contenedor tiene altura definida
+        }}
+      >
+        <button
+          onClick={() => setViewMode('cases')}
+          style={{
+            margin: '0 5px',
+            backgroundColor: viewMode === 'cases' ? '#4CAF50' : '#f0f0f0',
+            color: viewMode === 'cases' ? '#fff' : '#000',
+            borderRadius: '5px', // Añadido border-radius
+            padding: '8px 12px',  // Añadido padding para mejorar la apariencia
+            border: 'none',       // Opcional: quitar el borde por defecto
+            cursor: 'pointer',    // Añadido cursor para indicar que es clickeable
+          }}
+        >
+          Mostrar Casos
+        </button>
+        <button
+          onClick={() => setViewMode('percentages')}
+          style={{
+            margin: '0 5px',
+            backgroundColor: viewMode === 'percentages' ? '#4CAF50' : '#f0f0f0',
+            color: viewMode === 'percentages' ? '#fff' : '#000',
+            borderRadius: '5px', // Añadido border-radius
+            padding: '8px 12px',  // Añadido padding para mejorar la apariencia
+            border: 'none',       // Opcional: quitar el borde por defecto
+            cursor: 'pointer',    // Añadido cursor para indicar que es clickeable
+          }}
+        >
+          Mostrar Porcentajes
+        </button>
+      </div>
       {data.length > 0 ? (
         <Bar data={chartData} options={options} />
       ) : (

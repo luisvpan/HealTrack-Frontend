@@ -16,6 +16,7 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 const SymptomsBySurgeryTypeChart = () => {
   const [data, setData] = useState([]);
   const [selectedSurgeryType, setSelectedSurgeryType] = useState('');
+  const [viewMode, setViewMode] = useState('cases'); // 'cases' o 'percentages'
 
   useEffect(() => {
     const fetchData = async () => {
@@ -41,19 +42,21 @@ const SymptomsBySurgeryTypeChart = () => {
     labels: ['Fiebre Alta', 'Enrojecimiento', 'Hinchazón', 'Secreciones'],
     datasets: filteredData.map((item) => ({
       label: item.surgeryType,
-      data: [
-        item.symptoms.highTemperature.count,
-        item.symptoms.redness.count,
-        item.symptoms.swelling.count,
-        item.symptoms.secretions.count,
-      ],
+      data:
+        viewMode === 'cases'
+          ? [
+              item.symptoms.highTemperature.count,
+              item.symptoms.redness.count,
+              item.symptoms.swelling.count,
+              item.symptoms.secretions.count,
+            ]
+          : [
+              item.symptoms.highTemperature.percentage,
+              item.symptoms.redness.percentage,
+              item.symptoms.swelling.percentage,
+              item.symptoms.secretions.percentage,
+            ],
       backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0'],
-      percentages: [
-        item.symptoms.highTemperature.percentage,
-        item.symptoms.redness.percentage,
-        item.symptoms.swelling.percentage,
-        item.symptoms.secretions.percentage,
-      ],
     })),
   };
 
@@ -63,10 +66,18 @@ const SymptomsBySurgeryTypeChart = () => {
       tooltip: {
         callbacks: {
           label: (context) => {
-            const symptomCount = context.raw;
-            const percentage = context.dataset.percentages[context.dataIndex].toFixed(2);
-            return `${context.dataset.label}: ${symptomCount} casos (${percentage}%)`;
+            const value = context.raw.toFixed(2);
+            return `${context.dataset.label}: ${value} ${viewMode === 'cases' ? 'casos' : '%'}`;
           },
+        },
+      },
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: viewMode === 'cases' ? 'Número de Casos' : 'Porcentaje (%)',
         },
       },
     },
@@ -92,6 +103,44 @@ const SymptomsBySurgeryTypeChart = () => {
           </option>
         ))}
       </select>
+      {selectedSurgeryType && selectedSurgeryType !== '' && (
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',  // Centra horizontalmente
+          alignItems: 'center',      // Centra verticalmente si el contenedor tiene altura definida
+        }}
+      >
+          <button
+            onClick={() => setViewMode('cases')}
+            style={{
+              margin: '10px 5px',
+              backgroundColor: viewMode === 'cases' ? '#4CAF50' : '#f0f0f0',
+              color: viewMode === 'cases' ? '#fff' : '#000',
+              borderRadius: '5px', // Añadido border-radius
+              padding: '8px 12px',  // Añadido padding para mejorar la apariencia
+              border: 'none',       // Opcional: quitar el borde por defecto
+              cursor: 'pointer',    // Añadido cursor para indicar que es clickeable
+            }}
+          >
+            Mostrar Casos
+          </button>
+          <button
+            onClick={() => setViewMode('percentages')}
+            style={{
+              margin: '10px 5px',
+              backgroundColor: viewMode === 'percentages' ? '#4CAF50' : '#f0f0f0',
+              color: viewMode === 'percentages' ? '#fff' : '#000',
+              borderRadius: '5px', // Añadido border-radius
+              padding: '8px 12px',  // Añadido padding para mejorar la apariencia
+              border: 'none',       // Opcional: quitar el borde por defecto
+              cursor: 'pointer',    // Añadido cursor para indicar que es clickeable
+            }}
+          >
+            Mostrar Porcentajes
+          </button>
+        </div>
+      )}
       {filteredData.length > 0 ? (
         <Bar data={chartData} options={options} />
       ) : selectedSurgeryType === '' ? (

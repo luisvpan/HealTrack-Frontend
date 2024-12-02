@@ -8,6 +8,7 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 const SymptomPercentages = () => {
   const [data, setData] = useState([]);
   const [selectedAge, setSelectedAge] = useState('');
+  const [viewMode, setViewMode] = useState('cases'); // 'cases' o 'percentages'
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,19 +34,21 @@ const SymptomPercentages = () => {
     labels: ['Fiebre Alta', 'Enrojecimiento', 'Hinchazón', 'Secreciones'],
     datasets: filteredData.length > 0 ? [{
       label: `Edad: ${filteredData[0].age}`,
-      data: [
-        filteredData[0].symptoms.highTemperature.count,
-        filteredData[0].symptoms.redness.count,
-        filteredData[0].symptoms.swelling.count,
-        filteredData[0].symptoms.secretions.count,
-      ],
+      data:
+        viewMode === 'cases'
+          ? [
+              filteredData[0].symptoms.highTemperature.count,
+              filteredData[0].symptoms.redness.count,
+              filteredData[0].symptoms.swelling.count,
+              filteredData[0].symptoms.secretions.count,
+            ]
+          : [
+              filteredData[0].symptoms.highTemperature.percentage,
+              filteredData[0].symptoms.redness.percentage,
+              filteredData[0].symptoms.swelling.percentage,
+              filteredData[0].symptoms.secretions.percentage,
+            ],
       backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0'],
-      percentages: [
-        filteredData[0].symptoms.highTemperature.percentage,
-        filteredData[0].symptoms.redness.percentage,
-        filteredData[0].symptoms.swelling.percentage,
-        filteredData[0].symptoms.secretions.percentage,
-      ],
     }] : [],
   };
 
@@ -62,10 +65,18 @@ const SymptomPercentages = () => {
       tooltip: {
         callbacks: {
           label: (context) => {
-            const symptomCount = context.raw;
-            const percentage = context.dataset.percentages[context.dataIndex].toFixed(2);
-            return `${context.dataset.label}: ${symptomCount} casos (${percentage}%)`;
+            const value = context.raw.toFixed(2);
+            return `${context.dataset.label}: ${value} ${viewMode === 'cases' ? 'casos' : '%'}`;
           },
+        },
+      },
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: viewMode === 'cases' ? 'Número de Casos' : 'Porcentaje (%)',
         },
       },
     },
@@ -90,6 +101,44 @@ const SymptomPercentages = () => {
           </option>
         ))}
       </select>
+      {selectedAge && selectedAge !== '' && (
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',  // Centra horizontalmente
+            alignItems: 'center',      // Centra verticalmente si el contenedor tiene altura definida
+          }}
+        >
+          <button
+            onClick={() => setViewMode('cases')}
+            style={{
+              margin: '10px 5px',
+              backgroundColor: viewMode === 'cases' ? '#4CAF50' : '#f0f0f0',
+              color: viewMode === 'cases' ? '#fff' : '#000',
+              borderRadius: '5px', // Añadido border-radius
+              padding: '8px 12px',  // Añadido padding para mejorar la apariencia
+              border: 'none',       // Opcional: quitar el borde por defecto
+              cursor: 'pointer',    // Añadido cursor para indicar que es clickeable
+            }}
+          >
+            Mostrar Casos
+          </button>
+          <button
+            onClick={() => setViewMode('percentages')}
+            style={{
+              margin: '10px 5px',
+              backgroundColor: viewMode === 'percentages' ? '#4CAF50' : '#f0f0f0',
+              color: viewMode === 'percentages' ? '#fff' : '#000',
+              borderRadius: '5px', // Añadido border-radius
+              padding: '8px 12px',  // Añadido padding para mejorar la apariencia
+              border: 'none',       // Opcional: quitar el borde por defecto
+              cursor: 'pointer',    // Añadido cursor para indicar que es clickeable
+            }}
+          >
+            Mostrar Porcentajes
+          </button>
+        </div>
+      )}
       {filteredData.length > 0 ? (
         <Bar data={chartData} options={options} />
       ) : (
